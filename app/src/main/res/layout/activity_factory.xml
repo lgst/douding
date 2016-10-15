@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ddgj.dd.activity.FactoryActivity">
+    <RelativeLayout
+        style="@style/ActionBarTheme">
+        <ImageView
+            style="@style/TitleBarImageTheme"
+            android:onClick="backClick"
+            android:src="@mipmap/ic_chevron_left_white_24dp"/>
+        <TextView
+            style="@style/TitleBarTextTheme"
+            android:text="@string/factory"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:id="@+id/rg_factory"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_factory_enterprise"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:checked="true"
+                android:drawableBottom="@drawable/shape_radio_btn_line"
+                android:gravity="center"
+                android:text="企业"
+                android:textColor="@drawable/selector_rb_text_blue"/>
+            <View android:layout_width="1dp"
+                android:layout_height="16dp"
+                android:background="@color/grey"/>
+            <RadioButton
+                android:id="@+id/rb_factory_product"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawableBottom="@drawable/shape_radio_btn_line"
+                android:gravity="center"
+                android:text="产品"
+                android:textColor="@drawable/selector_rb_text_blue"/>
+
+        </RadioGroup>
+    </LinearLayout>
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_factory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        >
+
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+</LinearLayout>

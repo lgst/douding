@@ -114,6 +114,8 @@
     <string name="loading_data">加载数据中...</string>
     <string name="originality">创意</string>
 
+    <string name="factory">中国智造</string>
+
     <string-array name="originalityTypes">
         <item>农林牧副渔</item>
         <item>通讯计算机</item>
