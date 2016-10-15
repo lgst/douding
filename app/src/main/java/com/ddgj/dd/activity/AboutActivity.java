@@ -21,6 +21,6 @@ public class AboutActivity extends BaseActivity {
 
     public void backClick(View v)
     {
-        this.finish();
+        finish();
     }
 }
