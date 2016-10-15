@@ -1,6 +1,7 @@
 package com.ddgj.dd.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.ddgj.dd.R;
@@ -16,7 +17,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void initViews() {
-
+        Log.i("","");
     }
 
     public void backClick(View v)
