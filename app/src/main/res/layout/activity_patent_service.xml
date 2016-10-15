@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        style="@style/ActionBarLightTheme">
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            style="@style/TitleBarImageTheme"
+
+            android:src="@mipmap/ic_blue_back"/>
+        <TextView
+            android:layout_gravity="center_vertical"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="创意"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/shape_login_edit_text_bg"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="2dp"
+                android:padding="4dp"
+                android:src="@mipmap/ic_blue_search"/>
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/alpha"
+                android:hint="输入搜索内容"/>
+            <TextView
+                android:id="@+id/search_btn"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_search_btn_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="发布"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light"
+       ></LinearLayout>
+    <RadioGroup
+        android:id="@+id/rg_content_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#FFFFFFFF"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/rb_content_fragment_activity"
+            style="@style/top_tab_style"
+            android:drawableRight="@drawable/shape_rectangle_line"
+            android:text="全部"/>
+
+        <RadioButton
+            android:id="@+id/rb_content_fragment_notify"
+            android:drawableRight="@drawable/shape_rectangle_line"
+            style="@style/top_tab_style"
+            android:text="最新"/>
+
+        <RadioButton
+            android:id="@+id/rb_content_fragment_club"
+            android:drawableRight="@drawable/shape_rectangle_line"
+            style="@style/top_tab_style"
+            android:text="热门"/>
+        <RadioButton
+            android:id="@+id/rb_content_fragmentclub"
+            style="@style/top_tab_style"
+
+            android:text="我的"/>
+
+
+    </RadioGroup>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/red_button_background"
+        android:id="@+id/floatingActionButton" />
+
+
+</LinearLayout>

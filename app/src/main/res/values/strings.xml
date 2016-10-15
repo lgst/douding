@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">豆丁工匠</string>
+    <string name="splash_bottom_text">汇众智 共创造 助力中国智造</string>
+    <string name="selecte_photo_from_gallery">从相册选择图片</string>
+    <string name="take_a_photo">拍照</string>
+    <string name="cancel">取消</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="now_register">立即注册</string>
+    <string name="forget_pwd">忘记密码？</string>
+    <string name="user_name">账号</string>
+    <string name="pass_word">密码</string>
+    <string name="old_pass_word">旧密码</string>
+    <string name="new_pass_word">新密码</string>
+    <string name="pass_word_agin">确认密码</string>
+    <string name="user_login">用户登录</string>
+    <string name="user_register">用户注册</string>
+    <string name="please_input_username">请填写账号！</string>
+    <string name="please_input_new_pass_word">请填写6-16位新密码！</string>
+    <string name="please_input_old_pass_word">请填写旧密码！</string>
+    <string name="pwd_so_short">请填写6-16位密码！</string>
+    <string name="confirm_so_short">请填写6-16位确认密码！</string>
+    <string name="password_not_equals_confirm">两次密码输入不一致！请重新输入！</string>
+    <string name="home">首页</string>
+    <string name="community">社区</string>
+    <string name="message">消息</string>
+    <string name="mine">我的</string>
+    <string name="quetions">密保问题</string>
+    <string name="please_input_answer">请填写密保问题答案！</string>
+    <string name="answer">答案</string>
+    <string name="forget_password">找回密码</string>
+    <string name="update_password">修改密码</string>
+    <string name="forget_password_success">找回密码成功！</string>
+    <string name="network_is_not_connection">无法访问网络！</string>
+    <string name="update_password_success">修改密码成功！请重新登录！</string>
+    <string name="update_password_faild">修改密码失败！</string>
+    <string name="custom_hall">订制大厅</string>
+    <string name="click_login">点击登录</string>
+    <string name="user_center">用户中心</string>
+    <string name="mine_favorite">我的收藏</string>
+    <string name="app_settings">应用设置</string>
+    <string name="share_to_friend">分享给好友</string>
+    <string name="about_us">关于豆丁工匠</string>
+    <string name="logout_success">已退出登录</string>
+
+
+    <string-array name="questions">
+        <item>您大学班主任的名字是？</item>
+        <item>您高中班主任的名字是？</item>
+        <item>您的启蒙老师是？</item>
+        <item>对您影响最大的人名字是？</item>
+        <item>您最好的朋友名字是？</item>
+        <item>您母亲的生日是？</item>
+        <item>您父亲的生日是？</item>
+        <item>您的大学学号是？</item>
+    </string-array>
+
+    <string-array name="classes">
+        <item>全部</item>
+        <item>创意</item>
+        <item>专利</item>
+        <item>订制</item>
+        <item>代工</item>
+        <item>众筹</item>
+        <item>中国智造</item>
+    </string-array>
+
+    <string-array name="patent_type">
+        <item>发明创造型</item>
+        <item>外观新颖型</item>
+        <item>使用型</item>
+    </string-array>
+
+    <string-array name="secrecyType">
+        <item>完全公开</item>
+        <item>部分保密</item>
+        <item>完全保密</item>
+    </string-array>
+
+
+    <string name="title_activity_user_center">UserCenterActivity</string>
+    <string name="logout">退出登录</string>
+    <string name="user_info">用户资料</string>
+    <string name="name">姓名</string>
+    <string name="gender">性别</string>
+    <string name="nick_name">昵称</string>
+    <string name="age">年龄</string>
+    <string name="phone_number">手机号</string>
+    <string name="email">邮箱</string>
+    <string name="address">所在地</string>
+    <string name="not_set">未填写</string>
+    <string name="edit">编辑</string>
+    <string name="save">保存</string>
+    <string name="edit_user_info">编辑用户信息</string>
+    <string name="enterprise_name">名称</string>
+    <string name="enterprise_scale">规模</string>
+    <string name="enterprise_field">领域</string>
+    <string name="enterprise_area">区域</string>
+    <string name="enterprise_address">地址</string>
+    <string name="enterprise_link_name">联系人</string>
+    <string name="enterprise_contact">联系方式</string>
+    <string name="about_us_content">
+        豆丁工匠于2014年底策划，并于2015年成立于陕西西安市国际港务区，前身为西安快租商贸有限公司国际港务区第一分公司，现更名为西安豆丁工匠网络科技有限公司。
+        豆丁工匠前期主要为租天下研发并生产智能充电站，包括：进行投币式充电站、无线式充电站、19寸LCD无线充电站等三代产品，目前主产第四代42寸LED无线局域网充电站,全息产品及其衍生产品等。
+        豆丁工匠为租天下代工可以视为一个整体的项目代工，该项目主要包括产品代工，创意设计，专利代申请，产品众筹，产品委托加工、代产，产品研发等功能。
+        因此，我们将豆丁工匠网络科技有限公司视为产品私人订制平台领域的试验审核基地、制造业的威客网，专利的孵化器。 我们是一群热衷个人知识产权的维权者，我们时刻准备着为您服务。
+    </string>
+    <string name="search">搜索</string>
+    <string name="input_text_search">输入关键字搜索</string>
+    <string name="patent">专利</string>
+    <string name="all">全部</string>
+    <string name="news">最新</string>
+    <string name="hot">热门</string>
+    <string name="loading_data">加载数据中...</string>
+    <string name="originality">创意</string>
+
+    <string-array name="originalityTypes">
+        <item>农林牧副渔</item>
+        <item>通讯计算机</item>
+        <item>粮油食品饮料</item>
+        <item>医疗卫生保健</item>
+        <item>交通车辆运输</item>
+        <item>建筑材料五金</item>
+        <item>轻工日用家具</item>
+        <item>文教体育娱乐</item>
+        <item>化工石油冶金</item>
+        <item>机械设备装置</item>
+        <item>电子电器仪表</item>
+        <item>环保除尘采矿</item>
+        <item>能源采暖炉灶</item>
+        <item>造纸纺织服装</item>
+        <item>其他专利类别</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.ddgj.dd"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application
+        android:name=".DDGJApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon, android:theme">
+        <activity
+            android:name=".activity.SplashScreenActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".util.camera.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.UpdatePasswordActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.UserCenterActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.EditPersonalUserInfoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.EditEnterpriseUserInfoActivity">
+        </activity>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.SearchActivity">
+        </activity>
+        <activity android:name=".activity.OriginalityActivity">
+        </activity>
+        <activity android:name=".activity.PatentActivity">
+        </activity>
+        <activity android:name=".activity.WebActivity">
+        </activity>
+        <activity android:name=".activity.CreativeActivity"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+    </application>
+
+</manifest>

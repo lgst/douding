@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.EditEnterpriseUserInfoActivity">
+    <RelativeLayout
+        style="@style/ActionBarTheme">
+        <ImageView
+            style="@style/TitleBarImageTheme"
+            android:onClick="backClick"
+            android:src="@mipmap/ic_chevron_left_white_24dp"/>
+        <TextView
+            style="@style/TitleBarTextTheme"
+            android:text="@string/edit_user_info"/>
+        <TextView
+            style="@style/TitleBarRightTextTheme"
+            android:onClick="saveClick"
+            android:text="@string/save"/>
+    </RelativeLayout>
+
+    <View style="@style/LineGrey1dp"
+          android:layout_marginTop="16dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_name"/>
+            <EditText
+                android:id="@+id/enterprise_name"
+                style="@style/UserInfoValues"/>
+        </LinearLayout>
+        <View style="@style/LineGrey1dp"
+              android:layout_marginLeft="16dp"/>
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_scale"/>
+            <EditText
+                android:id="@+id/enterprise_scale"
+                style="@style/UserInfoValues"/>
+        </LinearLayout>
+        <View style="@style/LineGrey1dp"
+              android:layout_marginLeft="16dp"/>
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_field"/>
+            <EditText
+                android:id="@+id/enterprise_field"
+                style="@style/UserInfoValues"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_area"/>
+            <EditText
+                android:id="@+id/enterprise_area"
+                style="@style/UserInfoValues"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="6dp"
+          android:background="@drawable/shape_shadow_v_up"/>
+    <View style="@style/LineGrey1dp"
+          android:layout_marginTop="16dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_address"/>
+            <EditText
+                android:id="@+id/enterprise_address"
+                style="@style/UserInfoValues"/>
+        </LinearLayout>
+        <View style="@style/LineGrey1dp"
+              android:layout_marginLeft="16dp"/>
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/email"/>
+            <EditText
+                android:id="@+id/enterprise_email"
+                style="@style/UserInfoValues"
+                android:inputType="textEmailAddress"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_link_name"/>
+            <EditText
+                android:id="@+id/enterprise_link_name"
+                style="@style/UserInfoValues"/>
+        </LinearLayout>
+        <View style="@style/LineGrey1dp"
+              android:layout_marginLeft="16dp"/>
+        <LinearLayout
+            style="@style/UserInfoLinerLayout">
+            <TextView
+                style="@style/UserInfoEditNames"
+                android:text="@string/enterprise_contact"/>
+            <EditText
+                android:id="@+id/enterprise_contact"
+                style="@style/UserInfoValues"
+                android:inputType="phone"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View android:layout_width="match_parent"
+          android:layout_height="6dp"
+          android:background="@drawable/shape_shadow_v_up"/>
+</LinearLayout>

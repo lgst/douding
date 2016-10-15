@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/grey_light"
+    tools:context="com.ddgj.dd.activity.MainActivity">
+    <com.ddgj.dd.view.CustomViewPager
+        android:id="@+id/act_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></com.ddgj.dd.view.CustomViewPager>
+    <View android:layout_width="match_parent" android:layout_height="4dp"
+    android:background="@color/colorPrimary"/>
+    <RadioGroup
+        android:id="@+id/act_main_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/act_main_radio_btn_home"
+            style="@style/RadioBtnStyle"
+            android:checked="true"
+            android:drawableTop="@drawable/selector_radio_btn_home"
+            android:text="@string/home"/>
+        <RadioButton
+            android:id="@+id/act_main_radio_btn_community"
+            style="@style/RadioBtnStyle"
+            android:drawableTop="@drawable/selector_radio_btn_community"
+            android:text="@string/community"/>
+        <RadioButton
+            android:id="@+id/act_main_radio_btn_message"
+            style="@style/RadioBtnStyle"
+            android:drawableTop="@drawable/selector_radio_btn_message"
+            android:text="@string/message"/>
+        <RadioButton
+            android:id="@+id/act_main_radio_btn_mine"
+            style="@style/RadioBtnStyle"
+            android:drawableTop="@drawable/selector_radio_btn_mine"
+            android:text="@string/mine"/>
+
+    </RadioGroup>
+</LinearLayout>
