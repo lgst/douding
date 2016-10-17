@@ -2,6 +2,7 @@ package com.ddgj.dd.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,6 +32,8 @@ import java.util.Map;
 
 import okhttp3.Call;
 
+import static com.ddgj.dd.R.id.floatingActionButton;
+
 public class PatentActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, NetWorkInterface {
 
     private PullToRefreshListView mplv;
@@ -39,6 +42,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     private RadioGroup mRg;
     private LinearLayout mLoading;
     private TextView content;
+    private FloatingActionButton floatingActionButton;
+
     /**
      * 页码
      */
@@ -178,6 +183,13 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         });
         mRg.setOnCheckedChangeListener(this);
         content = (TextView) findViewById(R.id.search_edit_text);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PatentActivity.this,PublishPatentActivity.class));
+            }
+        });
     }
 
     @Override

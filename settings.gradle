@@ -1,2 +1,1 @@
-include ':app', ':pull-to-refresh-library', ':umeng_library', ':easeui'
-include ':city-selector'
+include ':app', ':pull-to-refresh-library', ':umeng_library'
