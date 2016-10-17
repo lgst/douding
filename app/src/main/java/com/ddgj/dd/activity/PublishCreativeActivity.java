@@ -126,10 +126,6 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                 MultiImageSelector.create(PublishCreativeActivity.this)
                         .start(PublishCreativeActivity.this, REQUEST_IMAGE);
                 break;
-            case R.id.type_spinner:
-                break;
-            case R.id.mode_spinner:
-                break;
             case R.id.commit_idea:
                 getAllInfor();
                 toCommitIdea();
@@ -161,19 +157,10 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             params.put("head_picture", "head_picture");
             params.put("originality_differentiate", "0");
 
-                 file = new File(path.get(0));
-                file1 = new File(path.get(1));
-                file2 = new File(path.get(2));
-                //this.file =  FileUtil.scal(Uri.parse(p));
-               // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
-
-
+            file = new File(path.get(0));
 
             OkHttpUtils.post()
                     .addFile("o_picture1",file.getName(),file)
- .addFile("o_picture2",file1.getName(),file1)
- .addFile("o_picture3",file2.getName(),file2)
-
                     .url(NetWorkInterface.ADD_IDEA)
                     .params(params).build()
                     .execute(new StringCallback() {

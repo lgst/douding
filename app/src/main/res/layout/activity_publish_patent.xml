@@ -55,7 +55,7 @@
                     android:text="专利名称" />
 
                 <EditText
-                    android:id="@+id/edit_name"
+                    android:id="@+id/patent_name"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
@@ -77,7 +77,7 @@
                     android:text="专利介绍" />
 
                 <EditText
-                    android:id="@+id/edit_intro"
+                    android:id="@+id/patent_intro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -97,7 +97,7 @@
                     android:text="专利详情" />
 
                 <EditText
-                    android:id="@+id/edit_infor"
+                    android:id="@+id/patent_infor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -125,7 +125,7 @@
                     android:text="你的姓名：" />
 
                 <EditText
-                    android:id="@+id/idea_user_name"
+                    android:id="@+id/patent_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
@@ -153,7 +153,7 @@
                     android:text="你的邮箱：" />
 
                 <EditText
-                    android:id="@+id/idea_user_email"
+                    android:id="@+id/patent_user_email"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
@@ -180,7 +180,7 @@
                     android:text="你的电话：" />
 
                 <EditText
-                    android:id="@+id/idea_user_phone"
+                    android:id="@+id/patent_user_phone"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
@@ -288,7 +288,7 @@
                     android:text="已授权"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/checkBox2"
+                    android:id="@+id/assignment_checkBox"
                     android:layout_weight="1" />
 
             </LinearLayout>
@@ -347,7 +347,7 @@
                     android:text="专利类别：" />
 
                 <Spinner
-                    android:id="@+id/type_spinner"
+                    android:id="@+id/category_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/originalityTypes" />
@@ -367,7 +367,7 @@
                     android:layout_weight="1" />
 
                 <Button
-                    android:id="@+id/commit_idea"
+                    android:id="@+id/commit_patent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
