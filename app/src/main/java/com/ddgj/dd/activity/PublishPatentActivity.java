@@ -183,6 +183,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                         public void onResponse(String response, int id) {
                             Log.e("fabu", " 成功id:" + id);
                             showToastLong("成功");
+                            PublishPatentActivity.this.finish();
                         }
                     });
 

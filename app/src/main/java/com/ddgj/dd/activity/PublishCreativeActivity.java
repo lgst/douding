@@ -174,6 +174,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                 public void onResponse(String response, int id) {
                     Log.e("fabu", " 成功id:" + id);
                     showToastLong("成功");
+                    PublishCreativeActivity.this.finish();
                 }
             });
 
