@@ -68,4 +68,13 @@ public interface NetWorkInterface {
      * 获取我的创意接口
      */
     public static final String GET_MINE_ORIGINALITY = HOST + "/finfMyOriginality.do";
+    /**
+     * 获取个人创意接口
+     */
+    public static final String ADD_IDEA = HOST + "/addOriginality.do";
+    /**
+     * 获取个人专利接口
+     */
+    public static final String ADD_Patent = HOST + "/addPatent.do";
+
 }
