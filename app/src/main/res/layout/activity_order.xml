@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_order"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ddgj.dd.activity.OrderActivity">
+    <RelativeLayout
+        style="@style/ActionBarLightTheme"
+        android:background="@color/white">
+        <ImageView
+            style="@style/TitleBarImageTheme"
+            android:onClick="backClick"
+            android:src="@mipmap/ic_blue_back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/order"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+    <View style="@style/LineGrey1dp"/>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.ddgj.dd.view.CustomGridView
+                android:id="@+id/classes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:numColumns="4">
+
+            </com.ddgj.dd.view.CustomGridView>
+            <View android:layout_width="match_parent"
+                  android:layout_height="4dp"
+                  android:layout_marginBottom="4dp"
+                  android:background="@drawable/shape_shadow_v_up"
+            />
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="32dp"
+                          android:background="@color/white"
+                          android:gravity="center_vertical"
+                          android:orientation="horizontal">
+                <ImageView android:layout_width="24dp"
+                           android:layout_height="24dp"
+                           android:src="@mipmap/ic_launcher"
+                />
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:text="成功案例"
+                          android:textColor="@color/colorPrimary"/>
+            </LinearLayout>
+            <com.ddgj.dd.view.CustomListView
+                android:id="@+id/success"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.ddgj.dd.view.CustomListView>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="32dp"
+                          android:background="@color/white"
+                          android:gravity="center_vertical"
+                          android:orientation="horizontal">
+                <ImageView android:layout_width="24dp"
+                           android:layout_height="24dp"
+                           android:src="@mipmap/ic_launcher"
+                />
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:text="推荐订制"
+                          android:textColor="@color/colorPrimary"/>
+            </LinearLayout>
+            <com.ddgj.dd.view.CustomListView
+                android:id="@+id/recommend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.ddgj.dd.view.CustomListView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.ddgj.dd.view.CustomGridView
+    android:id="@+id/calsses_list"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:horizontalSpacing="4dp"
+    android:horizontalSpacing="1dp"
     android:numColumns="3"
     android:orientation="vertical"
-    android:padding="4dp"
-    android:verticalSpacing="4dp">
+    android:verticalSpacing="1dp">
 
 </com.ddgj.dd.view.CustomGridView>

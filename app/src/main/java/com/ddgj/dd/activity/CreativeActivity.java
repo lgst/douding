@@ -294,13 +294,13 @@ public class CreativeActivity extends BaseActivity implements View.OnClickListen
             //This implementation does nothing.
             mFileOutputStream.flush();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            //  Auto-generated catch block
             e.printStackTrace();
         } finally {
             try {
                 mFileOutputStream.close();
             } catch (IOException e) {
-                // TODO: handle exception
+                //  handle exception
                 e.printStackTrace();
             }
         }

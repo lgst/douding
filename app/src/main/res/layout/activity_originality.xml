@@ -26,7 +26,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@drawable/shape_login_edit_text_bg"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:onClick="searchClick">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -43,19 +44,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_marginRight="16dp"
                 android:background="@color/alpha"
+                android:gravity="center_vertical"
                 android:hint="@string/input_text_search"/>
-            <TextView
-                android:id="@+id/search_btn"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/selector_search_btn_bg"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="searchClick"
-                android:text="@string/search"
-                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
     <View
@@ -125,8 +117,8 @@
         <com.handmark.pulltorefresh.library.PullToRefreshListView
             android:id="@+id/plv"
             android:layout_width="match_parent"
-            android:dividerHeight="8dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:dividerHeight="8dp">
         </com.handmark.pulltorefresh.library.PullToRefreshListView>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

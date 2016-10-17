@@ -101,47 +101,35 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         if (classes == MINE)
             params.put("p_account_id", UserHelper.getInstance().getUser().getAccount_id());
 
-//        Log.i("lgst", "mPageNumber:" + mPageNumber);
-//        Log.i("lgst", "mPageSingle:" + mPageSingle);
         OkHttpUtils.post().url(getUrl(classes)).params(params).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-//                Log.e("lgst", e.getMessage() + " id:" + id);
                 mPageNumber--;//网络访问失败，页码下次不能加1 所以先减一
                 mplv.onRefreshComplete();
             }
 
             @Override
             public void onResponse(String response, int id) {
-//                Log.i("lgst", response);
                 try {
                     JSONObject jo = new JSONObject(response);
                     int status = jo.getInt("status");
                     if (status == STATUS_SUCCESS) {
                         JSONArray ja = jo.getJSONArray("data");
-//                        Log.i("lgst", jo.getString("msg"));
                         if (flag == LOAD) {
-//                            Log.i("lgst", "+++++" + LOAD);
                             mPatents.clear();
                         }
                         for (int i = 0; i < ja.length(); i++) {
                             String patentStr = ja.getJSONObject(i).toString();
                             Patent patent = new Gson().fromJson(patentStr, Patent.class);
                             mPatents.add(patent);
-//                            Log.i("lgst", "=====" + mPatents.size());
                         }
                         if (flag == LOAD) {
-//                            Log.i("lgst", "LOAD");
                             mAdapter = new PatentPLVAdapter(PatentActivity.this, mPatents);
                             mplv.setAdapter(mAdapter);
                         } else {
-//                            Log.i("lgst", "UPDATE");
                             if (mAdapter != null)
                                 mAdapter.notifyDataSetChanged();
                         }
-//                        if (i < mPageSingle){//如果返回数据小于请求数量则表示已经取到最后一条数据，页码就不能再加一，每次请求前页码加一，所以这里要减一
-//                            mPageNumber--;
-//                        }
                         if (mplv.isRefreshing())//关闭刷新
                             mplv.onRefreshComplete();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
@@ -198,7 +186,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
             content.setText(text);
-
+            initDatas(UPDATE,classes);
         }
     }
 
@@ -207,7 +195,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     }
 
     public void searchClick(View v) {
-
+        startActivityForResult(new Intent(this,SearchActivity.class).putExtra("content","专利"),1);
     }
 
     @Override

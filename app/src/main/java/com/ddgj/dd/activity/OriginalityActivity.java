@@ -218,7 +218,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
     }
 
     public void searchClick(View v) {
-
+        startActivityForResult(new Intent(this,SearchActivity.class).putExtra("content","创意"),1);
     }
 
     @Override

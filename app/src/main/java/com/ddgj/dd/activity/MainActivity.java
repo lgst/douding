@@ -1,7 +1,7 @@
 package com.ddgj.dd.activity;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.widget.RadioGroup;
 
@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         fragments.add(communityFragment);
         fragments.add(messageFragment);
         fragments.add(mineFragment);
-        adapter = new MainContentVPAdapter(getFragmentManager(),fragments);
+        adapter = new MainContentVPAdapter(getSupportFragmentManager(),fragments);
 
     }
 

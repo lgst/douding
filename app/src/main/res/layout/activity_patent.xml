@@ -25,6 +25,8 @@
             android:layout_height="36dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:clickable="true"
+            android:onClick="searchClick"
             android:background="@drawable/shape_login_edit_text_bg"
             android:gravity="center_vertical">
             <ImageView
@@ -43,19 +45,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:maxLines="1"
+                android:layout_marginRight="18dp"
                 android:gravity="center_vertical"
                 android:background="@color/alpha"
                 android:hint="@string/input_text_search"/>
-            <TextView
-                android:id="@+id/search_btn"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/selector_search_btn_bg"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="searchClick"
-                android:text="@string/search"
-                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
     <View

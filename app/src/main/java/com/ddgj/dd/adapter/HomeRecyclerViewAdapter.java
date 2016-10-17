@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
@@ -58,8 +59,8 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return new ViewHolderClasses(view);
             case 2://
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_home_list_title, parent, false);
-                break;
+                        .inflate(R.layout.item_home_list_patent_title, parent, false);
+                return new ViewHolderTitle(view);
         }
         return null;
     }
@@ -71,6 +72,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onError(Call call, Exception e, int id) {
 
+                        Log.i("lgst", "获取轮播图失败："+e.getMessage());
                 }
 
                 @Override
@@ -78,12 +80,11 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     try {
                         JSONObject jo = new JSONObject(response);
                         JSONArray array = jo.getJSONArray("data");
-                        Log.i("lgst",array.toString());
 
                         List<ADBean> adBeens = new ArrayList<ADBean>();
-                        for (int i = 0; i <array.length();i++) {
+                        for (int i = 0; i < array.length(); i++) {
                             JSONObject jsonObject = array.getJSONObject(i);
-                            ADBean adBean = new Gson().fromJson(jsonObject.toString(),ADBean.class);
+                            ADBean adBean = new Gson().fromJson(jsonObject.toString(), ADBean.class);
                             adBeens.add(adBean);
                             ImageView imageView = (ImageView) act.getLayoutInflater().inflate(R.layout.item_home_list_ad_item, null);
                             Glide.with(act)
@@ -93,7 +94,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                         }
                         LoopViewPager viewpager = (LoopViewPager) ((ViewHolderAD) holder).vp;
                         CircleIndicator indicator = ((ViewHolderAD) holder).point;
-                        viewpager.setAdapter(new ADAdapter(act,adBeens));
+                        viewpager.setAdapter(new ADAdapter(act, adBeens));
                         viewpager.setLooperPic(true);//是否设置自动轮播
                         indicator.setViewPager(viewpager);
                     } catch (JSONException e) {
@@ -102,9 +103,14 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
         } else if (holder instanceof ViewHolderClasses) {//分类
-            HomeListContent.Classes classes = (HomeListContent.Classes) mValues.get(position);
+            HomeListContent.Classes classes = (HomeListContent.Classes) mValues.get(position-1);
             ViewHolderClasses viewHolderClasses = ((ViewHolderClasses) holder);
-            viewHolderClasses.customGridView.setAdapter(new ClassesGridViewAdapter(act, classes.getIMGS(), classes.getNames()));
+//            viewHolderClasses.customGridView.setAdapter(new ClassesGridViewAdapter(act, classes.getIMGS(), classes.getNames()));
+        } else if (position==1)
+        {
+            ViewHolderTitle holderTitle = (ViewHolderTitle) holder;
+            holderTitle.mTextView.setText((CharSequence) mValues.get(position));
+            holderTitle.mImageView.setImageResource(R.mipmap.ic_custom);
         }
     }
 
@@ -136,6 +142,17 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         public ViewHolderClasses(View itemView) {
             super(itemView);
             customGridView = (CustomGridView) itemView;
+        }
+    }
+
+    class ViewHolderTitle extends RecyclerView.ViewHolder {
+        public final ImageView mImageView;
+        public final TextView mTextView;
+
+        public ViewHolderTitle(View itemView) {
+            super(itemView);
+            mImageView = (ImageView) itemView.findViewById(R.id.icon);
+            mTextView = (TextView) itemView.findViewById(R.id.text);
         }
     }
 }

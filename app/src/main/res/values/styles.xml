@@ -41,7 +41,7 @@
     <!-- Actionbar back image style! -->
     <style name="TitleBarImageTheme">
         <item name="android:layout_width">40dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_height">@dimen/action_bar_height</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/selector_back</item>

@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/img"
         android:layout_width="wrap_content"
-        android:layout_height="56dp"
+        android:layout_height="64dp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"/>
     <TextView

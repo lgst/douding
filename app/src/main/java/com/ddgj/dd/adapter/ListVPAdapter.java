@@ -1,8 +1,8 @@
 package com.ddgj.dd.adapter;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ListVPAdapter extends FragmentStatePagerAdapter {
     List<Fragment> fragments;
-    public ListVPAdapter(FragmentManager fm,List<Fragment> fragments) {
+    public ListVPAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;
     }

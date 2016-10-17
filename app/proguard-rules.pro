@@ -15,3 +15,15 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class com.hyphenate.** {*;}
+-dontwarn  com.hyphenate.**
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.** { *;}
+-dontwarn okio.**
+
+-dontwarn com.handmark.pulltorefresh.library.**
+-keep class com.handmark.pulltorefresh.library.** { *;}
+-dontwarn com.handmark.pulltorefresh.library.extras.**
+-keep class com.handmark.pulltorefresh.library.extras.** { *;}
+-dontwarn com.handmark.pulltorefresh.library.internal.**
+-keep class com.handmark.pulltorefresh.library.internal.** { *;}

@@ -10,6 +10,7 @@ import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.fragment.EnterpriseFragment;
 import com.ddgj.dd.fragment.PersonalFragment;
 import com.ddgj.dd.util.user.UserHelper;
+import com.hyphenate.chat.EMClient;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -33,9 +34,9 @@ public class UserCenterActivity extends BaseActivity {
     @Override
     public void initViews() {
         if (UserHelper.getInstance().getUser() instanceof PersonalUser) {//个人用户信息
-            getFragmentManager().beginTransaction().add(R.id.content_container, new PersonalFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.content_container, new PersonalFragment()).commit();
         } else if (UserHelper.getInstance().getUser() instanceof EnterpriseUser) {//企业用信息
-            getFragmentManager().beginTransaction().add(R.id.content_container, new EnterpriseFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.content_container, new EnterpriseFragment()).commit();
         }
     }
 
@@ -61,9 +62,9 @@ public class UserCenterActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE && resultCode == UpdatePasswordActivity.CHANGED) {//修改密码成功，关闭当前页面
             finish();
         } else if (requestCode == PERSONAL_REQUEST_CODE && resultCode == SUCCESS) {
-            getFragmentManager().beginTransaction().replace(R.id.content_container, new PersonalFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new PersonalFragment()).commit();
         } else if (requestCode == ENTERPRISE_REQUEST_CODE && resultCode == SUCCESS) {
-            getFragmentManager().beginTransaction().add(R.id.content_container, new EnterpriseFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.content_container, new EnterpriseFragment()).commit();
         }
     }
 
@@ -83,6 +84,7 @@ public class UserCenterActivity extends BaseActivity {
 
                         MainActivity.update = true;
                         UserHelper.getInstance().logout();
+                        EMClient.getInstance().logout(true);
                         sweetAlertDialog.dismiss();
                         finish();
                     }

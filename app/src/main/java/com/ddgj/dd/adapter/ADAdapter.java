@@ -1,6 +1,7 @@
 package com.ddgj.dd.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.WebActivity;
 import com.ddgj.dd.bean.ADBean;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
@@ -42,12 +44,17 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
         final ADBean ad = ads.get(position);
         Glide.with(act)
                 .load(HOST + "/" + ad.getPicture())
+                .placeholder(R.mipmap.ic_image_white_48dp)
+                .error(R.mipmap.ic_image_white_48dp)
                 .thumbnail(0.1f)
                 .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("lgst","Url:"+ad.getLink_address());
+                act.startActivity(new Intent(act, WebActivity.class)
+                        .putExtra("url","http://"+ad.getLink_address())
+                .putExtra("title",ad.getNote()));
             }
         });
         container.addView(imageView);

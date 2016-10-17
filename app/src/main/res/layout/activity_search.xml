@@ -13,6 +13,7 @@
             android:onClick="backClick"
             android:src="@mipmap/ic_blue_back"/>
         <TextView
+            android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="专利"
@@ -42,9 +43,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
                 android:background="@color/alpha"
-                android:hint="输入搜索内容"/>
+                android:gravity="center_vertical"
+                android:hint="输入搜索内容"
+                android:maxLines="1"/>
             <TextView
                 android:id="@+id/search_btn"
                 android:layout_width="48dp"
@@ -59,4 +61,28 @@
     </LinearLayout>
     <View
         style="@style/LineGrey1dp"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="8dp"
+                  android:gravity="center_vertical">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="搜索历史"/>
+        <ImageView android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:background="@drawable/ripple_bg"
+                   android:clickable="true"
+                   android:onClick="clearClick"
+                   android:padding="4dp"
+                   android:src="@mipmap/ic_delete_grey600_48dp"/>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
 </LinearLayout>

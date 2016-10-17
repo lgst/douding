@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ddgj.fragment.HomeFragment">
+    tools:context=".fragment.HomeFragment">
     <RelativeLayout
         style="@style/ActionBarTheme">
         <TextView
@@ -20,22 +20,38 @@
             android:id="@+id/search"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:visibility="gone"
             android:src="@mipmap/ic_search_white_24dp"/>
         <TextView
             style="@style/TitleBarTextTheme"
             android:text="@string/app_name"/>
     </RelativeLayout>
-    <android.support.v4.widget.SwipeRefreshLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    >
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
+            <include layout="@layout/item_home_list_ad"/><!--轮播图-->
+            <include layout="@layout/item_home_list_class"/><!--分类-->
+            <include layout="@layout/item_home_list_patent_title"/><!--专利标题-->
+            <include layout="@layout/item_home_list_patent_list"/><!--专利列表-->
+            <include layout="@layout/item_home_list_originality_title"/><!--创意标题-->
+            <include layout="@layout/item_home_list_originality_list"/><!--创意列表-->
+        </LinearLayout>
+    </ScrollView>
+    <!--<android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:name="com.ddgj.fragment.HomeFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/fragment_home"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="com.ddgj.fragment.HomeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/fragment_home"/>-->
 </LinearLayout>

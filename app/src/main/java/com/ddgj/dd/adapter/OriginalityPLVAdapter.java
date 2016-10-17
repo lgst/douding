@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Originality;
+import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
         showImages(act, originality, vh);
         vh.approve.setText(String.valueOf((int) (Math.random() * 100)));
         vh.browse.setText(originality.getO_browse_amount());
-        vh.date.setText(originality.getO_creation_time());
+        vh.date.setText(StringUtils.getDate(originality.getO_creation_time()));
         return convertView;
     }
 

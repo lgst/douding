@@ -15,6 +15,8 @@ import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.JsonUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -28,7 +30,9 @@ import java.io.IOException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-/**用户登录界面*/
+/**
+ * 用户登录界面
+ */
 public class LoginActivity extends BaseActivity {
     public static final String BACK = "back";
     private EditText usernaemEt;
@@ -40,16 +44,30 @@ public class LoginActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case SUCCESS:
-                    showToastShort("登录成功！");
-                    if(getIntent().getStringExtra("flag").equals(BACK))
-                    {
-                        MainActivity.update=true;
+                    if (getIntent().getStringExtra("flag").equals(BACK)) {
+                        MainActivity.update = true;
                         UserHelper.getInstance().setLogined(true);
 //                        UserHelper.getInstance().getUser().saveToSharedPreferences(LoginActivity.this);
                         UserHelper.getInstance().loadUserInfo();
-
-                        finish();
-                    }else {
+                        //登录环信
+                        EMClient.getInstance().login(UserHelper.getInstance().getUser().getAccount(),(String)msg.obj, new EMCallBack() {//回调
+                            @Override
+                            public void onSuccess() {
+                                EMClient.getInstance().groupManager().loadAllGroups();
+                                EMClient.getInstance().chatManager().loadAllConversations();
+                                Log.i("main", "登录聊天服务器成功！");
+                                showToastShort("登录成功！");
+                                finish();
+                            }
+                            @Override
+                            public void onProgress(int progress, String status) {
+                            }
+                            @Override
+                            public void onError(int code, String message) {
+                                Log.i("main", "登录聊天服务器失败！");
+                            }
+                        });
+                    } else {
                     }
                     break;
                 case FAILDE:
@@ -69,7 +87,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(UserHelper.getInstance().isLogined()){
+        if (UserHelper.getInstance().isLogined()) {
             startActivity(new Intent(this, MainActivity.class));
         }
     }
@@ -83,15 +101,14 @@ public class LoginActivity extends BaseActivity {
      * 登录按钮点击事件
      */
     public void loginClick(View v) {
-        if(!checkNetWork())
-        {
+        if (!checkNetWork()) {
             showToastNotNetWork();
-            return ;
+            return;
         }
         String usernameContent = usernaemEt.getText().toString().trim();
-        String pwdContent = pwdEt.getText().toString().trim();
+        final String pwdContent = pwdEt.getText().toString().trim();
         if (checkInput(usernameContent, pwdContent)) {
-            final SweetAlertDialog dialog = showLoadingDialog("登录中...","");
+            final SweetAlertDialog dialog = showLoadingDialog("登录中...", "");
             OkHttpClient client = new OkHttpClient();
             FormEncodingBuilder builder = new FormEncodingBuilder();
             builder.add("account", usernameContent)
@@ -113,9 +130,9 @@ public class LoginActivity extends BaseActivity {
 
                 @Override
                 public void onResponse(Response response) throws IOException {
-                            dialog.dismiss();
+                    dialog.dismiss();
                     String responseContent = response.body().string();
-                    Log.i("lgst", responseContent);
+//                    Log.i("lgst", responseContent);
                     ResponseInfo responseInfo = null;
                     try {
                         responseInfo = JsonUtils.getResponse(responseContent);
@@ -126,16 +143,16 @@ public class LoginActivity extends BaseActivity {
                     if (responseInfo.getStatus() == NetWorkInterface.STATUS_SUCCESS) {
                         try {
                             Object user = JsonUtils.getUser(responseInfo.getData());
-                            if(user instanceof EnterpriseUser)
-                            {//企业用户
+                            if (user instanceof EnterpriseUser) {//企业用户
                                 ((EnterpriseUser) user).saveToSharedPreferences(LoginActivity.this);
-                            }else{//个人用户
-                                ((PersonalUser)user).saveToSharedPreferences(LoginActivity.this);
+                            } else {//个人用户
+                                ((PersonalUser) user).saveToSharedPreferences(LoginActivity.this);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         msg.what = SUCCESS;
+                        msg.obj = pwdContent;
                         handler.sendMessage(msg);
                     } else {
                         msg.what = FAILDE;

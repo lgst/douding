@@ -20,7 +20,6 @@ public class HomeListContent {
     private static HomeListContent instance;
 
     public static final List<Object> ITEMS = new ArrayList<Object>();
-    private AD ad;
     private Classes classes;
 
     private HomeListContent() {
@@ -40,8 +39,8 @@ public class HomeListContent {
     public void init(Context context) {
         if (isFirst) {
             this.context = context;
-            initAD();
             initClasses();
+
             isFirst = false;
             return;
         }
@@ -50,32 +49,6 @@ public class HomeListContent {
     private void initClasses() {
         classes = new Classes();
         ITEMS.add(classes);
-    }
-
-    private void initAD() {
-        ad = new AD();
-        ad.add(R.mipmap.banner1);
-        ad.add(R.mipmap.banner2);
-        ad.add(R.mipmap.banner3);
-        ITEMS.add(ad);
-    }
-
-    /**
-     * 轮播图，广告
-     */
-    public class AD {
-        private final List<Integer> IMGS = new ArrayList<Integer>();
-
-        public AD() {
-        }
-
-        public void add(int img) {
-            IMGS.add(img);
-        }
-
-        public List<Integer> getIMGS() {
-            return IMGS;
-        }
     }
 
     /**
