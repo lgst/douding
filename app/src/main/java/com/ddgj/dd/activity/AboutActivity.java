@@ -17,7 +17,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void initViews() {
-        Log.i("d","d");
+        Log.i("d传到devo","d");
 
     }
 
