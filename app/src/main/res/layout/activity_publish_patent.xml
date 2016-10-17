@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="创意发布"
+            android:text="专利申请"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
-                    android:text="创意名称" />
+                    android:text="专利名称" />
 
                 <EditText
                     android:id="@+id/edit_name"
@@ -74,7 +74,7 @@
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
-                    android:text="创意介绍" />
+                    android:text="专利介绍" />
 
                 <EditText
                     android:id="@+id/edit_intro"
@@ -94,7 +94,7 @@
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
-                    android:text="创意详情" />
+                    android:text="专利详情" />
 
                 <EditText
                     android:id="@+id/edit_infor"
@@ -137,6 +137,7 @@
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -191,6 +192,106 @@
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="专利编号：" />
+
+                <EditText
+                    android:id="@+id/patent_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="授权价格：" />
+
+                <EditText
+                    android:id="@+id/patent_empower_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="转让价格：" />
+
+                <EditText
+                    android:id="@+id/patent_assignment_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="授权状态：" />
+
+                <CheckBox
+                    android:text="已授权"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBox2"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -203,7 +304,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="添加图片：" />
+                    android:text="专利图片：" />
 
                 <Button
                     android:id="@+id/pick_pic"
@@ -221,9 +322,9 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
-             <!--   <GridView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></GridView>-->
+                <!--   <GridView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"></GridView>-->
                 <ImageView
                     android:id="@+id/select_pic"
                     android:layout_width="60dp"
@@ -243,7 +344,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="添加类型：" />
+                    android:text="专利类别：" />
 
                 <Spinner
                     android:id="@+id/type_spinner"
@@ -260,7 +361,7 @@
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/mode_spinner"
+                    android:id="@+id/patent_type"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -281,3 +382,4 @@
 
 
 </LinearLayout>
+

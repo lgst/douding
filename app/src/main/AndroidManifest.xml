@@ -74,8 +74,13 @@
         </activity>
         <activity android:name=".activity.WebActivity">
         </activity>
-        <activity android:name=".activity.CreativeActivity"/>
+        <activity android:name=".activity.PublishCreativeActivity"/>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <!--Image Selector Entry-->
+        <activity
+            android:configChanges="orientation|screenSize"
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity" />
+        <activity android:name=".activity.PublishPatentActivity"></activity>
     </application>
 
 </manifest>

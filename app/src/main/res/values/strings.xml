@@ -68,7 +68,7 @@
     <string-array name="patent_type">
         <item>发明创造型</item>
         <item>外观新颖型</item>
-        <item>使用型</item>
+        <item>实用型</item>
     </string-array>
 
     <string-array name="secrecyType">
@@ -76,6 +76,7 @@
         <item>部分保密</item>
         <item>完全保密</item>
     </string-array>
+
 
 
     <string name="title_activity_user_center">UserCenterActivity</string>
