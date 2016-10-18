@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/root_view"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/root_view"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout style="@style/ActionBarLightTheme">
 
         <ImageView
             android:id="@+id/backup"
             style="@style/TitleBarImageTheme"
-            android:src="@mipmap/ic_blue_back"/>
+            android:src="@mipmap/ic_blue_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="订制发布"
+            android:text="定制发布"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -32,177 +32,27 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:orientation="vertical">
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/shape_rectangle"
-                        android:drawablePadding="5dp"
-                        android:text="产品名称"/>
-
-                    <EditText
-                        android:id="@+id/edit_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="@drawable/selector_edittext"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        android:nextFocusForward="@+id/edit_intro"
-                        android:paddingLeft="4dip"
-                        android:paddingRight="4dip"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/shape_rectangle"
-                        android:drawablePadding="5dp"
-                        android:text="订制标题"/>
-
-                    <EditText
-                        android:id="@+id/edit_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="@drawable/selector_edittext"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        android:nextFocusForward="@+id/edit_intro"
-                        android:paddingLeft="4dip"
-                        android:paddingRight="4dip"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:drawableLeft="@drawable/shape_rectangle"
-                        android:drawablePadding="5dp"
-                        android:text="订制类别"/>
-
-                    <EditText
-                        android:id="@+id/edit_classes"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="9"
-                        android:background="@drawable/selector_edittext"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        android:nextFocusForward="@+id/edit_intro"
-                        android:paddingLeft="4dip"
-                        android:paddingRight="4dip"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:drawableLeft="@drawable/shape_rectangle"
-                        android:drawablePadding="5dp"
-                        android:text="价格"/>
-
-                    <EditText
-                        android:id="@+id/edit_price"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="8"
-                        android:background="@drawable/selector_edittext"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        android:nextFocusForward="@+id/edit_intro"
-                        android:paddingLeft="4dip"
-                        android:paddingRight="4dip"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/shape_rectangle"
-                        android:drawablePadding="5dp"
-                        android:text="产品名称"/>
-
-                    <EditText
-                        android:id="@+id/edit_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="@drawable/selector_edittext"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        android:nextFocusForward="@+id/edit_intro"
-                        android:paddingLeft="4dip"
-                        android:paddingRight="4dip"/>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="你的姓名："/>
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:text="产品名称：" />
 
                 <EditText
-                    android:id="@+id/idea_user_name"
+                    android:id="@+id/product_name"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
@@ -211,24 +61,244 @@
                     android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:paddingLeft="4dip"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="你的邮箱："/>
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:text="定制标题：" />
 
                 <EditText
-                    android:id="@+id/idea_user_email"
+                    android:id="@+id/order_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:text="定制类别：" />
+
+                <Spinner
+                    android:id="@+id/made_type_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/order_classes_name" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:text="价格：" />
+
+                <EditText
+                    android:id="@+id/order_price"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:paddingLeft="5dp"
+                android:text="数量：" />
+
+            <EditText
+                android:id="@+id/order_number"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:background="@drawable/selector_edittext"
+                android:gravity="left|top"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:nextFocusForward="@+id/idea_user_email"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:singleLine="true"></EditText>
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:paddingLeft="5dp"
+                android:text="周期：" />
+
+            <EditText
+                android:id="@+id/order_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:background="@drawable/selector_edittext"
+                android:gravity="left|top"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:nextFocusForward="@+id/idea_user_email"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:singleLine="true"></EditText>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:text="定制规格：" />
+
+                <EditText
+                    android:id="@+id/order_Specifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:drawablePadding="5dp"
+                    android:text="产品描述" />
+
+                <EditText
+                    android:id="@+id/product_intro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:inputType="textMultiLine"
+                    android:minLines="4"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"></EditText>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:drawablePadding="5dp"
+                    android:text="产品备注" />
+
+                <EditText
+                    android:id="@+id/product_infor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+
+                    android:inputType="textMultiLine"
+                    android:minLines="4"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"></EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="客户姓名：" />
+
+                <EditText
+                    android:id="@+id/order_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/idea_user_email"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="联系电话：" />
+
+                <EditText
+                    android:id="@+id/order_user_phone"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
@@ -237,24 +307,25 @@
                     android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_phone"
                     android:paddingLeft="4dip"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="你的电话："/>
+                    android:text="电子邮件：" />
 
                 <EditText
-                    android:id="@+id/idea_user_phone"
+                    android:id="@+id/order_user_email"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
@@ -263,37 +334,64 @@
                     android:maxLines="1"
                     android:nextFocusForward="@+id/pick_pic"
                     android:paddingLeft="4dip"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="添加图片："/>
+                    android:text="定制地址：" />
+
+                <EditText
+                    android:id="@+id/order_user_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionDone"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/pick_pic"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加图片：" />
 
                 <Button
                     android:id="@+id/pick_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
-                    android:text="选择图片"/>
+                    android:text="选择图片" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
                 <!--   <GridView
                        android:layout_width="match_parent"
@@ -302,54 +400,67 @@
                     android:id="@+id/select_pic"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                />
+                    />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:text="添加类型："/>
+                    android:text="定制区分：" />
 
-                <Spinner
-                    android:id="@+id/type_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/originalityTypes"/>
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="30dp">
+                    <RadioButton
+                        android:id="@+id/personal_made"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="私人定制"/>
+                    <RadioButton
+                        android:id="@+id/entrust_made"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="委托定制"/>
+                </RadioGroup>
 
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal">
-
                 <Spinner
-                    android:id="@+id/mode_spinner"
+                    android:id="@+id/made_state"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
+
 
                 <Button
-                    android:id="@+id/commit_idea"
+                    android:id="@+id/commit_order"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:text="提交审核"
-                    android:textColor="@color/white"/>
-
+                    android:textColor="@color/white" />
 
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
+
+
 </LinearLayout>

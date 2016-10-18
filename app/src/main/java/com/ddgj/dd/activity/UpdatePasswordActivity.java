@@ -12,7 +12,7 @@ import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
-import com.hyphenate.chat.EMClient;
+
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -38,7 +38,7 @@ public class UpdatePasswordActivity extends BaseActivity {
                 showToastShort(getResources().getString(R.string.update_password_success));
                 MainActivity.update = true;//修改密码成功，更新 我的 页面数据
                 UserHelper.getInstance().logout();//修改密码成功执行登出操作
-                EMClient.getInstance().logout(true);
+               // EMClient.getInstance().logout(true);
                 setResult(CHANGED);//返回修改密码成功
                 finish();
             } else {

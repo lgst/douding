@@ -78,6 +78,12 @@
         <item>部分保密</item>
         <item>完全保密</item>
     </string-array>
+    <string-array name="made_state">
+        <item>公开</item>
+        <item>不公开</item>
+        <item>成功</item>
+    </string-array>
+
 
     <string-array name="order_classes_name">
         <item>家具订制</item>

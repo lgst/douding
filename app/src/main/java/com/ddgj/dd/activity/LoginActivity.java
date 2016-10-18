@@ -15,8 +15,7 @@ import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.JsonUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
+
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -50,7 +49,7 @@ public class LoginActivity extends BaseActivity {
 //                        UserHelper.getInstance().getUser().saveToSharedPreferences(LoginActivity.this);
                         UserHelper.getInstance().loadUserInfo();
                         //登录环信
-                        EMClient.getInstance().login(UserHelper.getInstance().getUser().getAccount(),(String)msg.obj, new EMCallBack() {//回调
+                      /*  EMClient.getInstance().login(UserHelper.getInstance().getUser().getAccount(),(String)msg.obj, new EMCallBack() {//回调
                             @Override
                             public void onSuccess() {
                                 EMClient.getInstance().groupManager().loadAllGroups();
@@ -66,7 +65,7 @@ public class LoginActivity extends BaseActivity {
                             public void onError(int code, String message) {
                                 Log.i("main", "登录聊天服务器失败！");
                             }
-                        });
+                        });*/
                     } else {
                     }
                     break;

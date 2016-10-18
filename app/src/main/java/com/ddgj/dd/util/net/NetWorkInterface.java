@@ -80,5 +80,9 @@ public interface NetWorkInterface {
      * 获取个人专利接口
      */
     public static final String ADD_Patent = HOST + "/addPatent.do";
+    /**
+     * 获取发布定制接口
+     */
+    public static final String ADD_Order = HOST + "/addCustom_made.do";
 
 }

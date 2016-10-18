@@ -2,6 +2,7 @@ package com.ddgj.dd.activity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -12,11 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -66,6 +69,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     private File file;
     private File file1;
     private File file2;
+    private LinearLayout addImageGroup;
 
 
     @Override
@@ -85,6 +89,9 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         commitIdea = (Button) findViewById(R.id.commit_idea);
         commitIdea.setOnClickListener(this);
         selectPic = (ImageView) findViewById(R.id.select_pic);
+
+        //添加图片
+        addImageGroup = (LinearLayout) findViewById(R.id.add_image_group);
     }
 
     @Override
@@ -157,7 +164,9 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             params.put("head_picture", "head_picture");
             params.put("originality_differentiate", "0");
 
-            file = new File(path.get(0));
+            //file = new File(path.get(0));
+             file = FileUtil.scal(Uri.parse(path.get(0)));
+
 
             OkHttpUtils.post()
                     .addFile("o_picture1",file.getName(),file)
@@ -249,6 +258,11 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                 for (String p : path) {
                     System.out.println(p+"");
                     Glide.with(this).load(p).into(selectPic);
+                    ImageView addImageView = new ImageView(this);
+
+                    addImageView.setImageDrawable(getResources().getDrawable(R.drawable.beijing));
+                    addImageGroup.addView(addImageView);
+                    Glide.with(this).load(path.get(0)).into(addImageView);
                 }
 
             }
