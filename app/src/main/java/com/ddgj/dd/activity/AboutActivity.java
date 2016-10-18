@@ -17,7 +17,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void initViews() {
-        Log.i("","");
+        Log.i("weiweifabu","");
     }
 
     public void backClick(View v)
