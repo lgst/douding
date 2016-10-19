@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -35,9 +34,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-import static android.R.attr.checked;
-
-public class OrderAddActivity extends BaseActivity implements View.OnClickListener {
+public class OEMAddActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText productName;
     private EditText orderTitle;
@@ -166,8 +163,8 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.pick_pic:
                 //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
-                MultiImageSelector.create(OrderAddActivity.this)
-                        .start(OrderAddActivity.this, REQUEST_IMAGE);
+                MultiImageSelector.create(OEMAddActivity.this)
+                        .start(OEMAddActivity.this, REQUEST_IMAGE);
                 break;
             case R.id.commit_order:
                 getAllInfor();
@@ -241,7 +238,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                         public void onResponse(String response, int id) {
                             Log.e("fabu", " 成功id:" + id);
                             showToastLong("成功");
-                            OrderAddActivity.this.finish();
+                            OEMAddActivity.this.finish();
                             dialog.dismiss();
 
                         }

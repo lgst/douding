@@ -19,10 +19,12 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 
+import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
@@ -31,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
@@ -70,6 +73,8 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     private File file1;
     private File file2;
     private LinearLayout addImageGroup;
+    private PostFormBuilder o_picture2;
+    private SweetAlertDialog dialog;
 
 
     @Override
@@ -91,7 +96,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         selectPic = (ImageView) findViewById(R.id.select_pic);
 
         //添加图片
-        addImageGroup = (LinearLayout) findViewById(R.id.add_image_group);
+        addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
     }
 
     @Override
@@ -149,6 +154,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
      */
     private void toCommitIdea() {
         if (check(sEditName, sEditIntro, sEditInfor, sEditUserName, sEditUserPhone)) {
+            dialog = showLoadingDialog("", "正在发送您的创意");
             Map<String, String> params = new HashMap<String, String>();
             params.put("originality_name", String.valueOf(sEditName));
             params.put("originality_introduce", String.valueOf(sEditIntro));
@@ -165,18 +171,25 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             params.put("originality_differentiate", "0");
 
             //file = new File(path.get(0));
-             file = FileUtil.scal(Uri.parse(path.get(0)));
+             //file = FileUtil.scal(Uri.parse(path.get(0)));
+             //file1 = FileUtil.scal(Uri.parse(path.get(1)));
 
 
-            OkHttpUtils.post()
-                    .addFile("o_picture1",file.getName(),file)
-                    .url(NetWorkInterface.ADD_IDEA)
+            PostFormBuilder post = OkHttpUtils.post();
+            for (int i = 0; i < path.size(); i++) {
+                file = FileUtil.scal(Uri.parse(path.get(i)));
+                String s="o_picture";
+                post.addFile(s+i, file.getName(), file);
+
+            }
+            post.url(NetWorkInterface.ADD_IDEA)
                     .params(params).build()
                     .execute(new StringCallback() {
                 @Override
                 public void onError(okhttp3.Call call, Exception e, int id) {
                     Log.e("fabu", e.getMessage() + " 失败id:" + id);
                     showToastLong("失败");
+                    dialog.dismiss();
                 }
 
                 @Override
@@ -184,6 +197,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                     Log.e("fabu", " 成功id:" + id);
                     showToastLong("成功");
                     PublishCreativeActivity.this.finish();
+                    dialog.dismiss();
                 }
             });
 
@@ -256,13 +270,13 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
                 for (String p : path) {
-                    System.out.println(p+"");
-                    Glide.with(this).load(p).into(selectPic);
-                    ImageView addImageView = new ImageView(this);
-
-                    addImageView.setImageDrawable(getResources().getDrawable(R.drawable.beijing));
-                    addImageGroup.addView(addImageView);
-                    Glide.with(this).load(path.get(0)).into(addImageView);
+                    int px = DensityUtil.dp2px(this, 60);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
+                    ImageView imageView = new ImageView(this);
+                    imageView.setLayoutParams(layoutParams);
+                    addImageGroup.addView(imageView);
+                    Glide.with(this).load(p).into(imageView);
+                    selectPic.setVisibility(View.GONE);
                 }
 
             }

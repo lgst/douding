@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/root_view"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -192,6 +192,7 @@
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -245,6 +246,7 @@
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -271,6 +273,7 @@
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -285,11 +288,11 @@
                     android:text="授权状态：" />
 
                 <CheckBox
-                    android:text="已授权"
+                    android:id="@+id/assignment_checkBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/assignment_checkBox"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="已授权" />
 
             </LinearLayout>
 
@@ -326,23 +329,24 @@
                 <!--   <GridView
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"></GridView>-->
-                    <ImageView
-                        android:id="@+id/select_pic"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:scaleType="fitStart"
-                        android:src="@mipmap/uploading"
-                        />
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/id_recyclerview_horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_centerVertical="true"
-
-                    android:scrollbars="none" />
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/all_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/select_pic"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:scaleType="fitStart"
+                            android:src="@mipmap/uploading" />
+                    </LinearLayout>
                 </HorizontalScrollView>
 
 

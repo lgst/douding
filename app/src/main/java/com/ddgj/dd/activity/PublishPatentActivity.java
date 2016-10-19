@@ -1,6 +1,7 @@
 package com.ddgj.dd.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,21 +12,29 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.RequestCall;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
+import static com.ddgj.dd.R.id.select_pic;
 
 /**
  * Created by Administrator on 2016/10/17.
@@ -64,6 +73,9 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     private boolean checked;
     private ArrayList<String> path;
     private File file;
+    private LinearLayout allPic;
+    private ImageView selectPic1;
+    private SweetAlertDialog dialog;
 
     @Override
     public void initViews() {
@@ -85,7 +97,8 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         commitPatent.setOnClickListener(this);
         spinnerPatentType = (Spinner) findViewById(R.id.patent_type);
         spinnerPatentCategory = (Spinner) findViewById(R.id.category_spinner);
-        selectPic = (ImageView) findViewById(R.id.select_pic);
+        selectPic1 = (ImageView) findViewById(R.id.select_pic);
+        allPic = (LinearLayout) findViewById(R.id.all_pic);
     }
 
     @Override
@@ -141,7 +154,11 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
      * 提交所有文本信息
      */
     private void toCommitIdea() {
+
         if (check(sPatentName, sPatentIntro, sPatentInfor, sPatentUserName, sPatentUserEmail, sPatentUserPhone, sPatentNumber, sPatentEmpower, sPatentAssignmentPrice)) {
+            dialog = showLoadingDialog("", "正在发送您的专利");
+
+
             Map<String, String> params = new HashMap<String, String>();
             params.put("patent_name", String.valueOf(sPatentName));
             params.put("patent_introduce", String.valueOf(sPatentIntro));
@@ -162,21 +179,27 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
             params.put("head_picture", "head_picture");
 
 
-            file = new File(path.get(0));
+            //file = new File(path.get(0));
 
             //this.file =  FileUtil.scal(Uri.parse(p));
             // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
 
+            PostFormBuilder post = OkHttpUtils.post();
 
-            OkHttpUtils.post()
-                    .addFile("patent_picture", file.getName(), file)
-                    .url(NetWorkInterface.ADD_Patent)
-                    .params(params).build()
+            for (int i = 0; i <path.size() ; i++) {
+                file = FileUtil.scal(Uri.parse(path.get(i)));
+                String s= "patent_picture";
+                post.addFile(s+i, file.getName(), file);
+                Log.e("duotu","几张图片"+path.size()+"图片地址"+path.get(i));
+            }
+
+            post.url(NetWorkInterface.ADD_Patent).params(params).build()
                     .execute(new StringCallback() {
                         @Override
                         public void onError(okhttp3.Call call, Exception e, int id) {
                             Log.e("fabu", e.getMessage() + " 失败id:" + id);
                             showToastLong("失败");
+                            dialog.dismiss();
                         }
 
                         @Override
@@ -184,6 +207,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                             Log.e("fabu", " 成功id:" + id);
                             showToastLong("成功");
                             PublishPatentActivity.this.finish();
+                            dialog.dismiss();
                         }
                     });
 
@@ -238,7 +262,13 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 // 处理你自己的逻辑 ....
                 for (String p : path) {
                     System.out.println(p + "");
-                    Glide.with(this).load(p).into(selectPic);
+                    int px = DensityUtil.dp2px(this, 60);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
+                    ImageView imageView = new ImageView(this);
+                    imageView.setLayoutParams(layoutParams);
+                    allPic.addView(imageView);
+                    Glide.with(this).load(p).into(imageView);
+                    selectPic1.setVisibility(View.GONE);
                 }
 
             }

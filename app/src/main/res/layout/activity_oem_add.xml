@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="定制发布"
+            android:text="代工发布"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/shape_rectangle"
-                    android:text="定制标题：" />
+                    android:text="代工标题：" />
 
                 <EditText
                     android:id="@+id/order_title"
@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/shape_rectangle"
-                    android:text="定制类别：" />
+                    android:text="代工类别：" />
 
                 <Spinner
                     android:id="@+id/made_type_spinner"
@@ -190,7 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/shape_rectangle"
-                    android:text="定制规格：" />
+                    android:text="代工规格：" />
 
                 <EditText
                     android:id="@+id/order_Specifications"
@@ -434,11 +434,13 @@
                     android:layout_width="wrap_content"
                     android:orientation="horizontal"
                     android:layout_height="30dp">
+
                     <RadioButton
                         android:id="@+id/personal_made"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="私人定制"/>
+
                     <RadioButton
                         android:id="@+id/entrust_made"
                         android:layout_width="wrap_content"
@@ -465,7 +467,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
-                    android:text="提交定制"
+                    android:text="提交代工"
                     android:textColor="@color/white" />
 
             </LinearLayout>
