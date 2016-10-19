@@ -151,8 +151,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         commitOrder.setOnClickListener(this);
         selectPic = (ImageView) findViewById(R.id.select_pic);
 
-        personalMade = (RadioButton) findViewById(R.id.personal_made);
-        entrustMade = (RadioButton) findViewById(R.id.entrust_made);
+
 
         //添加图片
         addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
@@ -213,6 +212,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             params.put("made_state", sMadeStateSpinner);
             params.put("m_a_id", "m_a_id");
             params.put("head_picture", "head_picture");
+            params.put("made_differentiate", "0");
 
 
             //file = new File(path.get(0));
@@ -267,8 +267,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
         sOrderUserAddress = orderUserAddress.getText().toString().trim();
         sMadeType = (String) this.madeType.getSelectedItem();
-        personalMadeChecked = personalMade.isChecked();
-        entrustMadeChecked = entrustMade.isChecked();
+
     }
 
     /**

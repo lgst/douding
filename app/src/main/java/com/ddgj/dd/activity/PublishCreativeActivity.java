@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -85,6 +87,12 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         editIntro = (EditText) findViewById(R.id.edit_intro);
         editInfor = (EditText) findViewById(R.id.edit_infor);
         userNmae = (EditText) findViewById(R.id.idea_user_name);
+        userNmae.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+
+            }
+        });
         userEmail = (EditText) findViewById(R.id.idea_user_email);
         userPhone = (EditText) findViewById(R.id.idea_user_phone);
         pickPic = (Button) findViewById(R.id.pick_pic);

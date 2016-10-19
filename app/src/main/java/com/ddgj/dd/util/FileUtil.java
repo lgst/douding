@@ -91,7 +91,6 @@ public class FileUtil {
 			BitmapFactory.decodeFile(path, options);
 			int height = options.outHeight;
 			int width = options.outWidth;
-
 			double scale = Math.sqrt((float) fileSize / fileMaxSize);
 			options.outHeight = (int) (height / scale);
 			options.outWidth = (int) (width / scale);

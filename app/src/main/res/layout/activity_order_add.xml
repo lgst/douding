@@ -415,38 +415,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="30dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_height="wrap_content"
-                    android:text="定制区分：" />
-
-                <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_height="30dp">
-                    <RadioButton
-                        android:id="@+id/personal_made"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="私人定制"/>
-                    <RadioButton
-                        android:id="@+id/entrust_made"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="委托定制"/>
-                </RadioGroup>
-
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
