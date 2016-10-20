@@ -45,7 +45,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-        initViews();
+        initView();
     }
 
     public void backClick(View v) {
@@ -104,7 +104,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         userName = (EditText) findViewById(R.id.user_name);
         passWord = (EditText) findViewById(R.id.pass_word);
         confirm = (EditText) findViewById(R.id.confirm);

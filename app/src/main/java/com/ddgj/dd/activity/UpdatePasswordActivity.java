@@ -55,11 +55,11 @@ public class UpdatePasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_password);
-        initViews();
+        initView();
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         oldPassword = (EditText) findViewById(R.id.old_pass_word);
         newPassword = (EditText) findViewById(R.id.new_pass_word);
         confirm = (EditText) findViewById(R.id.confirm);

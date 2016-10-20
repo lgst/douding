@@ -28,11 +28,11 @@ public class UserCenterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_center);
-        initViews();
+        initView();
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         if (UserHelper.getInstance().getUser() instanceof PersonalUser) {//个人用户信息
             getSupportFragmentManager().beginTransaction().add(R.id.content_container, new PersonalFragment()).commit();
         } else if (UserHelper.getInstance().getUser() instanceof EnterpriseUser) {//企业用信息

@@ -33,7 +33,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * 用户登录界面
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements NetWorkInterface {
     public static final String BACK = "back";
     private EditText usernaemEt;
     private EditText pwdEt;
@@ -46,42 +46,27 @@ public class LoginActivity extends BaseActivity {
                 case SUCCESS:
                     if (getIntent().getStringExtra("flag").equals(BACK)) {
                         MainActivity.update = true;
-                        UserHelper.getInstance().setLogined(true);
-//                        UserHelper.getInstance().getUser().saveToSharedPreferences(LoginActivity.this);
                         UserHelper.getInstance().loadUserInfo();
-                        //登录环信
-                        EMClient.getInstance().login(UserHelper.getInstance().getUser().getAccount(),(String)msg.obj, new EMCallBack() {//回调
-                            @Override
-                            public void onSuccess() {
-                                EMClient.getInstance().groupManager().loadAllGroups();
-                                EMClient.getInstance().chatManager().loadAllConversations();
-                                Log.i("main", "登录聊天服务器成功！");
-                                showToastShort("登录成功！");
-                                finish();
-                            }
-                            @Override
-                            public void onProgress(int progress, String status) {
-                            }
-                            @Override
-                            public void onError(int code, String message) {
-                                Log.i("main", "登录聊天服务器失败！");
-                            }
-                        });
+                        showToastShort((String) msg.obj);
+                        dialog.dismiss();
+                        finish();
                     } else {
                     }
                     break;
                 case FAILDE:
                     showToastShort((String) msg.obj);
+                    dialog.dismiss();
                     break;
             }
         }
     };
+    private SweetAlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        initViews();
+        initView();
     }
 
     @Override
@@ -92,7 +77,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void initViews() {
+    public void initView() {
         usernaemEt = (EditText) findViewById(R.id.act_login_et_user_name);
         pwdEt = (EditText) findViewById(R.id.act_login_et_pwd);
     }
@@ -105,10 +90,10 @@ public class LoginActivity extends BaseActivity {
             showToastNotNetWork();
             return;
         }
-        String usernameContent = usernaemEt.getText().toString().trim();
+        final String usernameContent = usernaemEt.getText().toString().trim();
         final String pwdContent = pwdEt.getText().toString().trim();
         if (checkInput(usernameContent, pwdContent)) {
-            final SweetAlertDialog dialog = showLoadingDialog("登录中...", "");
+            dialog = showLoadingDialog("登录中...", "");
             OkHttpClient client = new OkHttpClient();
             FormEncodingBuilder builder = new FormEncodingBuilder();
             builder.add("account", usernameContent)
@@ -125,24 +110,22 @@ public class LoginActivity extends BaseActivity {
                     msg.what = FAILDE;
                     msg.obj = "网络异常！";
                     handler.sendMessage(msg);
-                    dialog.dismiss();
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
-                    dialog.dismiss();
                     String responseContent = response.body().string();
-//                    Log.i("lgst", responseContent);
+                    Log.i("lgst", responseContent);
                     ResponseInfo responseInfo = null;
                     try {
                         responseInfo = JsonUtils.getResponse(responseContent);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Message msg = new Message();
+                    final Message msg = new Message();
                     if (responseInfo.getStatus() == NetWorkInterface.STATUS_SUCCESS) {
                         try {
-                            Object user = JsonUtils.getUser(responseInfo.getData());
+                            final Object user = JsonUtils.getUser(responseInfo.getData());
                             if (user instanceof EnterpriseUser) {//企业用户
                                 ((EnterpriseUser) user).saveToSharedPreferences(LoginActivity.this);
                             } else {//个人用户
@@ -151,9 +134,31 @@ public class LoginActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        msg.what = SUCCESS;
-                        msg.obj = pwdContent;
-                        handler.sendMessage(msg);
+                        //登录环信
+                        final ResponseInfo finalResponseInfo = responseInfo;
+                        EMClient.getInstance().login(usernameContent, pwdContent, new EMCallBack() {//回调
+                            @Override
+                            public void onSuccess() {
+                                EMClient.getInstance().groupManager().loadAllGroups();
+                                EMClient.getInstance().chatManager().loadAllConversations();
+                                Log.i("main", "登录聊天服务器成功！");
+                                msg.what = SUCCESS;
+                                msg.obj = "登录成功！";
+                                handler.sendMessage(msg);
+                            }
+
+                            @Override
+                            public void onProgress(int progress, String status) {
+                            }
+
+                            @Override
+                            public void onError(int code, String message) {
+                                Log.i("main", "登录聊天服务器失败！");
+                                msg.what = FAILDE;
+                                msg.obj = "登录失败";
+                                handler.sendMessage(msg);
+                            }
+                        });
                     } else {
                         msg.what = FAILDE;
                         msg.obj = responseInfo.getMsg();

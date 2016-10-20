@@ -107,7 +107,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/shape_login_edit_text_bg"
             android:drawableLeft="@mipmap/ic_question_answer_grey600_24dp"
-            android:hint="@string/answer_quetion"
+            android:hint="@string/answerquetion"
             android:paddingBottom="8dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

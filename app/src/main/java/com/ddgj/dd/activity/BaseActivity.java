@@ -29,7 +29,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     /**初始化控件*/
-    public abstract void initViews();
+    public abstract void initView();
 
     /**
      * 网络检查
@@ -50,7 +50,7 @@ public abstract class BaseActivity extends FragmentActivity {
         dialog.setContentText(content)
                 .setTitleText(title)
                 .show();
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.getProgressHelper().setBarColor(getResources().getColor(R.color.colorPrimary));
         dialog.getProgressHelper().setCircleRadius(100);
         return dialog;

@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey_lightE"
-    android:orientation="vertical">
-
-    <View style="@style/LineGrey1dp"
-          android:layout_marginTop="16dp"/>
-    <android.support.v7.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="4dp">
+        android:layout_height="match_parent"
+        android:background="@color/grey_lightE"
+        android:orientation="vertical">
+        <View style="@style/LineGrey1px"
+              android:layout_marginTop="16dp"/>
+        <LinearLayout
+            android:id="@+id/ll_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <com.ddgj.dd.view.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:border_color="@color/white"
+                app:border_width="2dp"
+                android:id="@+id/icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="4dp"
+                android:src="@mipmap/ic_account_circle_grey600_24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"/>
+            <View android:layout_width="0dp"
+                  android:layout_height="0dp"
+                  android:layout_weight="1"/>
+            <ImageView android:layout_width="24dp"
+                       android:layout_height="24dp"
+                       android:layout_gravity="center_vertical"
+                       android:layout_marginRight="16dp"
+                       android:src="@mipmap/ic_chevron_right_black_24dp"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent"
+              android:layout_height="6dp"
+              android:background="@drawable/shape_shadow_v_up"/>
+
+        <View style="@style/LineGrey1px"
+              android:layout_marginTop="16dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
@@ -29,7 +59,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -41,7 +71,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -53,7 +83,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -66,19 +96,15 @@
                     android:text="@string/not_set"/>
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <View style="@style/LineGrey1dp"
-          android:layout_marginTop="16dp"/>
-    <android.support.v7.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="4dp">
+        <View android:layout_width="match_parent"
+              android:layout_height="6dp"
+              android:background="@drawable/shape_shadow_v_up"/>
+        <View style="@style/LineGrey1px"
+              android:layout_marginTop="16dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
@@ -91,7 +117,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -103,7 +129,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -116,5 +142,8 @@
                     android:text="@string/not_set"/>
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+        <View android:layout_width="match_parent"
+              android:layout_height="6dp"
+              android:background="@drawable/shape_shadow_v_up"/>
+    </LinearLayout>
+</ScrollView>

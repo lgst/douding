@@ -81,7 +81,7 @@
             android:src="@mipmap/ic_launcher"/>
     </LinearLayout>
     <View
-        style="@style/LineGrey1dp"
+        style="@style/LineGrey1px"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"/>
     <LinearLayout android:layout_width="match_parent"

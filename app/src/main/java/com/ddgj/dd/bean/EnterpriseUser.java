@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 企业用户
  * Created by lyg on 2016/10/5.
  */
-public class EnterpriseUser extends User implements Serializable{
+public class EnterpriseUser extends User implements Serializable {
 
     /**
      * password : 123123
@@ -73,10 +73,13 @@ public class EnterpriseUser extends User implements Serializable{
                 .putString("facilitator_ip", facilitator_ip)
                 .putString("facilitator_landing_time", facilitator_landing_time)
                 .putString("add_time", add_time)
+                .putString("head_picture", head_picture)
                 .putString("modify_time", modify_time).commit();
     }
 
-    /**从SharedPreferences获取企业用户信息*/
+    /**
+     * 从SharedPreferences获取企业用户信息
+     */
     public void initFromSharedPreferences(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         password = sharedPreferences.getString("password", "");
@@ -98,6 +101,7 @@ public class EnterpriseUser extends User implements Serializable{
         facilitator_landing_time = sharedPreferences.getString("facilitator_landing_time", "");
         add_time = sharedPreferences.getString("add_time", "");
         modify_time = sharedPreferences.getString("modify_time", "");
+        head_picture = sharedPreferences.getString("head_picture", "");
     }
 
     public String getPassword() {

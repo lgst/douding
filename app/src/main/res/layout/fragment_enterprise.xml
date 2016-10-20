@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:background="@color/grey_lightE"
               android:orientation="vertical">
-    <View style="@style/LineGrey1dp"
+    <View style="@style/LineGrey1px"
           android:layout_marginTop="16dp"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -34,7 +34,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -46,7 +46,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -58,7 +58,7 @@
                     style="@style/UserInfoValues"
                     android:text="@string/not_set"/>
             </LinearLayout>
-            <View style="@style/LineGrey1dp"
+            <View style="@style/LineGrey1px"
                   android:layout_marginLeft="16dp"/>
             <LinearLayout
                 style="@style/UserInfoLinerLayout">
@@ -74,7 +74,7 @@
     <View android:layout_width="match_parent"
           android:layout_height="6dp"
           android:background="@drawable/shape_shadow_v_up"/>
-    <View style="@style/LineGrey1dp"
+    <View style="@style/LineGrey1px"
           android:layout_marginTop="16dp"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                 style="@style/UserInfoValues"
                 android:text="@string/not_set"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -104,7 +104,7 @@
                 style="@style/UserInfoValues"
                 android:text="@string/not_set"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -116,7 +116,7 @@
                 style="@style/UserInfoValues"
                 android:text="@string/not_set"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">

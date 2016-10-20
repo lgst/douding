@@ -92,6 +92,7 @@ public class PersonalUser extends User implements Serializable {
 				.putString("user_landing_time",user_landing_time)
 				.putString("user_bank_account",user_bank_account)
 				.putString("role_id",role_id)
+				.putString("head_picture",head_picture)
 				.putString("user_permissions",user_permissions).commit();
 	}
 	/**从SharedPreferences获取个人用户信息*/
@@ -121,6 +122,7 @@ public class PersonalUser extends User implements Serializable {
 		user_bank_account = sharedPreferences.getString("user_bank_account", "");
 		role_id = sharedPreferences.getString("role_id", "");
 		user_permissions = sharedPreferences.getString("user_permissions", "");
+		head_picture = sharedPreferences.getString("head_picture", "");
 	}
 
 	public String getPassword() {

@@ -15,11 +15,11 @@ public class ChatActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        initViews();
+        initView();
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         //new出EaseChatFragment或其子类的实例
         EaseChatFragment chatFragment = new EaseChatFragment();
         //传入参数

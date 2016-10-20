@@ -118,8 +118,15 @@
         </activity>
         <activity android:name=".activity.OrderListActivity">
         </activity>
-        <activity android:name=".activity.CitySelectorActivity"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        <activity
+            android:name=".activity.CitySelectorActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        <activity android:name=".activity.OrderFactoryActivity">
+        </activity>
+        <activity android:name=".activity.OEMActivity">
+        </activity>
+        <activity android:name=".activity.OEMProductActivity">
         </activity>
     </application>
 

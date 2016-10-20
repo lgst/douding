@@ -21,7 +21,7 @@
             android:text="@string/save"/>
     </RelativeLayout>
 
-    <View style="@style/LineGrey1dp"
+    <View style="@style/LineGrey1px"
           android:layout_marginTop="16dp"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                 android:id="@+id/enterprise_name"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -49,7 +49,7 @@
                 android:id="@+id/enterprise_scale"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -73,7 +73,7 @@
     <View android:layout_width="match_parent"
           android:layout_height="6dp"
           android:background="@drawable/shape_shadow_v_up"/>
-    <View style="@style/LineGrey1dp"
+    <View style="@style/LineGrey1px"
           android:layout_marginTop="16dp"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:id="@+id/enterprise_address"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -111,7 +111,7 @@
                 android:id="@+id/enterprise_link_name"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">

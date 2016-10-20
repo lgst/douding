@@ -17,6 +17,7 @@
             android:onClick="backClick"
             android:src="@mipmap/ic_blue_back"/>
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -25,7 +26,7 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
     </RelativeLayout>
-    <View style="@style/LineGrey1dp"/>
+    <View style="@style/LineGrey1px"/>
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal">
@@ -35,26 +36,50 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:clickable="true"
-            android:onClick="selectCity"
             android:gravity="center"
             android:padding="8dp"
             android:text="西安"/>
+        <View android:layout_width="1px" android:layout_height="match_parent"
+              android:background="@color/grey_light"/>
         <TextView
             android:id="@+id/tv_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:gravity="center"
             android:clickable="true"
-            android:onClick="selectPrice"
+            android:gravity="center"
             android:padding="8dp"
-            android:text="1~1000"/>
+            android:text="1-1000"/>
 
     </LinearLayout>
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <View style="@style/LineGrey1px"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        <LinearLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ProgressBar
+                style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/loading_data"/>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

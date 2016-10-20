@@ -81,7 +81,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patent);
-        initViews();
+        initView();
         mPatents = new ArrayList<Patent>();
         initDatas(LOAD, classes);
     }
@@ -158,7 +158,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         mLoading = (LinearLayout) findViewById(R.id.loading);
         mRg = (RadioGroup) findViewById(R.id.rg);
         mplv = (PullToRefreshListView) findViewById(R.id.plv);

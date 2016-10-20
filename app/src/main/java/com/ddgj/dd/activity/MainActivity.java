@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.widget.RadioGroup;
 
-import com.ddgj.dd.DDGJApplication;
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.MainContentVPAdapter;
 import com.ddgj.dd.fragment.CommunityFragment;
@@ -51,9 +50,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DDGJApplication.addActivity(this);
         initFragment();
-        initViews();
+        initView();
     }
 
     /**初始化fragment*/
@@ -71,7 +69,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     }
 
-    public void initViews() {
+    public void initView() {
         customViewPager = (CustomViewPager) findViewById(R.id.act_main_content);
         mRadioGroup = (RadioGroup) findViewById(R.id.act_main_radio_group);
         mRadioGroup.setOnCheckedChangeListener(this);
@@ -103,17 +101,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(update)//更新我的界面
-        {
-            mineFragment.updateUserInfo();
-            update = false;
-        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DDGJApplication.removeActivity(this);
     }
 
     @Override

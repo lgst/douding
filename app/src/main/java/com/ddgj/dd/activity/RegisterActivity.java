@@ -56,10 +56,10 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        initViews();
+        initView();
     }
 
-    public void initViews() {
+    public void initView() {
         userName = (EditText) findViewById(R.id.user_name);
         passWord = (EditText) findViewById(R.id.pass_word);
         confirm = (EditText) findViewById(R.id.confirm);

@@ -12,7 +12,7 @@ import com.ddgj.dd.R;
 
 public class PatentServiceActivity extends BaseActivity {
     @Override
-    public void initViews() {
+    public void initView() {
 
     }
 

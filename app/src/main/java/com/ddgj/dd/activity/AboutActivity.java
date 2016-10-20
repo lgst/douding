@@ -16,7 +16,7 @@ public class AboutActivity extends BaseActivity {
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         Log.i("","");
     }
 

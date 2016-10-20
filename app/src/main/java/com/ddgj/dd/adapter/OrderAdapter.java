@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.util.StringUtils;
+import com.ddgj.dd.util.net.NetWorkInterface;
 
 import java.util.List;
 
@@ -47,19 +48,27 @@ public class OrderAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-        }else{
+        } else {
             vh = (ViewHolder) convertView.getTag();
         }
         Order order = mOrders.get(position);
-        Glide.with(parent.getContext())
-                .load("")
-                .error(R.mipmap.ic_image_white_48dp)
-                .placeholder(R.mipmap.ic_image_white_48dp)
-                .thumbnail(0.1f)
-                .into(vh.img);
+        if (order.getMade_picture() != null) {
+            String imgs[] = order.getMade_picture().split(",");
+            for (int i = 0; i < imgs.length; i++) {
+                if (imgs[i].isEmpty() || imgs[i].equals("null"))
+                    continue;
+                Glide.with(parent.getContext())
+                        .load(NetWorkInterface.HOST + "/" + imgs[i])
+                        .error(R.mipmap.ic_crop_original_grey600_48dp)
+                        .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
+                        .thumbnail(0.1f)
+                        .into(vh.img);
+                break;
+            }
+        }
         vh.title_text.setText(order.getMade_title());
         vh.content_text.setText(order.getMade_describe());
-        vh.browse.setText(String.valueOf((int)(Math.random()*100)));
+        vh.browse.setText(String.valueOf((int) (Math.random() * 100)));
         vh.date.setText(StringUtils.getDate(order.getMade_time()));
         return convertView;
     }

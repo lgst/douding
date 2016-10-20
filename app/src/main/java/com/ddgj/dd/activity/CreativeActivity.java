@@ -71,7 +71,7 @@ public class CreativeActivity extends BaseActivity implements View.OnClickListen
     private InputStream inputStream;
 
     @Override
-    public void initViews() {
+    public void initView() {
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         editName = (EditText) findViewById(R.id.edit_name);
@@ -93,7 +93,7 @@ public class CreativeActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creative);
-        initViews();
+        initView();
         initModeSpinner();
     }
 

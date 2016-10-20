@@ -33,11 +33,11 @@ public class SearchActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        initViews();
+        initView();
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         searchContent = (EditText) findViewById(R.id.search_edit_text);
         classes = (TextView) findViewById(R.id.title_text);
         searchHistory = (ListView) findViewById(R.id.list);

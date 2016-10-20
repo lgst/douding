@@ -20,7 +20,7 @@ public class WebActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-        initViews();
+        initView();
         initWebView();
     }
 
@@ -33,7 +33,7 @@ public class WebActivity extends BaseActivity {
             }
         });
         WebSettings webSettings = mWebView.getSettings();
-//        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setSupportZoom(false);
         webSettings.setUseWideViewPort(false);
@@ -42,7 +42,7 @@ public class WebActivity extends BaseActivity {
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         mTitle = (TextView) findViewById(R.id.title);
         mTitle.setText(getIntent().getStringExtra("title"));
         mContainer = (RelativeLayout) findViewById(R.id.content_container);

@@ -7,16 +7,19 @@
     android:orientation="vertical"
     tools:context=".activity.WebActivity">
     <RelativeLayout
-        style="@style/ActionBarTheme">
+        style="@style/ActionBarLightTheme"
+        android:background="@color/white">
         <ImageView
             style="@style/TitleBarImageTheme"
             android:clickable="true"
             android:onClick="backClick"
-            android:src="@mipmap/ic_chevron_left_white_24dp"/>
+            android:src="@mipmap/ic_blue_back"/>
         <TextView
             android:id="@+id/title"
-            style="@style/TitleBarTextTheme"/>
+            style="@style/TitleBarTextTheme"
+            android:textColor="@color/colorPrimary"/>
     </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
 
     <RelativeLayout
         android:id="@+id/content_container"
