@@ -16,6 +16,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/colorActionBar</item>
     </style>
+    <style name="ActionBarFactoryTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/grey_lightE</item>
+    </style>
     <style name="ActionBarLightTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -29,6 +34,13 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="TitleBarFactoryTextTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
     <style name="TitleBarRightTextTheme">
         <item name="android:layout_width">50dp</item>

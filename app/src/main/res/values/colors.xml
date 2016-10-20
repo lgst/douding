@@ -16,6 +16,9 @@
     <color name="grey_lightE">#EEEEEE</color>
     <color name="alpha">#00000000</color>
 
+    <color name="factorysizecolor">#014886</color>
+    <color name="factorysize">#0F0F0F</color>
+
     <color name="select_pic_bg">#014886</color>
     <color name="all_bg_color">#013461</color>
     <color name="base_color_text_white">#FFFFFFFF</color>
