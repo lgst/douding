@@ -68,4 +68,25 @@ public interface NetWorkInterface {
      * 获取我的创意接口
      */
     public static final String GET_MINE_ORIGINALITY = HOST + "/finfMyOriginality.do";
+    /**
+     * 获取工厂接口
+     */
+    public static final String GET_FACILITATORMADE= HOST + "/findFacilitatorMade.do";
+    /**
+     * 获取产品接口
+     *
+     */
+    public static final String GET_PRODUCTMADE= HOST + "/findAllOriginalityTwo.do";
+    /***
+     * 获取工厂详情接口
+     *
+     */
+    public static final String GET_FAC_DETAILS= HOST + "/factorydetails.do";
+    /***
+     * 获取创意产品详情接口
+     *OriginalityDetails.do
+     */
+    public static final String GET__PRODUCT_DETAILS= HOST + "/OriginalityDetails.do";
+
+
 }

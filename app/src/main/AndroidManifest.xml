@@ -72,10 +72,16 @@
         </activity>
         <activity android:name=".activity.PatentActivity">
         </activity>
+        <activity android:name=".activity.FactoryActivity">
+        </activity>
         <activity android:name=".activity.WebActivity">
         </activity>
         <activity android:name=".activity.CreativeActivity"/>
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

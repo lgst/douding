@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.FactoryActivity;
 import com.ddgj.dd.activity.OriginalityActivity;
 import com.ddgj.dd.activity.PatentActivity;
 //import com.ddgj.activity.ListActivity;
@@ -68,7 +69,7 @@ public class ClassesGridViewAdapter extends BaseAdapter {
 //                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",5));
                         break;
                     case 5://工厂 中国智造
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",6));
+                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page",6));
                         break;
                 }
             }

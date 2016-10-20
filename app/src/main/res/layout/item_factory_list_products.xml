@@ -7,17 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp">
+
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:src="@mipmap/f_product"
+                android:id="@+id/img_products_pic"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
                 />
 
-        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,6 +41,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="已经炸了了一次又一次的三星如何补救市场。你坐高铁，坐飞机，只要拿着三星的note7，一概被拒，这么多年三星在人们心中打造的良好品牌，出了这么一档子，三星老总的心理阴影面积应该很大吧!"
+                    android:maxLines="3"
+                    android:ellipsize="end"
                     android:textColor="@color/factorysize"
                     android:paddingTop="7dp"
                     android:paddingBottom="5dp"

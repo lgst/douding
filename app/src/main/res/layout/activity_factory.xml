@@ -7,14 +7,16 @@
     android:orientation="vertical"
     tools:context="com.ddgj.dd.activity.FactoryActivity">
     <RelativeLayout
-        style="@style/ActionBarTheme">
+        style="@style/ActionBarFactoryTheme">
         <ImageView
             style="@style/TitleBarImageTheme"
             android:onClick="backClick"
-            android:src="@mipmap/ic_chevron_left_white_24dp"/>
+            android:src="@mipmap/ic_blue_back"/>
         <TextView
-            style="@style/TitleBarTextTheme"
-            android:text="@string/factory"/>
+            style="@style/TitleBarFactoryTextTheme"
+            android:text="@string/factory"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -54,13 +56,36 @@
 
         </RadioGroup>
     </LinearLayout>
+    <View
+        style="@style/LineGrey1dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/lv_factory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
         >
 
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ProgressBar
+            style="@style/Base.Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/loading_data"/>
+    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
