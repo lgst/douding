@@ -1,5 +1,6 @@
 package com.ddgj.dd.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -97,7 +98,8 @@ public class FileUtil {
 	 * @param fileUri
      * @return
      */
-	public static File scal(Uri fileUri){
+	public static File scal(Uri fileUri,File dir){
+
 		String path = fileUri.getPath();
 		File outputFile = new File(path);
 		long fileSize = outputFile.length();
@@ -115,7 +117,7 @@ public class FileUtil {
 			options.inJustDecodeBounds = false;
 
 			Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-			outputFile = new File(createImageFile().getPath());
+			outputFile = new File(createImageFile(dir).getPath());
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(outputFile);
@@ -130,7 +132,7 @@ public class FileUtil {
 				bitmap.recycle();
 			}else{
 				File tempFile = outputFile;
-				outputFile = new File(createImageFile().getPath());
+				outputFile = new File(createImageFile(dir).getPath());
 				copyFileUsingFileChannels(tempFile, outputFile);
 			}
 
@@ -138,18 +140,19 @@ public class FileUtil {
 		return outputFile;
 
 	}
-	public static Uri createImageFile(){
+	public static Uri createImageFile(File dir){
 		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
 		File storageDir = Environment.getExternalStoragePublicDirectory(
 				Environment.DIRECTORY_PICTURES);
+
 		File image = null;
 		try {
 			image = File.createTempFile(
 					imageFileName,  /* prefix */
 					".jpg",         /* suffix */
-					storageDir      /* directory */
+					dir      /* directory */
 			);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

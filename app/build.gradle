@@ -47,6 +47,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
-    compile project(':easeui')
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+   /* compile project(':easeui')*/
 //    compile 'org.xutils:xutils:3.3.36'
 }

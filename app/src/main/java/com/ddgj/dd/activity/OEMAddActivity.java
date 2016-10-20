@@ -217,12 +217,14 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
             //file =  FileUtil.scal(Uri.parse(path.get(0)));
             // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
 
-
+            File cacheDir = getCacheDir();
             PostFormBuilder post = OkHttpUtils.post();
-            for (int i = 0; i < path.size(); i++) {
-                file = FileUtil.scal(Uri.parse(path.get(i)));
-                String s="made_picture";
-                post.addFile(s+i, file.getName(), file);
+            if (path!=null) {
+                for (int i = 0; i < path.size(); i++) {
+                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
+                    String s = "made_picture";
+                    post.addFile(s + i, file.getName(), file);
+                }
             }
             post.url(NetWorkInterface.ADD_Order)
                     .params(params).build()

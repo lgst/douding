@@ -5,6 +5,15 @@ import android.app.Application;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.user.UserHelper;
 
+import com.zhy.http.okhttp.OkHttpUtils;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 
 /**
  * Created by Administrator on 2016/9/28.
@@ -17,6 +26,19 @@ public class DDGJApplication extends Application {
         UserHelper.getInstance().initUserInfo(this);
         FileUtil.getInstance().init(getApplicationContext());
         initEM();
+        initOkhttp();
+    }
+    /**
+     * 配置网络请求
+     */
+    private void initOkhttp() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(20000L, TimeUnit.MILLISECONDS)
+                .readTimeout(20000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     /**
