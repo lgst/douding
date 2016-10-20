@@ -104,8 +104,13 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        if (classes == MINE)
+        if (classes == MINE){
             params.put("o_account_id", UserHelper.getInstance().getUser().getAccount_id());
+        }else {
+            params.put("originality_differentiate",String.valueOf(0));
+
+        }
+
 
 //        Log.i("lgst", "mPageNumber:" + mPageNumber);
 //        Log.i("lgst", "mPageSingle:" + mPageSingle);

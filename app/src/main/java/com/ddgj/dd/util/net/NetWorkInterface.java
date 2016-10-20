@@ -100,7 +100,7 @@ public interface NetWorkInterface {
     /**
      * 获取创意详情页
      */
-    public static final String GET_ORIGINALITY_DETAILS = HOST + "/OriginalityDetails.do";
+    public static final String GET_ORIGINALITY_DETAILS = HOST + "/OriginalityDet.do";
     /**
      * 获取订制详情页
      */

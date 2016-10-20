@@ -4,6 +4,7 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -17,9 +18,13 @@ import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.bean.EnterpriseUser;
+import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -38,7 +43,7 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  * Created by Administrator on 2016/10/13.
  */
 
-public class PublishCreativeActivity extends BaseActivity implements View.OnClickListener {
+public class PublishCreativeActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private ImageView backUp;
     private EditText editName;
@@ -72,24 +77,26 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     private LinearLayout addImageGroup;
     private PostFormBuilder o_picture2;
     private SweetAlertDialog dialog;
+    private String nickname;
+    private String facilitator_name;
+    private String account_id;
+    private String head_picture;
 
 
     @Override
     public void initView() {
+
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         editName = (EditText) findViewById(R.id.edit_name);
         editIntro = (EditText) findViewById(R.id.edit_intro);
         editInfor = (EditText) findViewById(R.id.edit_infor);
         userNmae = (EditText) findViewById(R.id.idea_user_name);
-        userNmae.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
 
-            }
-        });
         userEmail = (EditText) findViewById(R.id.idea_user_email);
+        userEmail.setOnFocusChangeListener(this);
         userPhone = (EditText) findViewById(R.id.idea_user_phone);
+        userPhone.setOnFocusChangeListener(this);
         pickPic = (Button) findViewById(R.id.pick_pic);
         typeSpinner = (Spinner) findViewById(R.id.type_spinner);
         pickPic.setOnClickListener(this);
@@ -102,10 +109,25 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
     }
 
+    /**
+     * 获取用户信息
+     */
+    private void initUser() {
+        account_id = UserHelper.getInstance().getUser().getAccount_id();
+        head_picture = UserHelper.getInstance().getUser().getHead_picture();
+        if(UserHelper.getInstance().getUser() instanceof PersonalUser){
+            nickname = ((PersonalUser) UserHelper.getInstance().getUser()).getNickname();
+        }if(UserHelper.getInstance().getUser() instanceof EnterpriseUser){
+            facilitator_name = ((EnterpriseUser) UserHelper.getInstance().getUser()).getFacilitator_name();
+        }
+
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_creative);
+        initUser();
         initView();
         initModeSpinner();
     }
@@ -168,10 +190,11 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             params.put("o_user_email", String.valueOf(sEditUserEmail));
             params.put("o_secrecy_type", String.valueOf(sModeSpinner));
             params.put("o_originality_address", "o_originality_address");
-            params.put("o_account_id", "o_account_id");
+            params.put("o_account_id", account_id);
             params.put("o_nickname", "o_nickname");
             params.put("head_picture", "head_picture");
             params.put("originality_differentiate", "0");
+
 
             //file = new File(path.get(0));
              //file = FileUtil.scal(Uri.parse(path.get(0)));
@@ -221,10 +244,8 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         sEditUserPhone = this.userPhone.getText().toString().trim();
         sTypeSpinner = (String) this.typeSpinner.getSelectedItem();
         int id = this.typeSpinner.getSelectedItemPosition();
-        System.out.println(id+"模式id");
-        System.out.println(id+"模式id");
-        System.out.println(id+"模式id");
-        Log.e("douding","shuju模式id"+id+sEditName+sEditIntro+sEditInfor+sEditUserName+sEditUserEmail+sEditUserPhone+sTypeSpinner+sModeSpinner);
+
+        //Log.e("douding","shuju模式id"+id+sEditName+sEditIntro+sEditInfor+sEditUserName+sEditUserEmail+sEditUserPhone+sTypeSpinner+sModeSpinner);
 
 
     }
@@ -288,4 +309,32 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch (view.getId()) {
+            case R.id.idea_user_email:
+                if (b) {
+                    // 此处为得到焦点时的处理内容
+                    //showToastShort("此处为得到焦点时的处理内容");
+                } else {
+                    // 此处为失去焦点时的处理内容
+                    sEditUserEmail = this.userEmail.getText().toString().trim();
+
+                    if (!TextCheck.checkEmail(sEditUserEmail)){
+                        showToastShort("邮箱格式不正确");
+                    }
+                }
+                break;
+            case R.id.idea_user_phone:
+                if (b) {
+                } else {
+                    sEditUserPhone = this.userPhone.getText().toString().trim();
+                    if (!TextCheck.checkPhoneNumber(sEditUserPhone)){
+                        showToastShort("手机号码格式不正确");
+                    }
+                }
+            default:
+                break;
+        }
+    }
 }
