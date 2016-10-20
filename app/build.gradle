@@ -37,4 +37,5 @@ dependencies {
     compile 'com.hejunlin.superindicatorlibray:superindicatorlibray:1.0.3'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
