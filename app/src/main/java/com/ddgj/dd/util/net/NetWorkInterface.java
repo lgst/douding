@@ -85,4 +85,30 @@ public interface NetWorkInterface {
      */
     public static final String ADD_Order = HOST + "/addCustom_made.do";
 
+    /**
+     * 根据类别获取订制接口
+     */
+    public static final String GET_ORDER_FOR_TYPE = HOST + "/findCustom_madeType.do";
+    /**
+     * 上传用户图像
+     */
+    public static final String UPDATE_USER_ICON = HOST + "/addHeadPicture.do";
+    /**
+     * 获取订制工厂 / 代工工厂
+     */
+    public static final String GET_ORDER_FACTORY = HOST + "/findFacilitatorMade.do";
+    /**
+     * 获取创意详情页
+     */
+    public static final String GET_ORIGINALITY_DETAILS = HOST + "/OriginalityDetails.do";
+    /**
+     * 获取订制详情页
+     */
+    public static final String GET_ORDER_DETAILS = HOST + "/Custom_madeDetails.do";
+    /**获取订制工厂详情*/
+    public static final String GET_ORDER_FACTORY_DETAILS = HOST + "/factorydetails.do";
+    /**获取代工产品*/
+    public static final String GET_ORDER_PRODUCT_DETAILS = HOST + "/foundryDetails.do ";
+
+
 }

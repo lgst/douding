@@ -1,6 +1,8 @@
 package com.ddgj.dd.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +10,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.AboutActivity;
 import com.ddgj.dd.activity.LoginActivity;
 import com.ddgj.dd.activity.UserCenterActivity;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
+import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
+
+import static com.ddgj.dd.activity.MainActivity.update;
 
 /**
  * Created by Administrator on 2016/9/29.
@@ -31,6 +38,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (update)//更新我的界面
+        {
+            updateUserInfo();
+            update = false;
+        }
     }
 
     @Override
@@ -162,9 +179,17 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     private void updateUI() {
         userName.setText(getResources().getString(R.string.click_login));
+        userIcon.setImageResource(R.mipmap.ic_account_circle_white_48dp);
     }
 
     private void updateUI(String username) {
         userName.setText(username);
+        Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getInstance().getmImageCache() + "user_icon");
+        if (bitmap != null)
+            userIcon.setImageBitmap(bitmap);
+        else {
+            Glide.with(this).load(NetWorkInterface.HOST + "/" + UserHelper.getInstance().getUser().getHead_picture())
+                    .into(userIcon);
+        }
     }
 }

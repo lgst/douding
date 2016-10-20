@@ -1,16 +1,18 @@
 package com.ddgj.dd.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
+import com.ddgj.dd.activity.WebActivity;
 import com.ddgj.dd.adapter.ADAdapter;
 import com.ddgj.dd.adapter.ClassesGridViewAdapter;
 import com.ddgj.dd.adapter.OriginalityPLVAdapter;
@@ -18,6 +20,8 @@ import com.ddgj.dd.adapter.PatentPLVAdapter;
 import com.ddgj.dd.bean.ADBean;
 import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.Patent;
+import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
@@ -38,39 +42,19 @@ import java.util.Map;
 
 import okhttp3.Call;
 
-//import org.xutils.DbManager;
-//import org.xutils.ex.DbException;
-//import org.xutils.x;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * interface.
+ * 主页
  */
 public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private BaseActivity act;
-    private SwipeRefreshLayout refreshLayout;
     private LoopViewPager viewpager;
     private CircleIndicator indicator;
     private CustomGridView classesGV;
     private CustomListView patentListView;
     private CustomListView originalityListView;
-//    private DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
-//            .setDbName("home_chach.db")
-//            .setDbVersion(2)
-//            .setDbOpenListener(new DbManager.DbOpenListener() {
-//                @Override
-//                public void onDbOpened(DbManager db) {
-//                    // 开启WAL, 对写入加速提升巨大
-//                    db.getDatabase().enableWriteAheadLogging();
-//                }
-//            });
-//    private DbManager dm = x.getDb(daoConfig);
+    private List<Originality> mOriginalitys;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public HomeFragment() {
     }
 
@@ -90,25 +74,19 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews();
-        initChach();
-        initAD();
-        initPatent();
-        initOriginality();
+        initCacha();//加载缓存
+        initAD();//从网络加载轮播图
+        initPatent();//从网络加载专利
+        initOriginality();//从网络加载创意
     }
 
-    private void initChach() {
-//        try {
-//            List<ADBean> ads = dm.findAll(ADBean.class);
-//            viewpager.setAdapter(new ADAdapter(act, ads));
-//            viewpager.setLooperPic(true);//是否设置自动轮播
-//            indicator.setViewPager(viewpager);
-//            List<Originality> mOriginalitys = dm.findAll(Originality.class);
-//            originalityListView.setAdapter(new OriginalityPLVAdapter(act, mOriginalitys));
-//            List<Patent> mPatents = dm.findAll(Patent.class);
-//            patentListView.setAdapter(new PatentPLVAdapter(act, mPatents));
-//        } catch (DbException e) {
-//            e.printStackTrace();
-//        }
+    private void initCacha() {
+        /*加载缓存广告*/
+        analysisAndLoadAD(FileUtil.readJsonFromCacha("ad"));
+        /**加载缓存创意*/
+        analysisAndLoadOriginality(FileUtil.readJsonFromCacha("originality"));
+        /**加载缓存专利*/
+        analysisAndLoadPatent(FileUtil.readJsonFromCacha("patent"));
     }
 
     /**
@@ -127,33 +105,63 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        try {
-                            JSONObject jo = new JSONObject(response);
-                            int status = jo.getInt("status");
-                            if (status == STATUS_SUCCESS) {
-//                                dm.delete(Originality.class);//清除上次缓存数据
-                                List<Originality> mOriginalitys = new ArrayList<Originality>();
-                                JSONArray ja = jo.getJSONArray("data");
-                                for (int i = 0; i < ja.length(); i++) {
-                                    String patentStr = ja.getJSONObject(i).toString();
-                                    Originality originality = new Gson().fromJson(patentStr, Originality.class);
-                                    mOriginalitys.add(originality);
-//                                    dm.save(originality);//缓存创意实体类
-                                }
-//                                dm.close();
-                                originalityListView.setAdapter(new OriginalityPLVAdapter(act, mOriginalitys));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } /*catch (DbException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
-
+                        analysisAndLoadOriginality(response);
                     }
                 }
         );
+        originalityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Originality originality = mOriginalitys.get(position);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("client_side", "app");
+                params.put("originality_id", originality.getOriginality_id());
+                OkHttpUtils.post().url(GET_ORIGINALITY_DETAILS).params(params).build().execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
+                            String url = responseInfo.getData();
+                            Log.e("lgst", url);
+                            startActivity(new Intent(getActivity(), WebActivity.class)
+                                    .putExtra("title", originality.getOriginality_name())
+                                    .putExtra("url", HOST + url));
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 解析创意json数据
+     */
+    private void analysisAndLoadOriginality(String response) {
+        if (response == null) {
+            return;
+        }
+        try {
+            JSONObject jo = new JSONObject(response);
+            int status = jo.getInt("status");
+            if (status == STATUS_SUCCESS) {
+                FileUtil.saveJsonToCacha(response, "originality");
+                mOriginalitys = new ArrayList<Originality>();
+                JSONArray ja = jo.getJSONArray("data");
+                for (int i = 0; i < ja.length(); i++) {
+                    String patentStr = ja.getJSONObject(i).toString();
+                    Originality originality = new Gson().fromJson(patentStr, Originality.class);
+                    mOriginalitys.add(originality);
+                }
+                originalityListView.setAdapter(new OriginalityPLVAdapter(act, mOriginalitys));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -172,45 +180,15 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        try {
-                            List<Patent> mPatents = new ArrayList<Patent>();
-                            JSONObject jo = new JSONObject(response);
-                            int status = jo.getInt("status");
-                            if (status == STATUS_SUCCESS) {
-//                                dm.delete(Patent.class);//清除上次缓存
-                                JSONArray ja = jo.getJSONArray("data");
-                                for (int i = 0; i < ja.length(); i++) {
-                                    String patentStr = ja.getJSONObject(i).toString();
-                                    Patent patent = new Gson().fromJson(patentStr, Patent.class);
-                                    mPatents.add(patent);
-//                                    dm.save(patent);//缓存实专利体类对象
-                                }
-//                                dm.close();//关闭数据库
-                                patentListView.setAdapter(new PatentPLVAdapter(act, mPatents));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } /*catch (DbException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
+                        analysisAndLoadPatent(response);
                     }
                 }
 
         );
     }
 
-
     @Override
     protected void initViews() {
-//        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-//        findViewById(R.id.search).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getActivity(), SearchActivity.class));
-//            }
-//        });
         viewpager = (LoopViewPager) findViewById(R.id.viewpager);
         indicator = (CircleIndicator) findViewById(R.id.indicator);
         classesGV = (CustomGridView) findViewById(R.id.calsses_list);
@@ -231,36 +209,65 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
             @Override
             public void onResponse(String response, int id) {
-                try {
-                    JSONObject jo = new JSONObject(response);
-                    if (STATUS_SUCCESS == jo.getInt("status")) {
-//                        dm.delete(ADBean.class);//清除缓存实体类
-                        JSONArray array = jo.getJSONArray("data");
-                        List<ADBean> adBeens = new ArrayList<ADBean>();
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject jsonObject = array.getJSONObject(i);
-                            ADBean adBean = new Gson().fromJson(jsonObject.toString(), ADBean.class);
-                            adBeens.add(adBean);
-                            ImageView imageView = (ImageView) act.getLayoutInflater().inflate(R.layout.item_home_list_ad_item, null);
-                            Glide.with(act)
-                                    .load(HOST + "/" + adBean.getPicture())
-                                    .thumbnail(0.1f)
-                                    .into(imageView);
-//                            dm.save(adBean);//将实体类缓存
-                        }
-//                        dm.close();//关闭数据库连接
-                        viewpager.setAdapter(new ADAdapter(act, adBeens));
-                        viewpager.setLooperPic(true);//是否设置自动轮播
-                        indicator.setViewPager(viewpager);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } /*catch (DbException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                analysisAndLoadAD(response);
             }
         });
+    }
+
+    /**
+     * 解析轮播图json数据
+     */
+    private void analysisAndLoadAD(String response) {
+        if (response == null) {
+            return;
+        }
+        try {
+            JSONObject jo = new JSONObject(response);
+            if (STATUS_SUCCESS == jo.getInt("status")) {
+                FileUtil.saveJsonToCacha(response, "ad");
+                JSONArray array = jo.getJSONArray("data");
+                List<ADBean> adBeens = new ArrayList<ADBean>();
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jsonObject = array.getJSONObject(i);
+                    ADBean adBean = new Gson().fromJson(jsonObject.toString(), ADBean.class);
+                    adBeens.add(adBean);
+                    ImageView imageView = (ImageView) act.getLayoutInflater().inflate(R.layout.item_home_list_ad_item, null);
+                    Glide.with(act)
+                            .load(HOST + "/" + adBean.getPicture())
+                            .thumbnail(0.1f)
+                            .into(imageView);
+                }
+                viewpager.setAdapter(new ADAdapter(act, adBeens));
+                viewpager.setLooperPic(true);//是否设置自动轮播
+                indicator.setViewPager(viewpager);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**解析专利json数据*/
+    public void analysisAndLoadPatent(String response) {
+        if (response == null) {
+            return;
+        }
+        try {
+            List<Patent> mPatents = new ArrayList<Patent>();
+            JSONObject jo = new JSONObject(response);
+            int status = jo.getInt("status");
+            if (status == STATUS_SUCCESS) {
+//                写入json缓存
+                FileUtil.saveJsonToCacha(response, "patent");
+                JSONArray ja = jo.getJSONArray("data");
+                for (int i = 0; i < ja.length(); i++) {
+                    String patentStr = ja.getJSONObject(i).toString();
+                    Patent patent = new Gson().fromJson(patentStr, Patent.class);
+                    mPatents.add(patent);
+                }
+                patentListView.setAdapter(new PatentPLVAdapter(act, mPatents));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

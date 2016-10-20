@@ -21,7 +21,7 @@
             android:onClick="saveClick"
             android:text="@string/save"/>
     </RelativeLayout>
-    <View style="@style/LineGrey1dp"
+    <View style="@style/LineGrey1px"
           android:layout_marginTop="16dp"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                 android:id="@+id/name"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -49,7 +49,7 @@
                 android:id="@+id/nick_name"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -119,7 +119,7 @@
                 android:id="@+id/phone_number"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
@@ -131,15 +131,16 @@
                 style="@style/UserInfoValues"
                 android:inputType="textEmailAddress"/>
         </LinearLayout>
-        <View style="@style/LineGrey1dp"
+        <View style="@style/LineGrey1px"
               android:layout_marginLeft="16dp"/>
         <LinearLayout
             style="@style/UserInfoLinerLayout">
             <TextView
                 style="@style/UserInfoEditNames"
                 android:text="@string/address"/>
-            <EditText
+            <TextView
                 android:id="@+id/address"
+                android:padding="8dp"
                 style="@style/UserInfoValues"/>
         </LinearLayout>
     </LinearLayout>

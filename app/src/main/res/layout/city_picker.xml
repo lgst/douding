@@ -6,7 +6,7 @@
     android:gravity="center_horizontal"
     android:orientation="horizontal" >
 
-    <com.example.city.ScrollerNumberPicker
+    <com.ddgj.dd.view.city_selector.ScrollerNumberPicker
         android:id="@+id/province"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         su:selecredTextSize="16sp"
         su:unitHight="50dp" />
 
-    <com.example.city.ScrollerNumberPicker
+    <com.ddgj.dd.view.city_selector.ScrollerNumberPicker
         android:id="@+id/city"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         su:selecredTextSize="16sp"
         su:unitHight="50dp" />
 
-    <com.example.city.ScrollerNumberPicker
+    <com.ddgj.dd.view.city_selector.ScrollerNumberPicker
         android:id="@+id/couny"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

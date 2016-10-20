@@ -34,26 +34,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_bg"
+                    android:background="@drawable/ripple_bg_grey"
                     android:clickable="true"
                     android:gravity="center"
                     android:onClick="galleryClick"
-                    android:padding="8dp"
+                    android:padding="16dp"
                     android:text="@string/selecte_photo_from_gallery"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp"/>
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/grey_light"/>
+                    style="@style/LineGrey1px"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_bg"
+                    android:background="@drawable/ripple_bg_grey"
                     android:clickable="true"
                     android:gravity="center"
                     android:onClick="graphClick"
-                    android:padding="8dp"
+                    android:padding="16dp"
                     android:text="@string/take_a_photo"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp"/>
@@ -69,11 +67,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ripple_bg"
+                android:background="@drawable/ripple_bg_grey"
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="cancelClick"
-                android:padding="8dp"
+                android:padding="16dp"
                 android:text="@string/cancel"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"/>

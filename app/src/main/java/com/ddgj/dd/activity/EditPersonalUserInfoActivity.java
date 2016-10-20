@@ -1,6 +1,7 @@
 package com.ddgj.dd.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,7 +43,7 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
     private RadioGroup gender;
     private EditText phoneNumber;
     private EditText email;
-    private EditText address;
+    private TextView address;
     private TextView age;
     private PersonalUser user = (PersonalUser) UserHelper.getInstance().getUser();
     private boolean textChanged;
@@ -56,7 +57,7 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
                 showToastShort("修改完成！");
                 textChanged = false;
             } else if (msg.what == FAILDE) {
-                showToastShort((String)msg.obj);
+                showToastShort((String) msg.obj);
             } else {
                 showToastShort("网络状况不佳！修改失败！");
             }
@@ -68,17 +69,17 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_personal_user_info);
-        initViews();
+        initView();
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         name = (EditText) findViewById(R.id.name);
         nickName = (EditText) findViewById(R.id.nick_name);
         gender = (RadioGroup) findViewById(R.id.gender);
         phoneNumber = (EditText) findViewById(R.id.phone_number);
         email = (EditText) findViewById(R.id.email);
-        address = (EditText) findViewById(R.id.address);
+        address = (TextView) findViewById(R.id.address);
         age = (TextView) findViewById(R.id.age);
 
         initDatas();
@@ -96,6 +97,13 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
         phoneNumber.setText(user.getPhone_number());
         email.setText(user.getUser_email());
         address.setText(user.getUser_address());
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(EditPersonalUserInfoActivity.this, CitySelectorActivity.class), 1);
+                overridePendingTransition(R.anim.slide_in_from_bottom,0);
+            }
+        });
         //设置年龄
         if (user.getUser_age().isEmpty()) {
             age.setText("");
@@ -134,6 +142,14 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == SUCCESS) {
+            address.setText(data.getStringExtra("city"));
+        }
     }
 
     public void saveClick(View v) {

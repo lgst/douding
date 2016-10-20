@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_oem"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ddgj.dd.activity.OEMActivity">
+    <RelativeLayout
+        style="@style/ActionBarLightTheme">
+        <ImageView
+            android:id="@+id/back"
+            style="@style/TitleBarImageTheme"
+            android:clickable="true"
+            android:src="@mipmap/ic_blue_back"/>
+        <TextView
+            android:id="@+id/title"
+            style="@style/TitleBarTextTheme"
+            android:text="委托代工"
+            android:textColor="@color/colorPrimary"/>
+    </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="#F5F5F5"
+                  android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@mipmap/ic_oem_1"/>
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="0dp"
+                   android:layout_weight="1"
+                   android:src="@mipmap/ic_oem_2"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:orientation="horizontal"
+                      android:padding="16dp">
+            <LinearLayout android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="5"
+                          android:gravity="center">
+                <ImageView android:id="@+id/factory"
+                           android:layout_width="120dp"
+                           android:layout_height="120dp"
+                           android:background="@drawable/ripple_circle_bg_grey"
+                           android:clickable="true"
+                           android:src="@mipmap/ic_oem_factory"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="5"
+                          android:gravity="center">
+                <ImageView android:id="@+id/product"
+                           android:layout_width="120dp"
+                           android:layout_height="120dp"
+                           android:background="@drawable/ripple_circle_bg_grey"
+                           android:src="@mipmap/ic_oem_product"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -24,7 +24,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"/>
     </LinearLayout>
-    <View style="@style/LineGrey1dp"/>
+    <View style="@style/LineGrey1px"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/list_vp"
         android:layout_width="match_parent"

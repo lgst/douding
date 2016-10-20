@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.OEMActivity;
 import com.ddgj.dd.activity.OrderActivity;
 import com.ddgj.dd.activity.OriginalityActivity;
 import com.ddgj.dd.activity.PatentActivity;
@@ -69,7 +70,7 @@ public class ClassesGridViewAdapter extends BaseAdapter {
                         context.startActivity(new Intent(context, OrderActivity.class).putExtra("page",3));
                         break;
                     case 3://代工
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",4));
+                        context.startActivity(new Intent(context, OEMActivity.class).putExtra("page",4));
                         break;
                     case 4://众筹
                         showLoadingDialog("该模块暂未开通，敬请期待！","");

@@ -11,6 +11,7 @@ public abstract class User implements Serializable {
     protected String account;
     protected String account_id;
     protected String account_type;
+    protected String head_picture;
 
     public String getAccount() {
         return account;
@@ -36,5 +37,13 @@ public abstract class User implements Serializable {
 
     public void setAccount_type(String account_type) {
         this.account_type = account_type;
+    }
+
+    public String getHead_picture() {
+        return head_picture;
+    }
+
+    public void setHead_picture(String head_picture) {
+        this.head_picture = head_picture;
     }
 }

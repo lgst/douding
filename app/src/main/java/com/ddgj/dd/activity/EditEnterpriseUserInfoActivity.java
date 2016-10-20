@@ -82,7 +82,7 @@ public class EditEnterpriseUserInfoActivity extends BaseActivity implements Text
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_enterprise_user_info);
         user = (EnterpriseUser) UserHelper.getInstance().getUser();
-        initViews();
+        initView();
         initDatas();
     }
 
@@ -107,7 +107,7 @@ public class EditEnterpriseUserInfoActivity extends BaseActivity implements Text
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         enterpriseName = (EditText) findViewById(R.id.enterprise_name);
         enterpriseScale = (EditText) findViewById(R.id.enterprise_scale);
         enterpriseField = (EditText) findViewById(R.id.enterprise_field);

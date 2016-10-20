@@ -51,7 +51,7 @@
         </LinearLayout>
     </LinearLayout>
     <View
-        style="@style/LineGrey1dp"/>
+        style="@style/LineGrey1px"/>
     <RadioGroup
         android:id="@+id/rg"
         android:layout_width="match_parent"
@@ -110,7 +110,7 @@
             android:textColor="@drawable/selector_rb_text_blue"/>
     </RadioGroup>
     <View
-        style="@style/LineGrey1dp"/>
+        style="@style/LineGrey1px"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
