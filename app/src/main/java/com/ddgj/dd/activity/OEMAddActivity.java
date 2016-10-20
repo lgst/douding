@@ -83,7 +83,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oem_add);
-        initViews();
+        initView();
         initMadeStateSpinner();
 
     }
@@ -109,7 +109,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         productName = (EditText) findViewById(R.id.product_name);

@@ -4,10 +4,7 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,11 +17,9 @@ import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
-
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
-
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -80,7 +75,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
 
 
     @Override
-    public void initViews() {
+    public void initView() {
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         editName = (EditText) findViewById(R.id.edit_name);
@@ -111,7 +106,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_creative);
-        initViews();
+        initView();
         initModeSpinner();
     }
 

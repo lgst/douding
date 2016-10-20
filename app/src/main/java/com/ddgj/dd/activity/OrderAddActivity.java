@@ -3,15 +3,12 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -34,8 +31,6 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
-
-import static android.R.attr.checked;
 
 public class OrderAddActivity extends BaseActivity implements View.OnClickListener {
 
@@ -86,7 +81,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_add);
-        initViews();
+        initView();
         initMadeStateSpinner();
 
     }
@@ -113,7 +108,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void initViews() {
+    public void initView() {
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         productName = (EditText) findViewById(R.id.product_name);

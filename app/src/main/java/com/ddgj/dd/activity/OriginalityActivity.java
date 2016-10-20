@@ -228,7 +228,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OriginalityActivity.this, CreativeActivity.class));
+                startActivity(new Intent(OriginalityActivity.this, PublishCreativeActivity.class));
             }
         });
     }

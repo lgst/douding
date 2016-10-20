@@ -1,15 +1,23 @@
 package com.ddgj.dd.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -61,44 +69,14 @@ public class FileUtil {
         return baos.toByteArray();
     }
 
-	public static String saveFile(Context c, String filePath, String fileName, byte[] bytes) {
-		String fileFullName = "";
-		FileOutputStream fos = null;
-		String dateFolder = new SimpleDateFormat("yyyyMMdd", Locale.CHINA)
-				.format(new Date());
-		try {
-			String suffix = "";
-			if (filePath == null || filePath.trim().length() == 0) {
-				filePath = Environment.getExternalStorageDirectory() + "/Fun/" + dateFolder + "/";
-			}
-			File file = new File(filePath);
-			if (!file.exists()) {
-				file.mkdirs();
-			}
-			File fullFile = new File(filePath, fileName + suffix);
-			fileFullName = fullFile.getPath();
-			fos = new FileOutputStream(new File(filePath, fileName + suffix));
-			fos.write(bytes);
-		} catch (Exception e) {
-			fileFullName = "";
-		} finally {
-			if (fos != null) {
-				try {
-					fos.close();
-				} catch (IOException e) {
-					fileFullName = "";
-				}
-			}
-		}
-		return fileFullName;
-	}
+
 
 	/**
 	 * 图片压缩
 	 * @param fileUri
      * @return
      */
-	public static File scal(Uri fileUri,File dir){
+	public static File scal(Uri fileUri, File dir){
 
 		String path = fileUri.getPath();
 		File outputFile = new File(path);

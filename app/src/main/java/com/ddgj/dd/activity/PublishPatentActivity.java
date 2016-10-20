@@ -19,12 +19,10 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
-import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
-import com.zhy.http.okhttp.request.RequestCall;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,8 +32,6 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
-
-import static com.ddgj.dd.R.id.select_pic;
 
 /**
  * Created by Administrator on 2016/10/17.
@@ -79,7 +75,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     private SweetAlertDialog dialog;
 
     @Override
-    public void initViews() {
+    public void initView() {
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         patentName = (EditText) findViewById(R.id.patent_name);
@@ -108,7 +104,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_patent);
-        initViews();
+        initView();
         initTypeSpinner();
 
     }

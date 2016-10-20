@@ -2,6 +2,7 @@ package com.ddgj.dd.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -56,6 +57,7 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
      */
     private static final int UPDATE = 2;
     private OrderAdapter mAdapter;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +181,8 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                 });
             }
         });
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(this);
     }
 
     @Override
@@ -186,6 +190,9 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.back:
                 finish();
+                break;
+            case R.id.fab:
+                startActivity(new Intent(this,OEMAddActivity.class));
                 break;
         }
     }
