@@ -181,14 +181,16 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             //file = new File(path.get(0));
              //file = FileUtil.scal(Uri.parse(path.get(0)));
              //file1 = FileUtil.scal(Uri.parse(path.get(1)));
-
+            File cacheDir = getCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
-            for (int i = 0; i < path.size(); i++) {
-                file = FileUtil.scal(Uri.parse(path.get(i)));
-                String s="o_picture";
-                post.addFile(s+i, file.getName(), file);
+            if (path!=null) {
+                for (int i = 0; i < path.size(); i++) {
+                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
+                    String s = "o_picture";
+                    post.addFile(s + i, file.getName(), file);
 
+                }
             }
             post.url(NetWorkInterface.ADD_IDEA)
                     .params(params).build()

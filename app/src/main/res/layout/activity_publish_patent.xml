@@ -24,11 +24,6 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_light"></LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -132,7 +127,7 @@
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:nextFocusForward="@+id/idea_user_email"
+                    android:nextFocusForward="@+id/patent_user_email"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
@@ -160,7 +155,8 @@
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:nextFocusForward="@+id/idea_user_phone"
+                    android:inputType="textEmailAddress"
+                    android:nextFocusForward="@+id/patent_user_phone"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
@@ -185,9 +181,10 @@
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:nextFocusForward="@+id/pick_pic"
+                    android:inputType="phone"
+                    android:nextFocusForward="@+id/patent_number"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
@@ -214,7 +211,8 @@
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:nextFocusForward="@+id/idea_user_email"
+                    android:inputType="number"
+                    android:nextFocusForward="@+id/patent_empower_price"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
@@ -241,7 +239,8 @@
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:nextFocusForward="@+id/idea_user_email"
+                    android:inputType="number"
+                    android:nextFocusForward="@+id/patent_assignment_price"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
@@ -266,9 +265,10 @@
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:maxLines="1"
-                    android:nextFocusForward="@+id/idea_user_email"
+                    android:inputType="number"
+                    android:nextFocusForward="@+id/select_pic"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"
                     android:singleLine="true"></EditText>
@@ -398,6 +398,11 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light"></LinearLayout>
 
 
 </LinearLayout>

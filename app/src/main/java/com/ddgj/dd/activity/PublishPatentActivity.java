@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -40,7 +41,7 @@ import static com.ddgj.dd.R.id.select_pic;
  * Created by Administrator on 2016/10/17.
  */
 
-public class PublishPatentActivity extends BaseActivity implements View.OnClickListener {
+public class PublishPatentActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private Spinner spinnerPatentType;
     private String sPatentTyoeSpinner;
@@ -86,7 +87,9 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         patentInfor = (EditText) findViewById(R.id.patent_infor);
         patentUserName = (EditText) findViewById(R.id.patent_user_name);
         patentUserEmail = (EditText) findViewById(R.id.patent_user_email);
+        patentUserEmail.setOnFocusChangeListener(this);
         patentUserPhone = (EditText) findViewById(R.id.patent_user_phone);
+        patentUserPhone.setOnFocusChangeListener(this);
         patentNumber = (EditText) findViewById(R.id.patent_number);
         patentEmpower = (EditText) findViewById(R.id.patent_empower_price);
         patentAssignmentPrice = (EditText) findViewById(R.id.patent_assignment_price);
@@ -183,14 +186,16 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
 
             //this.file =  FileUtil.scal(Uri.parse(p));
             // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
+            File cacheDir = getCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
-
-            for (int i = 0; i <path.size() ; i++) {
-                file = FileUtil.scal(Uri.parse(path.get(i)));
-                String s= "patent_picture";
-                post.addFile(s+i, file.getName(), file);
-                Log.e("duotu","几张图片"+path.size()+"图片地址"+path.get(i));
+            if (path != null) {
+                for (int i = 0; i < path.size(); i++) {
+                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
+                    String s = "patent_picture";
+                    post.addFile(s + i, file.getName(), file);
+                    Log.e("duotu", "几张图片" + path.size() + "图片地址" + path.get(i));
+                }
             }
 
             post.url(NetWorkInterface.ADD_Patent).params(params).build()
@@ -239,8 +244,8 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 sPatentEmpower +
                 sPatentAssignmentPrice +
                 sPatentCategory +
-                sPatentCategory+
-                sPatentTyoeSpinner+
+                sPatentCategory +
+                sPatentTyoeSpinner +
                 checked);
     }
 
@@ -274,6 +279,27 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
             }
         }
     }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch (view.getId()) {
+            case R.id.patent_user_email:
+                showToastShort("邮箱格式不正确");
+            /*    if (!TextCheck.checkEmail(sPatentUserEmail)){
+                    showToastShort("邮箱格式不正确");
+                }*/
+                break;
+            case R.id.patent_user_phone:
+              /*  if (!TextCheck.checkPhoneNumber(sPatentUserPhone)){
+                    showToastShort("手机号码格式不正确");
+                }*/
+                showToastShort("手机号码格式不正确");
+            default:
+                break;
+        }
+    }
+
+
 }
 
 

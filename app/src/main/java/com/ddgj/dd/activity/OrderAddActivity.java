@@ -90,6 +90,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         initMadeStateSpinner();
 
     }
+
     private void initMadeStateSpinner() {
         String[] mItems = getResources().getStringArray(R.array.made_state);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems);
@@ -116,22 +117,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         productName = (EditText) findViewById(R.id.product_name);
-        productName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         orderTitle = (EditText) findViewById(R.id.order_title);
         orderPrice = (EditText) findViewById(R.id.order_price);
         orderNumber = (EditText) findViewById(R.id.order_number);
@@ -150,7 +136,6 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         commitOrder = (Button) findViewById(R.id.commit_order);
         commitOrder.setOnClickListener(this);
         selectPic = (ImageView) findViewById(R.id.select_pic);
-
 
 
         //添加图片
@@ -181,19 +166,19 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
      * 提交定制信息
      */
     private void toCommitIdea() {
-        if (check( sProductName,
-                sOrderTitle ,
-                sOrderPrice ,
-                sOrderNumber ,
-                sOrderDate ,
+        if (check(sProductName,
+                sOrderTitle,
+                sOrderPrice,
+                sOrderNumber,
+                sOrderDate,
                 sOrderSpecifications,
-                sProductIntro ,
-                sProductInfor ,
-                sOrderUserName ,
+                sProductIntro,
+                sProductInfor,
+                sOrderUserName,
                 sOrderUserPhone,
-                sOrderUserEmail ,
-                sOrderUserAddress ,
-                sMadeType )) {
+                sOrderUserEmail,
+                sOrderUserAddress,
+                sMadeType)) {
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
             params.put("made_name", String.valueOf(sProductName));
@@ -219,13 +204,15 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
 
             //file =  FileUtil.scal(Uri.parse(path.get(0)));
             // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
-
+            File cacheDir = getCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
-            for (int i = 0; i < path.size(); i++) {
-                file = FileUtil.scal(Uri.parse(path.get(i)));
-                String s="made_picture";
-                post.addFile(s+i, file.getName(), file);
+            if (path!=null){
+                for (int i = 0; i < path.size(); i++) {
+                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
+                    String s = "made_picture";
+                    post.addFile(s + i, file.getName(), file);
+                }
             }
             post.url(NetWorkInterface.ADD_Order)
                     .params(params).build()
@@ -266,12 +253,39 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         sOrderUserPhone = orderUserPhone.getText().toString().trim();
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
         sOrderUserAddress = orderUserAddress.getText().toString().trim();
-        sMadeType = (String) this.madeType.getSelectedItem();
-
+        switch ((String) this.madeType.getSelectedItem()) {
+            case "家具订制":
+                sMadeType = "1";
+                break;
+            case "服装订制":
+                sMadeType = "2";
+                break;
+            case "礼品订制":
+                sMadeType = "3";
+                break;
+            case "机械产品":
+                sMadeType = "4";
+                break;
+            case "电子产品":
+                sMadeType = "5";
+                break;
+            case "其他":
+                sMadeType = "6";
+                break;
+            case "订制工厂":
+                sMadeType = "7";
+                break;
+            case "发布订制":
+                sMadeType = "8";
+                break;
+            default:
+                break;
+        }
     }
 
     /**
      * 檢查數據完成
+     *
      * @param ideaname
      * @param ideaintro
      * @param idrainfor
@@ -313,6 +327,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
