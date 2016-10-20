@@ -10,15 +10,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.FactoryActivity;
+import com.ddgj.dd.activity.OEMActivity;
+import com.ddgj.dd.activity.OrderActivity;
 import com.ddgj.dd.activity.OriginalityActivity;
 import com.ddgj.dd.activity.PatentActivity;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 //import com.ddgj.activity.ListActivity;
 
 /**
  * Created by Administrator on 2016/10/6.
  */
 public class ClassesGridViewAdapter extends BaseAdapter {
-    private final String[] names = new String[]{"个人创意", "专利服务", "私人订制", "委托代工", "全民众筹", "中国智造"};
+    private String[] names = new String[]{"个人创意", "专利服务", "私人订制", "委托代工", "全民众筹", "中国智造"};
     private final int[] IMGS = new int[]{
             R.mipmap.ic_home_classes_chuangyi,
             R.mipmap.ic_home_classes_zhuangli,
@@ -28,10 +33,8 @@ public class ClassesGridViewAdapter extends BaseAdapter {
             R.mipmap.ic_home_classes_gongchang};
     private Context context;
 
-    public ClassesGridViewAdapter(Context contexts, int[] imgs, String[] names) {
+    public ClassesGridViewAdapter(Context contexts) {
         this.context = contexts;
-        this.imgs = imgs;
-        this.names = names;
     }
 
     @Override
@@ -65,16 +68,16 @@ public class ClassesGridViewAdapter extends BaseAdapter {
                         context.startActivity(new Intent(context, PatentActivity.class));
                         break;
                     case 2://订制
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",3));
+                        context.startActivity(new Intent(context, OrderActivity.class).putExtra("page",3));
                         break;
                     case 3://代工
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",4));
+                        context.startActivity(new Intent(context, OEMActivity.class).putExtra("page",4));
                         break;
                     case 4://众筹
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",5));
+//                        context.startActivity(new Intent(context, .class).putExtra("page",5));
                         break;
                     case 5://工厂 中国智造
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",6));
+                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page",6));
                         break;
                 }
             }

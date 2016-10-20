@@ -112,7 +112,7 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_factory);
-        initViews();
+        initView();
         facilitator = new ArrayList<EnterpriseUser>();
         facProOriginality = new ArrayList<Originality>();
         initDatas(LOAD, classes);
@@ -220,7 +220,7 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
      * 初始化控件
      */
     @Override
-    public void initViews() {
+    public void initView() {
         floading = (LinearLayout) this.findViewById(R.id.loading);
         fRG = (RadioGroup) this.findViewById(R.id.rg_factory);
         factorylist = (PullToRefreshListView) this.findViewById(R.id.lv_factory);
