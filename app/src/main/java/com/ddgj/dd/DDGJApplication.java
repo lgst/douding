@@ -4,12 +4,10 @@ import android.app.Application;
 
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.user.UserHelper;
-
+import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.controller.EaseUI;
 import com.zhy.http.okhttp.OkHttpUtils;
 
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -28,6 +26,7 @@ public class DDGJApplication extends Application {
         initEM();
         initOkhttp();
     }
+
     /**
      * 配置网络请求
      */
@@ -45,9 +44,9 @@ public class DDGJApplication extends Application {
      * 环信初始化
      */
     private void initEM() {
-   /*     EMOptions options = new EMOptions();
+        EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
-        EaseUI.getInstance().init(this, options);*/
+        EaseUI.getInstance().init(this, options);
     }
 }

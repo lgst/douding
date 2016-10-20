@@ -68,6 +68,8 @@ public interface NetWorkInterface {
      * 获取我的创意接口
      */
     public static final String GET_MINE_ORIGINALITY = HOST + "/finfMyOriginality.do";
+    /**获取我的全部项目统计数量*/
+    public static final String GET_MINE = HOST + "/get_mine_count.do";
     /**
      * 获取订制接口
      */
@@ -100,7 +102,9 @@ public interface NetWorkInterface {
     /**
      * 获取创意详情页
      */
-    public static final String GET_ORIGINALITY_DETAILS = HOST + "/OriginalityDetails.do";
+    public static final String GET_ORIGINALITY_DETAILS = HOST + "/originalityDet.do";
+    /**获取专利详情页*/
+    public static final String GET_PATENT_DETAILS = HOST + "/patentDet.do";
     /**
      * 获取订制详情页
      */

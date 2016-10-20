@@ -12,6 +12,7 @@ import com.ddgj.dd.adapter.OrderClassesAdapter;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
 import com.google.gson.Gson;
@@ -60,28 +61,33 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0://家具
-                        startActivity(new Intent(OrderActivity.this,OrderListActivity.class).putExtra("title",names[0]).putExtra("classes",1));
+                        startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[0]).putExtra("classes", 1));
                         break;
                     case 1://服装
-                        startActivity(new Intent(OrderActivity.this,OrderListActivity.class).putExtra("title",names[1]).putExtra("classes",2));
+                        startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[1]).putExtra("classes", 2));
                         break;
                     case 2://礼品
-                        startActivity(new Intent(OrderActivity.this,OrderListActivity.class).putExtra("title",names[2]).putExtra("classes",3));
+                        startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[2]).putExtra("classes", 3));
                         break;
                     case 3://机械
-                        startActivity(new Intent(OrderActivity.this,OrderListActivity.class).putExtra("title",names[3]).putExtra("classes",4));
+                        startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[3]).putExtra("classes", 4));
                         break;
                     case 4://电子
-                        startActivity(new Intent(OrderActivity.this,OrderListActivity.class).putExtra("title",names[4]).putExtra("classes",5));
+                        startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[4]).putExtra("classes", 5));
                         break;
                     case 5://其他
-                        startActivity(new Intent(OrderActivity.this,OrderListActivity.class).putExtra("title",names[5]).putExtra("classes",6));
+                        startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[5]).putExtra("classes", 6));
                         break;
                     case 6://工厂
-                        startActivity(new Intent(OrderActivity.this, OrderFactoryActivity.class).putExtra("classes","2"));
+                        startActivity(new Intent(OrderActivity.this, OrderFactoryActivity.class).putExtra("classes", "2"));
                         break;
                     case 7://发布
-                        startActivity(new Intent(OrderActivity.this, OrderAddActivity.class));
+                        if (UserHelper.getInstance().isLogined()) {
+                            startActivity(new Intent(OrderActivity.this, OrderAddActivity.class));
+                        } else {
+                            showToastShort("请先登录！");
+                            startActivity(new Intent(OrderActivity.this, LoginActivity.class).putExtra("flag", "back"));
+                        }
                         break;
                 }
             }
@@ -92,23 +98,23 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
         finish();
     }
 
-    private void initDatas(){
+    private void initDatas() {
         //获取订制
-        OkHttpUtils.post().url(GET_ORDER).addParams("made_state","2")
-                .addParams("made_differentiate","0")
-                .addParams("pageNumber","1")
-                .addParams("pageSingle","5")
+        OkHttpUtils.post().url(GET_ORDER).addParams("made_state", "2")
+                .addParams("made_differentiate", "0")
+                .addParams("pageNumber", "1")
+                .addParams("pageSingle", "5")
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst","获取订制成功案例失败："+e.getMessage());
+                        Log.e("lgst", "获取订制成功案例失败：" + e.getMessage());
                         showToastShort("获取成功案例出错！");
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst",response);
+                        Log.i("lgst", response);
                         try {
                             JSONObject jo = new JSONObject(response);
                             int status = jo.getInt("status");

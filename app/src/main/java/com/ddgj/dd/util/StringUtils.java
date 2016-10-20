@@ -62,4 +62,13 @@ public class StringUtils {
         }
         return dateStr;
     }
+
+    public static String getSize(long size){
+        if(size<1024)
+            return size+"B";
+        else if(size<1024*1024)
+            return size/1024+"KB";
+        else
+            return size/1024/1024+"MB";
+    }
 }

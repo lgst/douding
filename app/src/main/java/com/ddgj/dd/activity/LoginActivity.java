@@ -32,6 +32,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * 用户登录界面
+ * flag:back
  */
 public class LoginActivity extends BaseActivity implements NetWorkInterface {
     public static final String BACK = "back";

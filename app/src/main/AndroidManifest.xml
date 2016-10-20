@@ -90,9 +90,9 @@
         </activity>
         <activity android:name=".activity.WebActivity">
         </activity>
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-        <activity android:name=".activity.PublishPatentActivity"></activity>
-        <activity android:name=".activity.PublishCreativeActivity"></activity>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
+        <activity android:name=".activity.PublishPatentActivity"/>
+        <activity android:name=".activity.PublishCreativeActivity"/>
         <activity android:name=".activity.OrderActivity">
         </activity>
         <activity android:name=".activity.OrderAddActivity">
@@ -110,6 +110,10 @@
         <activity android:name=".activity.OEMProductActivity">
         </activity>
         <activity android:name=".activity.OEMAddActivity"/>
+        <activity
+            android:name=".activity.SettingsActivity">
+        </activity>
+        <activity android:name=".activity.MineProjectActivity"/>
     </application>
 
 </manifest>

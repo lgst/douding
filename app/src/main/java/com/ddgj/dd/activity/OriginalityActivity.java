@@ -106,6 +106,8 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         params.put("pageSingle", String.valueOf(mPageSingle));
         if (classes == MINE)
             params.put("o_account_id", UserHelper.getInstance().getUser().getAccount_id());
+        else
+            params.put("originality_differentiate",String.valueOf(0));
 
 //        Log.i("lgst", "mPageNumber:" + mPageNumber);
 //        Log.i("lgst", "mPageSingle:" + mPageSingle);
@@ -120,7 +122,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
 
             @Override
             public void onResponse(String response, int id) {
-//                Log.i("lgst", response);
+                Log.i("lgst", response);
                 try {
                     JSONObject jo = new JSONObject(response);
                     int status = jo.getInt("status");
@@ -228,7 +230,12 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OriginalityActivity.this, PublishCreativeActivity.class));
+                if(UserHelper.getInstance().isLogined()) {
+                    startActivity(new Intent(OriginalityActivity.this, PublishCreativeActivity.class));
+                }else{
+                    showToastShort("请先登录！");
+                    startActivity(new Intent(OriginalityActivity.this,LoginActivity.class).putExtra("flag","back"));
+                }
             }
         });
     }
@@ -239,7 +246,6 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
             content.setText(text);
-
         }
     }
 

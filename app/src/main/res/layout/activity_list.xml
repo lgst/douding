@@ -5,15 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
-        style="@style/ActionBarTheme"
+    <RelativeLayout
+        style="@style/ActionBarLightTheme"
         android:orientation="horizontal">
         <ImageView
             style="@style/TitleBarImageTheme"
             android:onClick="backClick"
-            android:src="@mipmap/ic_chevron_left_white_24dp"/>
+            android:src="@mipmap/ic_blue_back"/>
+        <TextView style="@style/TitleBarTextTheme"
+                  android:textColor="@color/colorPrimary"
+                  android:text="我的"/>
+    </RelativeLayout>
 
-    </LinearLayout>
+    <View style="@style/LineGrey1px"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"

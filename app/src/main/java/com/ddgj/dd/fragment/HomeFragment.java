@@ -54,6 +54,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private CustomListView patentListView;
     private CustomListView originalityListView;
     private List<Originality> mOriginalitys;
+    private List<Patent> mPatents;
 
     public HomeFragment() {
     }
@@ -73,7 +74,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews();
+        initView();
         initCacha();//加载缓存
         initAD();//从网络加载轮播图
         initPatent();//从网络加载专利
@@ -96,6 +97,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
         params.put("pageSingle", "5");
+        params.put("originality_differentiate", "0");
         OkHttpUtils.post().url(GET_HOT_ORIGINALITY).params(params).build().execute(
                 new StringCallback() {
                     @Override
@@ -105,6 +107,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.i("lgst",response);
                         analysisAndLoadOriginality(response);
                     }
                 }
@@ -185,10 +188,37 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                 }
 
         );
+        patentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Patent originality = mPatents.get(position);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("client_side", "app");
+                params.put("patent_id", originality.getPatent_id());
+                OkHttpUtils.post().url(GET_PATENT_DETAILS).params(params).build().execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("lgst", "获取专利详情页失败：" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
+                            String url = responseInfo.getData();
+                            Log.e("lgst", url);
+                            startActivity(new Intent(getActivity(), WebActivity.class)
+                                    .putExtra("title", originality.getPatent_name())
+                                    .putExtra("url", HOST + url));
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
         viewpager = (LoopViewPager) findViewById(R.id.viewpager);
         indicator = (CircleIndicator) findViewById(R.id.indicator);
         classesGV = (CustomGridView) findViewById(R.id.calsses_list);
@@ -252,7 +282,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             return;
         }
         try {
-            List<Patent> mPatents = new ArrayList<Patent>();
+            mPatents = new ArrayList<Patent>();
             JSONObject jo = new JSONObject(response);
             int status = jo.getInt("status");
             if (status == STATUS_SUCCESS) {

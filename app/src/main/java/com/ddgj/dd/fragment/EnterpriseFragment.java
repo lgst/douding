@@ -78,7 +78,7 @@ public class EnterpriseFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mIconPath = FileUtil.getInstance().getmImageCache() + "user_icon";
-        initViews();
+        initView();
         initDatas();
     }
 
@@ -106,7 +106,7 @@ public class EnterpriseFragment extends BaseFragment {
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
         enterpriseId = (TextView) findViewById(R.id.enterprise_id);
         enterpriseName = (TextView) findViewById(R.id.enterprise_name);
         enterpriseScale = (TextView) findViewById(R.id.enterprise_scale);

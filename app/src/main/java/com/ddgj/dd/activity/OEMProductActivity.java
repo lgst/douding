@@ -16,6 +16,7 @@ import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -192,7 +193,12 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.fab:
-                startActivity(new Intent(this,OEMAddActivity.class));
+                if (UserHelper.getInstance().isLogined()) {
+                    startActivity(new Intent(this, OEMAddActivity.class));
+                } else {
+                    showToastShort("请先登录！");
+                    startActivity(new Intent(this, LoginActivity.class).putExtra("flag", "back"));
+                }
                 break;
         }
     }

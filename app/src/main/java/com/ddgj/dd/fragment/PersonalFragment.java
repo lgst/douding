@@ -52,13 +52,13 @@ public class PersonalFragment extends BaseFragment implements NetWorkInterface{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mIconPath = FileUtil.getInstance().getmImageCache() + "user_icon";
-        initViews();
+        initView();
         initDatas();
     }
 
 
     @Override
-    protected void initViews() {
+    protected void initView() {
         name = (TextView) findViewById(R.id.name);
         gender = (TextView) findViewById(R.id.gender);
         age = (TextView) findViewById(R.id.age);

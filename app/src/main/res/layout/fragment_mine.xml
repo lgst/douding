@@ -95,7 +95,7 @@
                 style="@style/LineGrey1px"
                 android:layout_marginTop="8dp"/>
             <LinearLayout
-                android:id="@+id/personal_center"
+                android:id="@+id/originality"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@drawable/ripple_bg_white"
@@ -107,11 +107,99 @@
                     android:layout_height="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:src="@mipmap/ic_account_circle_grey600_24dp"/>
+                    android:src="@mipmap/ic_home_classes_chuangyi"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mine_originality"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/originality_count"
                     style="@style/MineFragmentListTextStyle"
-                    android:text="@string/user_center"/>
+                    android:layout_marginLeft="8dp"
+                    android:text="0"
+                    android:textColor="@color/grey"/>
+
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/ic_chevron_right_black_24dp"/>
+            </LinearLayout>
+            <View
+                style="@style/LineGrey1px"
+                android:layout_marginLeft="16dp"/>
+            <LinearLayout
+                android:id="@+id/patent"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/ripple_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/ic_home_classes_zhuangli"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mine_patent"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/patent_count"
+                    style="@style/MineFragmentListTextStyle"
+                    android:layout_marginLeft="8dp"
+                    android:text="0"
+                    android:textColor="@color/grey"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/ic_chevron_right_black_24dp"/>
+            </LinearLayout>
+            <View
+                style="@style/LineGrey1px"
+                android:layout_marginLeft="16dp"/>
+            <LinearLayout
+                android:id="@+id/order"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/ripple_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/ic_home_classes_dingzhi"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mine_order"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/order_count"
+                    style="@style/MineFragmentListTextStyle"
+                    android:layout_marginLeft="8dp"
+                    android:text="0"
+                    android:textColor="@color/grey"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -125,6 +213,44 @@
             <View
                 style="@style/LineGrey1px"
                 android:layout_marginLeft="16dp"/>
+            <LinearLayout
+                android:id="@+id/oem"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/ripple_bg_white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/ic_home_classes_daigong"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mine_oem"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/oem_count"
+                    style="@style/MineFragmentListTextStyle"
+                    android:layout_marginLeft="8dp"
+                    android:text="0"
+                    android:textColor="@color/grey"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/ic_chevron_right_black_24dp"/>
+            </LinearLayout>
+
+            <View
+                style="@style/LineGrey1px"/>
 
             <LinearLayout
                 android:id="@+id/mine_favorite"
@@ -132,7 +258,8 @@
                 android:layout_height="56dp"
                 android:background="@drawable/ripple_bg_white"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -153,9 +280,10 @@
                     android:layout_marginRight="16dp"
                     android:src="@mipmap/ic_chevron_right_black_24dp"/>
             </LinearLayout>
-            <View style="@style/LineGrey1px"/>
             <View style="@style/LineGrey1px"
-            android:layout_marginTop="16dp"/>
+                  android:visibility="gone"/>
+            <View style="@style/LineGrey1px"
+                  android:layout_marginTop="16dp"/>
             <LinearLayout
                 android:id="@+id/app_settings"
                 android:layout_width="match_parent"

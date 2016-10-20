@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.AboutActivity;
 import com.ddgj.dd.activity.LoginActivity;
+import com.ddgj.dd.activity.MineProjectActivity;
+import com.ddgj.dd.activity.SettingsActivity;
 import com.ddgj.dd.activity.UserCenterActivity;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
@@ -21,18 +25,30 @@ import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import okhttp3.Call;
 
 import static com.ddgj.dd.activity.MainActivity.update;
 
 /**
  * Created by Administrator on 2016/9/29.
  */
-public class MineFragment extends BaseFragment implements View.OnClickListener {
+public class MineFragment extends BaseFragment implements View.OnClickListener, NetWorkInterface {
     public static final int NEED_UPDATE_USERINFO = 200;
     private static final int REQUEST_CODE = 101;
     private CircleImageView userIcon;
     private TextView userName;
     private TextView userType;
+    private TextView mOriginalityCount;
+    private LinearLayout mOriginality;
+    private TextView mPatentCount;
+    private LinearLayout mPatent;
+    private TextView mOrderCount;
+    private LinearLayout mOrder;
+    private TextView mOemCount;
+    private LinearLayout mOem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +69,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        initViews();
+        initView();
         if (UserHelper.getInstance().isLogined()) {
             updateUserInfo();
         }
@@ -65,11 +81,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
         //点击登录
         findViewById(R.id.click_login).setOnClickListener(this);
-        //个人中心
-        findViewById(R.id.personal_center).setOnClickListener(this);
         //我的收藏
         findViewById(R.id.mine_favorite).setOnClickListener(this);
         //应用设置
@@ -84,30 +98,67 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         userName = (TextView) findViewById(R.id.user_name);
         //用户身份
         userType = (TextView) findViewById(R.id.user_type);
+
+        findViewById(R.id.oem).setOnClickListener(this);
+        mOemCount = (TextView) findViewById(R.id.oem_count);
+        findViewById(R.id.order).setOnClickListener(this);
+        mOrderCount = (TextView) findViewById(R.id.order_count);
+        findViewById(R.id.originality).setOnClickListener(this);
+        mOriginalityCount = (TextView) findViewById(R.id.originality_count);
+        findViewById(R.id.patent).setOnClickListener(this);
+        mPatentCount = (TextView) findViewById(R.id.patent_count);
+        initData();
+    }
+
+    private void initData() {
+        OkHttpUtils.get()
+                .url(GET_MINE + "?account_id=" + UserHelper.getInstance().getUser().getAccount_id())
+                .build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.i("lgst", "获取我的出错：" + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("lgst", response);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
+        int page = 0;
         switch (v.getId()) {
+            case R.id.originality:
+
+                break;
+            case R.id.patent:
+                page = 1;
+                break;
+            case R.id.order:
+                page = 2;
+                break;
+            case R.id.oem:
+                page = 3;
+                break;
             case R.id.click_login:
                 clickLogin();
-                break;
-            case R.id.personal_center:
-                clickPersonalCenter();
-                break;
+                return;
             case R.id.mine_favorite:
                 clcikMineFavorite();
-                break;
+                return;
             case R.id.app_settings:
                 clickAppSettings();
-                break;
+                return;
             case R.id.share_to_friend:
                 clickShare();
-                break;
+                return;
             case R.id.about_us:
                 clickAboutUs();
-                break;
+                return;
         }
+        startActivity(new Intent(getActivity(), MineProjectActivity.class).putExtra("page",page));
     }
 
     /**
@@ -127,6 +178,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
      * 点击应用设置
      */
     private void clickAppSettings() {
+        startActivity(new Intent(getActivity(), SettingsActivity.class));
     }
 
     /**
@@ -140,7 +192,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
      */
     private void clickPersonalCenter() {
         if (UserHelper.getInstance().isLogined()) {
-            startActivity(new Intent(getActivity(), UserCenterActivity.class));
         } else {
             Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
         }
@@ -151,9 +202,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
      */
     private void clickLogin() {
         if (UserHelper.getInstance().isLogined()) {
-            return;
-        }
-        startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+            startActivity(new Intent(getActivity(), UserCenterActivity.class));
+        } else
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
     }
 
     public void updateUserInfo() {

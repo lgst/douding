@@ -18,7 +18,7 @@ public class CommunityFragment extends BaseFragment {
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
 
     }
 }

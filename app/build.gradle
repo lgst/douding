@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -18,7 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions{
+    lintOptions {
         abortOnError false
         checkReleaseBuilds false
         disable 'MissingTranslation'
@@ -27,18 +28,21 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     //    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.android.support:cardview-v7:24.2.1'
     //    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
     //    compile 'com.android.support:support-v13:24.2.1'
-    compile 'com.zhy:okhttputils:2.6.2'
     //    compile project(':umeng_library')
     compile project(':pull-to-refresh-library')
     //    compile 'com.github.bumptech.glide:glide:3.7.0'
+    /* compile project(':easeui')*/
+    //    compile 'org.xutils:xutils:3.3.36'
+    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
+    compile project(':easeui')
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.zhy:okhttputils:2.6.2'
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'com.hejunlin.superindicatorlibray:superindicatorlibray:1.0.3'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
@@ -46,9 +50,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
-    compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    /* compile project(':easeui')*/
-    //    compile 'org.xutils:xutils:3.3.36'
-    compile project(':easeui')
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-vector-drawable:24.2.1'
+    testCompile 'junit:junit:4.12'
 }
