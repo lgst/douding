@@ -7,14 +7,15 @@
     android:orientation="vertical">
     <RelativeLayout
         style="@style/ActionBarLightTheme"
+        android:background="@color/white"
         android:orientation="horizontal">
         <ImageView
             style="@style/TitleBarImageTheme"
             android:onClick="backClick"
             android:src="@mipmap/ic_blue_back"/>
         <TextView style="@style/TitleBarTextTheme"
-                  android:textColor="@color/colorPrimary"
-                  android:text="我的"/>
+                  android:text="我的"
+                  android:textColor="@color/colorPrimary"/>
     </RelativeLayout>
 
     <View style="@style/LineGrey1px"/>

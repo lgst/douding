@@ -52,6 +52,8 @@ public interface NetWorkInterface {
      * 获取我的专利接口
      */
     public static final String GET_MINE_PATENT = HOST + "/finfMyPatent.do";
+    /**根据id查询订制 代工*/
+    public static final String GET_ORDER_BY_ID = HOST + "/findMyCustom_made.do";
     /**
      * 获取全部创意接口
      */

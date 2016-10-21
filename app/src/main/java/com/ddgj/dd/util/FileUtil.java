@@ -34,6 +34,7 @@ public class FileUtil {
     private String mImageCache;
 
     private static FileUtil instance;
+    private String mPrivateCache;
 
     private FileUtil() {
     }
@@ -70,98 +71,100 @@ public class FileUtil {
     }
 
 
-
-	/**
-	 * 图片压缩
-	 * @param fileUri
+    /**
+     * 图片压缩
+     *
+     * @param fileUri
      * @return
      */
-	public static File scal(Uri fileUri, File dir){
+    public static File scal(Uri fileUri, File dir) {
 
-		String path = fileUri.getPath();
-		File outputFile = new File(path);
-		long fileSize = outputFile.length();
-		final long fileMaxSize = 200 * 1024;
-		if (fileSize >= fileMaxSize) {
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			BitmapFactory.decodeFile(path, options);
-			int height = options.outHeight;
-			int width = options.outWidth;
-			double scale = Math.sqrt((float) fileSize / fileMaxSize);
-			options.outHeight = (int) (height / scale);
-			options.outWidth = (int) (width / scale);
-			options.inSampleSize = (int) (scale + 0.5);
-			options.inJustDecodeBounds = false;
+        String path = fileUri.getPath();
+        File outputFile = new File(path);
+        long fileSize = outputFile.length();
+        final long fileMaxSize = 200 * 1024;
+        if (fileSize >= fileMaxSize) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+            int height = options.outHeight;
+            int width = options.outWidth;
+            double scale = Math.sqrt((float) fileSize / fileMaxSize);
+            options.outHeight = (int) (height / scale);
+            options.outWidth = (int) (width / scale);
+            options.inSampleSize = (int) (scale + 0.5);
+            options.inJustDecodeBounds = false;
 
-			Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-			outputFile = new File(createImageFile(dir).getPath());
-			FileOutputStream fos = null;
-			try {
-				fos = new FileOutputStream(outputFile);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
-				fos.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Log.d("", "sss ok " + outputFile.length());
-			if (!bitmap.isRecycled()) {
-				bitmap.recycle();
-			}else{
-				File tempFile = outputFile;
-				outputFile = new File(createImageFile(dir).getPath());
-				copyFileUsingFileChannels(tempFile, outputFile);
-			}
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            outputFile = new File(createImageFile(dir).getPath());
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(outputFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                fos.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Log.d("", "sss ok " + outputFile.length());
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            } else {
+                File tempFile = outputFile;
+                outputFile = new File(createImageFile(dir).getPath());
+                copyFileUsingFileChannels(tempFile, outputFile);
+            }
 
-		}
-		return outputFile;
+        }
+        return outputFile;
 
-	}
-	public static Uri createImageFile(File dir){
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = "JPEG_" + timeStamp + "_";
-		File storageDir = Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_PICTURES);
+    }
 
-		File image = null;
-		try {
-			image = File.createTempFile(
-					imageFileName,  /* prefix */
-					".jpg",         /* suffix */
-					dir      /* directory */
-			);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public static Uri createImageFile(File dir) {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
 
-		// Save a file: path for use with ACTION_VIEW intents
-		return Uri.fromFile(image);
-	}
-	public static void copyFileUsingFileChannels(File source, File dest){
-		FileChannel inputChannel = null;
-		FileChannel outputChannel = null;
-		try {
-			try {
-				inputChannel = new FileInputStream(source).getChannel();
-				outputChannel = new FileOutputStream(dest).getChannel();
-				outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} finally {
-			try {
-				inputChannel.close();
-				outputChannel.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    dir      /* directory */
+            );
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Save a file: path for use with ACTION_VIEW intents
+        return Uri.fromFile(image);
+    }
+
+    public static void copyFileUsingFileChannels(File source, File dest) {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            try {
+                inputChannel = new FileInputStream(source).getChannel();
+                outputChannel = new FileOutputStream(dest).getChannel();
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                inputChannel.close();
+                outputChannel.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     public static String saveFile(Context c, String filePath, String fileName, byte[] bytes) {
@@ -207,32 +210,83 @@ public class FileUtil {
         this.mContext = mContext;
         mImageCache = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/";
         mTempCache = mContext.getExternalCacheDir().getAbsolutePath() + "/";
+        mPrivateCache = mContext.getCacheDir().getAbsolutePath() + "/";
+        Log.i("lgst", mPrivateCache);
     }
 
     public void deleteUserIcon() {
         deleteFile(new File(mImageCache + "/" + "user_icon"));
     }
 
-    /**获取缓存大小*/
+    /**
+     * 获取缓存大小
+     */
     public long getCacheSize() {
         File imageCache = new File(mImageCache);
         File tempCache = new File(mTempCache);
+        File privateCache = new File(mPrivateCache);
         long size = 0;
         if (imageCache.exists()) {
-            size += imageCache.length();
+            size += getFolderSize(imageCache);
         }
         if (tempCache.exists()) {
-            size += tempCache.length();
+            size += getFolderSize(tempCache);
         }
+        if (privateCache.exists())
+            size += getFolderSize(imageCache);
+        Log.i("lgst", mContext.getCacheDir().length() + "--");
         return size;
     }
 
     public void clearCache() {
-        deleteFile(new File(mImageCache));
-        deleteFile(new File(mTempCache));
+        File file1 = new File(mImageCache);
+        File file2 = new File(mTempCache);
+        File file3 = new File(mPrivateCache);
+        File[] files1 = file1.listFiles();
+        File[] files2 = file2.listFiles();
+        File[] files3 = file3.listFiles();
+        for (int i = 0; i < files1.length; i++) {
+            deleteFile(files1[i]);
+        }
+        for (int i = 0; i < files2.length; i++) {
+            deleteFile(files2[i]);
+        }
+        for (int i = 0; i < files3.length; i++) {
+            deleteFile(files3[i]);
+        }
     }
 
-    /**文件删除*/
+    /**
+     * 获取文件夹大小
+     *
+     * @param file File实例
+     * @return long
+     */
+    public static long getFolderSize(java.io.File file) {
+
+        long size = 0;
+        try {
+            java.io.File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+
+                } else {
+                    size = size + fileList[i].length();
+
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //return size/1048576;
+        return size;
+    }
+
+    /**
+     * 文件删除
+     */
     public static void deleteFile(File file) {
         if (!file.exists()) {
             return;
@@ -243,7 +297,7 @@ public class FileUtil {
                 deleteFile(files[i]);
             }
         } else {
-            file.delete();
+            boolean bool = file.delete();
             return;
         }
         file.delete();
@@ -280,7 +334,9 @@ public class FileUtil {
         }
     }
 
-    /**图片缓存路径*/
+    /**
+     * 图片缓存路径
+     */
     public String getmImageCache() {
         return mImageCache;
     }
@@ -313,6 +369,7 @@ public class FileUtil {
             }
         }
     }
+
     /**
      * 读取缓存，json数据
      */

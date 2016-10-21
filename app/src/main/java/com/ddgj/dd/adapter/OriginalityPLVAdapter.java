@@ -68,7 +68,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
         vh.title.setText(originality.getOriginality_name());
         vh.userName.setText(originality.getO_nickname());
         if (originality.getOriginality_type() != null)
-            vh.type.setText(originality.getOriginality_type());
+            vh.type.setText(Integer.parseInt(originality.getOriginality_type()));
         vh.content.setText(originality.getOriginality_details());
         //tu
         showImages(act, originality, vh);

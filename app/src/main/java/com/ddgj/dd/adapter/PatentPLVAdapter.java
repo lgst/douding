@@ -73,7 +73,7 @@ public class PatentPLVAdapter extends BaseAdapter {
                 .into(vh.userIcon);
         vh.title.setText(patent.getPatent_name());
         vh.userName.setText(patent.getP_user_name());
-        vh.type.setText(patent.getPatent_type());
+        vh.type.setText(types[Integer.parseInt(patent.getPatent_type())]);
         vh.content.setText(patent.getPatent_details());
         setImages(patent, vh);
         vh.approve.setText(String.valueOf((int) (Math.random() * 100)));

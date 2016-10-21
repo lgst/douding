@@ -133,7 +133,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                             Log.e("lgst", url);
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getOriginality_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", url));
                         }
                     }
                 });

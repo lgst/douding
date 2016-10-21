@@ -13,6 +13,7 @@ import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -63,6 +64,8 @@ public class OrderAdapter extends BaseAdapter {
                         .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
                         .thumbnail(0.1f)
                         .into(vh.img);
+                File file = Glide.getPhotoCacheDir(parent.getContext());
+//                Log.i("lgst",file.getAbsolutePath());
                 break;
             }
         }

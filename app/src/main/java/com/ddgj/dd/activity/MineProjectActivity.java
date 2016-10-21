@@ -11,7 +11,10 @@ import android.widget.LinearLayout;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.ListVPAdapter;
+import com.ddgj.dd.fragment.MineOEMFragment;
+import com.ddgj.dd.fragment.MineOrderFragment;
 import com.ddgj.dd.fragment.MineOriginalityFragment;
+import com.ddgj.dd.fragment.MinePatentFragment;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -60,9 +63,9 @@ public class MineProjectActivity extends BaseActivity {
 
     private void initFragments() {
         framgents.add(new MineOriginalityFragment());
-        framgents.add(new MineOriginalityFragment());
-        framgents.add(new MineOriginalityFragment());
-        framgents.add(new MineOriginalityFragment());
+        framgents.add(new MinePatentFragment());
+        framgents.add(new MineOrderFragment());
+        framgents.add(new MineOEMFragment());
         adapter = new ListVPAdapter(getSupportFragmentManager(),framgents);
         mViewPager.setAdapter(adapter);
     }

@@ -28,6 +28,9 @@ import com.ddgj.dd.view.CircleImageView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import okhttp3.Call;
 
 import static com.ddgj.dd.activity.MainActivity.update;
@@ -111,19 +114,38 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void initData() {
+        if (!UserHelper.getInstance().isLogined()) {
+            return;
+        }
         OkHttpUtils.get()
                 .url(GET_MINE + "?account_id=" + UserHelper.getInstance().getUser().getAccount_id())
                 .build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                Log.i("lgst", "获取我的出错：" + e.getMessage());
-            }
+                                     @Override
+                                     public void onError(Call call, Exception e, int id) {
+                                         Log.i("lgst", "获取我的出错：" + e.getMessage());
+                                     }
 
-            @Override
-            public void onResponse(String response, int id) {
-                Log.i("lgst", response);
-            }
-        });
+                                     @Override
+                                     public void onResponse(String response, int id) {
+                                         Log.i("lgst", response);
+                                         try {
+                                             JSONObject jsonObject = new JSONObject(response);
+                                             int status = jsonObject.getInt("status");
+
+                                             if (status == 0) {
+                                                 String str = jsonObject.getString("data");
+                                                 JSONObject jo = new JSONObject(str);
+                                                 mOriginalityCount.setText(jo.getString("originality"));
+                                                 mOemCount.setText(jo.getString("custom_made"));
+                                                 mOemCount.setText(jo.getString("OEM"));
+                                                 mPatentCount.setText(jo.getString("patent"));
+                                             }
+                                         }catch (JSONException e) {
+                                             e.printStackTrace();
+                                         }
+                                     }
+                                 }
+        );
     }
 
     @Override
@@ -158,12 +180,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 clickAboutUs();
                 return;
         }
-        startActivity(new Intent(getActivity(), MineProjectActivity.class).putExtra("page",page));
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineProjectActivity.class).putExtra("page", page));
+        else
+            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
     }
 
     /**
      * 点击关于
      */
+
     private void clickAboutUs() {
         startActivity(new Intent(getActivity(), AboutActivity.class));
     }
@@ -185,16 +211,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
      * 点击我的收藏
      */
     private void clcikMineFavorite() {
-    }
-
-    /**
-     * 点击个人中心
-     */
-    private void clickPersonalCenter() {
-        if (UserHelper.getInstance().isLogined()) {
-        } else {
-            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
-        }
     }
 
     /**
