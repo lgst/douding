@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:text="发布者"/>
+
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="最新自动送飞机"
+        android:layout_alignTop="@+id/sItemIcon"
+        android:layout_toRightOf="@+id/sItemIcon"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="20dip"
+        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        android:singleLine="true"
+        android:textColor="@color/all_bg_color"
+        android:textSize="20.0sp" />
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="5dp"
+        android:text="2016-3-6"/>
+
+
+</LinearLayout>

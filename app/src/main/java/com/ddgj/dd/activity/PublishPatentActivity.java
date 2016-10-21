@@ -189,8 +189,8 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
             params.put("p_authorization_price", String.valueOf(sPatentEmpower));
             params.put("p_transfer_price", String.valueOf(sPatentAssignmentPrice));
             params.put("p_authorization_state", String.valueOf(checked));
-            params.put("o_account_id",UserHelper.getInstance().getUser().getAccount_id());
-            params.put("o_nickname", "o_nickname");
+            params.put("p_account_id",UserHelper.getInstance().getUser().getAccount_id());
+            params.put("p_nickname", "o_nickname");
             params.put("head_picture", "head_picture");
 
 
