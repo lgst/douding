@@ -133,6 +133,24 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     }
 
     private void initModeSpinner() {
+
+        String[] mItems1 = getResources().getStringArray(R.array.originalityTypes);
+        ArrayAdapter spinnerAdapter1=new ArrayAdapter(this,R.layout.textview_spinner_item,mItems1);
+        typeSpinner.setAdapter(spinnerAdapter1);
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sTypeSpinner = String.valueOf(position);
+
+                //Toast.makeText(PublishCreativeActivity.this, "你点击的是:"+position, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         String[] mItems = getResources().getStringArray(R.array.secrecyType);
         ArrayAdapter spinnerAdapter=new ArrayAdapter(this,R.layout.textview_spinner_item,mItems);
         modeSpinner.setAdapter(spinnerAdapter);
@@ -242,7 +260,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
         sEditUserName = this.userNmae.getText().toString().trim();
         sEditUserEmail = this.userEmail.getText().toString().trim();
         sEditUserPhone = this.userPhone.getText().toString().trim();
-        sTypeSpinner = (String) this.typeSpinner.getSelectedItem();
+
         int id = this.typeSpinner.getSelectedItemPosition();
 
         //Log.e("douding","shuju模式id"+id+sEditName+sEditIntro+sEditInfor+sEditUserName+sEditUserEmail+sEditUserPhone+sTypeSpinner+sModeSpinner);

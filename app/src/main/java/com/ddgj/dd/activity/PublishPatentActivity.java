@@ -112,6 +112,22 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initTypeSpinner() {
+        String[] mItems1 = getResources().getStringArray(R.array.originalityTypes);
+        ArrayAdapter spinnerAdapter1 = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems1);
+        spinnerPatentCategory.setAdapter(spinnerAdapter1);
+        spinnerPatentCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sPatentCategory = String.valueOf(position);
+
+                //Toast.makeText(PublishCreativeActivity.this, "你点击的是:"+position, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         String[] mItems = getResources().getStringArray(R.array.patent_type);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems);
         spinnerPatentType.setAdapter(spinnerAdapter);
@@ -228,7 +244,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         sPatentNumber = patentNumber.getText().toString().trim();
         sPatentEmpower = patentEmpower.getText().toString().trim();
         sPatentAssignmentPrice = patentAssignmentPrice.getText().toString().trim();
-        sPatentCategory = (String) this.spinnerPatentCategory.getSelectedItem();
+
         checked = assignmentCheck.isChecked();
         Log.e("getinfo", sPatentName +
                 sPatentIntro +

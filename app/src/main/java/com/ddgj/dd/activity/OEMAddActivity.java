@@ -253,7 +253,34 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         sOrderUserPhone = orderUserPhone.getText().toString().trim();
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
         sOrderUserAddress = orderUserAddress.getText().toString().trim();
-        sMadeType = (String) this.madeType.getSelectedItem();
+        switch ((String) this.madeType.getSelectedItem()) {
+            case "家具订制":
+                sMadeType = "0";
+                break;
+            case "服装订制":
+                sMadeType = "1";
+                break;
+            case "礼品订制":
+                sMadeType = "2";
+                break;
+            case "机械产品":
+                sMadeType = "3";
+                break;
+            case "电子产品":
+                sMadeType = "4";
+                break;
+            case "其他":
+                sMadeType = "5";
+                break;
+            case "订制工厂":
+                sMadeType = "6";
+                break;
+            case "发布订制":
+                sMadeType = "7";
+                break;
+            default:
+                break;
+        }
 
     }
 

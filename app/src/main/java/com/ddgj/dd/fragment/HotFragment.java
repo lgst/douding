@@ -13,21 +13,26 @@ import com.ddgj.dd.R;
  */
 
 public class HotFragment extends BaseFragment {
-    @Override
-    protected void initViews() {
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = initView();
-
-        return view;
-    }
-
-    private View initView() {
         View view = View.inflate(getActivity(), R.layout.fragment_hot, null);
         return view;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews();
+    }
+
+    @Override
+    protected void initViews() {
+
+
+    }
+
+
+
+
 }
