@@ -145,6 +145,8 @@
     <string name="order">私人订制</string>
     <string name="order_factory">订制工厂</string>
 
+    <string name="factory">中国智造</string>
+
     <string-array name="originalityTypes">
         <item>农林牧副渔</item>
         <item>通讯计算机</item>

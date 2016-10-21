@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.FactoryActivity;
 import com.ddgj.dd.activity.OEMActivity;
 import com.ddgj.dd.activity.OrderActivity;
 import com.ddgj.dd.activity.OriginalityActivity;
@@ -22,7 +23,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * Created by Administrator on 2016/10/6.
  */
 public class ClassesGridViewAdapter extends BaseAdapter {
-    private final String[] names = new String[]{"个人创意", "专利服务", "私人订制", "委托代工", "全民众筹", "中国智造"};
+    private String[] names = new String[]{"个人创意", "专利服务", "私人订制", "委托代工", "全民众筹", "中国智造"};
     private final int[] IMGS = new int[]{
             R.mipmap.ic_home_classes_chuangyi,
             R.mipmap.ic_home_classes_zhuangli,
@@ -73,11 +74,10 @@ public class ClassesGridViewAdapter extends BaseAdapter {
                         context.startActivity(new Intent(context, OEMActivity.class).putExtra("page",4));
                         break;
                     case 4://众筹
-                        showLoadingDialog("该模块暂未开通，敬请期待！","");
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",5));
+//                        context.startActivity(new Intent(context, .class).putExtra("page",5));
                         break;
                     case 5://工厂 中国智造
-//                        context.startActivity(new Intent(context, ListActivity.class).putExtra("page",6));
+                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page",6));
                         break;
                 }
             }

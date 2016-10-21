@@ -31,6 +31,25 @@ public class EnterpriseUser extends User implements Serializable {
      * facilitator_landing_time :
      * add_time : 2016-10-05 10:12:34
      * modify_time :
+     *
+     * private String acilitator_id;//服务商ID
+     private String facilitator_name;//服务商名称
+     private String facilitator_scale;//服务商规模
+     private String facilitator_field;//服务商领域
+     private String facilitator_area;//服务商区域
+     private String facilitator_address;//服务商详细地址
+     private String facilitator_contact;//服务商联系方式
+     private String facilitator_linkman;//服务商联系人
+     private String facilitator_email;//服务商邮箱
+     private String facilitator_license;//服务商营业执照
+     private String facilitator_picture;//服务商展示图片
+     private String facilitator_ip;//服务商登陆IP
+     private String facilitator_landing_time;//服务商登陆时间
+     private String add_time;//信息添加时间
+     private String modify_time;//信息更新时间
+     private String account_id;//账号ID
+     *
+     *
      */
 
     private String password;
