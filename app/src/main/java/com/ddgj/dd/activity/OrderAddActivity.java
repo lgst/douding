@@ -18,7 +18,9 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -32,7 +34,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-public class OrderAddActivity extends BaseActivity implements View.OnClickListener {
+public class OrderAddActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private EditText productName;
     private EditText orderTitle;
@@ -122,7 +124,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         productInfor = (EditText) findViewById(R.id.product_infor);
         orderUserName = (EditText) findViewById(R.id.order_user_name);
         orderUserPhone = (EditText) findViewById(R.id.order_user_phone);
+        orderUserPhone.setOnFocusChangeListener(this);
         orderUserEmail = (EditText) findViewById(R.id.order_user_email);
+        orderUserEmail.setOnFocusChangeListener(this);
         orderUserAddress = (EditText) findViewById(R.id.order_user_address);
         madeType = (Spinner) findViewById(R.id.made_type_spinner);
         madeState = (Spinner) findViewById(R.id.made_state);
@@ -190,7 +194,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             params.put("made_u_email", String.valueOf(sOrderUserEmail));
             params.put("made_u_address", String.valueOf(sOrderUserAddress));
             params.put("made_state", sMadeStateSpinner);
-            params.put("m_a_id", "m_a_id");
+            params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
             params.put("head_picture", "head_picture");
             params.put("made_differentiate", "0");
 
@@ -267,14 +271,6 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             case "其他":
                 sMadeType = "6";
                 break;
-            case "订制工厂":
-                sMadeType = "7";
-                break;
-            case "发布订制":
-                sMadeType = "8";
-                break;
-            default:
-                break;
         }
     }
 
@@ -342,6 +338,34 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 }
 
             }
+        }
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch (view.getId()) {
+            case R.id.order_user_email:
+                if (b) {
+                    // 此处为得到焦点时的处理内容
+                    //showToastShort("此处为得到焦点时的处理内容");
+                } else {
+                    // 此处为失去焦点时的处理内容
+                    sOrderUserEmail = orderUserEmail.getText().toString().trim();
+                    if (!TextCheck.checkEmail(sOrderUserEmail)){
+                        showToastShort("邮箱格式不正确");
+                    }
+                }
+                break;
+            case R.id.order_user_phone:
+                if (b) {
+                } else {
+                    sOrderUserPhone = orderUserPhone.getText().toString().trim();
+                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)){
+                        showToastShort("手机号码格式不正确");
+                    }
+                }
+            default:
+                break;
         }
     }
 }

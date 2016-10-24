@@ -15,6 +15,7 @@ import com.ddgj.dd.fragment.MineOEMFragment;
 import com.ddgj.dd.fragment.MineOrderFragment;
 import com.ddgj.dd.fragment.MineOriginalityFragment;
 import com.ddgj.dd.fragment.MinePatentFragment;
+import com.ddgj.dd.util.user.UserHelper;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -32,12 +33,12 @@ import java.util.List;
 
 /**
  * 二级页面，六个分类共用，需要传入参数：page 0-6 ， 0：全部 ， 1-6：分类
- * */
+ */
 public class MineProjectActivity extends BaseActivity {
     private ViewPager mViewPager;
     private MagicIndicator magicIndicator;
     private String[] indicatorItems;
-    List<Fragment> framgents  = new ArrayList<Fragment>();
+    List<Fragment> framgents = new ArrayList<Fragment>();
     private FragmentStatePagerAdapter adapter;
 
     @Override
@@ -53,20 +54,25 @@ public class MineProjectActivity extends BaseActivity {
 
     private void init() {
         Intent intent = getIntent();
-        int page = intent.getIntExtra("page",0);
+        int page = intent.getIntExtra("page", 0);
         mViewPager.setCurrentItem(page);
+        mViewPager.setOffscreenPageLimit(3);
     }
 
     private void initDatas() {
-        indicatorItems = getResources().getStringArray(R.array.mine_classes);
+        if (UserHelper.getInstance().getUser().getAccount_type().equals("1"))
+            indicatorItems = getResources().getStringArray(R.array.mine_classes_enterprise);
+        else
+            indicatorItems = getResources().getStringArray(R.array.mine_classes_personal);
     }
 
     private void initFragments() {
         framgents.add(new MineOriginalityFragment());
         framgents.add(new MinePatentFragment());
         framgents.add(new MineOrderFragment());
-        framgents.add(new MineOEMFragment());
-        adapter = new ListVPAdapter(getSupportFragmentManager(),framgents);
+        if (UserHelper.getInstance().getUser().getAccount_type().equals("1"))
+            framgents.add(new MineOEMFragment());
+        adapter = new ListVPAdapter(getSupportFragmentManager(), framgents);
         mViewPager.setAdapter(adapter);
     }
 
@@ -115,8 +121,7 @@ public class MineProjectActivity extends BaseActivity {
         magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
     }
 
-    public void backClick(View v)
-    {
+    public void backClick(View v) {
         finish();
     }
 }

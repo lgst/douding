@@ -136,7 +136,6 @@ public class RegisterActivity extends BaseActivity {
                         msg.obj = responseInfo.getMsg();
                         handler.sendMessage(msg);
                     }
-
                 }
             });
         }
@@ -145,6 +144,12 @@ public class RegisterActivity extends BaseActivity {
     private boolean check(String username, String password, String confirm, String answer) {
         if (username.isEmpty()) {
             showToastShort(getResources().getString(R.string.please_input_username));
+            userName.requestFocus();
+            return false;
+        }
+        if(!username.matches("([0-9]|[A-Za-z]|[_])+"))
+        {
+            showToastShort("用户名只能由字母、数字、下划线组成！");
             userName.requestFocus();
             return false;
         }

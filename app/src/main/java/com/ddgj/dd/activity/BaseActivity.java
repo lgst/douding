@@ -14,6 +14,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * Created by Administrator on 2016/9/28.
  */
 public abstract class BaseActivity extends FragmentActivity {
+    protected static final String TAG = "lgst";
     public static final int SUCCESS = 100;
     public static final int FAILDE = 101;
 

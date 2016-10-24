@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
@@ -20,7 +19,6 @@ import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -58,12 +56,6 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
     protected void initView() {
         mplv = (PullToRefreshListView)findViewById(R.id.list);
         mLoading = (LinearLayout)findViewById(R.id.loading);
-        mplv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData();
-            }
-        });
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -114,6 +106,10 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
             activity.showToastNotNetWork();
             return;
         }
+        if(mPatents.size()>0)
+        {
+            return;
+        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
         params.put("pageSingle", "1000");
@@ -123,7 +119,6 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
         OkHttpUtils.post().url(GET_MINE_PATENT).params(params).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                mplv.onRefreshComplete();
                 activity.showToastNotNetWork();
             }
 
@@ -142,8 +137,6 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
                         }
                             mAdapter = new PatentPLVAdapter(activity, mPatents);
                             mplv.setAdapter(mAdapter);
-                        if (mplv.isRefreshing())//关闭刷新
-                            mplv.onRefreshComplete();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
                             mLoading.setVisibility(View.GONE);
                     }

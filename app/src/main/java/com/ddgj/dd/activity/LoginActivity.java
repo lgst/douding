@@ -118,7 +118,6 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
 
                 @Override
                 public void onResponse(Response response) throws IOException {
-                    dialog.dismiss();
                     String responseContent = response.body().string();
                     Log.i("lgst", responseContent);
                     ResponseInfo responseInfo = null;
@@ -158,7 +157,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
 
                             @Override
                             public void onError(int code, String message) {
-                                Log.i("main", "登录聊天服务器失败！");
+                                Log.i("main", "登录聊天服务器失败！"+message);
                                 msg.what = FAILDE;
                                 msg.obj = "登录失败";
                                 handler.sendMessage(msg);

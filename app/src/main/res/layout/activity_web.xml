@@ -1,30 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.WebActivity">
-    <RelativeLayout
-        style="@style/ActionBarLightTheme"
-        android:background="@color/white">
-        <ImageView
-            style="@style/TitleBarImageTheme"
-            android:clickable="true"
-            android:onClick="backClick"
-            android:src="@mipmap/ic_blue_back"/>
-        <TextView
-            android:id="@+id/title"
-            style="@style/TitleBarTextTheme"
-            android:textColor="@color/colorPrimary"/>
-    </RelativeLayout>
-    <View style="@style/LineGrey1px"/>
-
-    <RelativeLayout
-        android:id="@+id/content_container"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activity.WebActivity">
+        <RelativeLayout
+            style="@style/ActionBarLightTheme"
+            android:background="@color/grey_lightE">
+            <ImageView
+                style="@style/TitleBarImageTheme"
+                android:clickable="true"
+                android:onClick="backClick"
+                android:src="@mipmap/ic_blue_back"/>
+            <TextView
+                android:id="@+id/title"
+                style="@style/TitleBarTextTheme"
+                android:textColor="@color/colorPrimary"/>
+            <ImageView
+                style="@style/TitleBarImageTheme"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:onClick="moreClick"
+                android:src="@mipmap/ic_more_vert_grey600_24dp"/>
+        </RelativeLayout>
+        <View style="@style/LineGrey1px"/>
 
-    </RelativeLayout>
-</LinearLayout>
+        <RelativeLayout
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+    </LinearLayout>
+    <com.ddgj.dd.view.PinchImageView
+        android:id="@+id/big_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EE000000"
+        android:visibility="gone"/>
+</RelativeLayout>

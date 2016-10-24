@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ddgj.dd.activity.OrderFactoryActivity">
+    tools:context="com.ddgj.dd.activity.OEMFactoryActivity">
     <RelativeLayout
         style="@style/ActionBarLightTheme"
         android:background="@color/white">

@@ -233,8 +233,7 @@ public class FileUtil {
             size += getFolderSize(tempCache);
         }
         if (privateCache.exists())
-            size += getFolderSize(imageCache);
-        Log.i("lgst", mContext.getCacheDir().length() + "--");
+            size += getFolderSize(privateCache);
         return size;
     }
 
@@ -297,7 +296,7 @@ public class FileUtil {
                 deleteFile(files[i]);
             }
         } else {
-            boolean bool = file.delete();
+            file.delete();
             return;
         }
         file.delete();
@@ -372,6 +371,8 @@ public class FileUtil {
 
     /**
      * 读取缓存，json数据
+     *
+     * @return 读取缓存成功返回JSON数据，否则返回null
      */
     public static String readJsonFromCacha(String fileName) {
         FileReader reader = null;

@@ -15,5 +15,5 @@
               android:gravity="center"
               android:text="电子产品"
               android:textColor="@color/black"
-              android:textSize="14sp"/>
+              android:textSize="14dp"/>
 </LinearLayout>

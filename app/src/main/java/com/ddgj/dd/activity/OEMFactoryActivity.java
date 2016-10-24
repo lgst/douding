@@ -32,7 +32,7 @@ import java.util.Map;
 
 import okhttp3.Call;
 
-public class OrderFactoryActivity extends BaseActivity implements View.OnClickListener, NetWorkInterface {
+public class OEMFactoryActivity extends BaseActivity implements View.OnClickListener, NetWorkInterface {
 
     private ImageView mBack;
     private TextView mTitle;
@@ -101,6 +101,7 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
                             String str = ja.getJSONObject(i).toString();
                             Log.i("lgst", str);
                             EnterpriseUser factory = new Gson().fromJson(str, EnterpriseUser.class);
+//                            factory.setHead_picture(new JSONObject(str).getString("facilitator_head"));
                             mFactorys.add(factory);
                         }
 //                        Log.i("lgst", "==" + mOriginalitys.size());
@@ -144,6 +145,7 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
         mplv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                mPageNumber=1;
                 initData(LOAD);
             }
 
@@ -173,9 +175,10 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
                             Log.e("lgst", url);
-                            startActivity(new Intent(OrderFactoryActivity.this, WebActivity.class)
+                            startActivity(new Intent(OEMFactoryActivity.this, WebActivity.class)
                                     .putExtra("title", user.getFacilitator_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", user.getAccount()));
                         }
                     }
                 });

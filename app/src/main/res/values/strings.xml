@@ -66,11 +66,16 @@
         <item>中国智造</item>
     </string-array>
 
-    <string-array name="mine_classes">
+    <string-array name="mine_classes_enterprise">
         <item>创意</item>
         <item>专利</item>
         <item>订制</item>
         <item>代工</item>
+    </string-array>
+    <string-array name="mine_classes_personal">
+        <item>创意</item>
+        <item>专利</item>
+        <item>订制</item>
     </string-array>
 
     <string-array name="patent_type">
@@ -100,6 +105,14 @@
         <item>其他</item>
         <item>订制工厂</item>
         <item>发布订制</item>
+    </string-array>
+    <string-array name="order_add_classes_name">
+        <item>家具订制</item>
+        <item>服装订制</item>
+        <item>礼品订制</item>
+        <item>机械产品</item>
+        <item>电子产品</item>
+        <item>其他</item>
     </string-array>
 
     <string-array name="price">
@@ -150,6 +163,8 @@
     <string name="originality">创意</string>
     <string name="order">私人订制</string>
     <string name="order_factory">订制工厂</string>
+
+    <string name="factory">中国智造</string>
 
     <string-array name="originalityTypes">
         <item>农林牧副渔</item>

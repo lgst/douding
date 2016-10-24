@@ -305,6 +305,7 @@
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
+                    android:inputType="phone"
                     android:nextFocusForward="@+id/idea_user_phone"
                     android:paddingLeft="4dip"
                     android:paddingRight="4dip"

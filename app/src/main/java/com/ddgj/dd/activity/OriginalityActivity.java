@@ -104,10 +104,12 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        if (classes == MINE)
+        if (classes == MINE) {
             params.put("o_account_id", UserHelper.getInstance().getUser().getAccount_id());
-        else
-            params.put("originality_differentiate",String.valueOf(0));
+        } else {
+            params.put("originality_differentiate", String.valueOf(0));
+        }
+
 
 //        Log.i("lgst", "mPageNumber:" + mPageNumber);
 //        Log.i("lgst", "mPageSingle:" + mPageSingle);
@@ -137,6 +139,8 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                             String patentStr = ja.getJSONObject(i).toString();
 //                            Log.i("lgst",patentStr);
                             Originality originality = new Gson().fromJson(patentStr, Originality.class);
+                            if(classes==MINE)
+                                originality.setHead_picture(UserHelper.getInstance().getUser().getHead_picture());
                             mOriginalitys.add(originality);
                         }
 //                        Log.i("lgst", "==" + mOriginalitys.size());
@@ -149,8 +153,6 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                             if (mAdapter != null)
                                 mAdapter.notifyDataSetChanged();
                         }
-//                        if (i < mPageSingle)//如果返回数据小于请求数量则表示已经取到最后一条数据，页码就不能再加一，每次请求前页码加一，所以这里要减一
-//                            mPageNumber--;
                         if (mplv.isRefreshing())//关闭刷新
                             mplv.onRefreshComplete();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
@@ -200,7 +202,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Originality originality = mOriginalitys.get(position-1);
+                final Originality originality = mOriginalitys.get(position - 1);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("originality_id", originality.getOriginality_id());
@@ -218,7 +220,8 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                             Log.e("lgst", url);
                             startActivity(new Intent(OriginalityActivity.this, WebActivity.class)
                                     .putExtra("title", originality.getOriginality_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", originality.getAccount()));
                         }
                     }
                 });
@@ -230,11 +233,11 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(UserHelper.getInstance().isLogined()) {
+                if (UserHelper.getInstance().isLogined()) {
                     startActivity(new Intent(OriginalityActivity.this, PublishCreativeActivity.class));
-                }else{
+                } else {
                     showToastShort("请先登录！");
-                    startActivity(new Intent(OriginalityActivity.this,LoginActivity.class).putExtra("flag","back"));
+                    startActivity(new Intent(OriginalityActivity.this, LoginActivity.class).putExtra("flag", "back"));
                 }
             }
         });
@@ -246,6 +249,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
             content.setText(text);
+
         }
     }
 

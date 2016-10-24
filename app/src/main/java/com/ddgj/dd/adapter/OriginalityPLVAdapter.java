@@ -66,9 +66,9 @@ public class OriginalityPLVAdapter extends BaseAdapter {
         Originality originality = originalitys.get(position);
         Glide.with(act).load(NetWorkInterface.HOST + "/" + originality.getHead_picture()).thumbnail(0.1f).into(vh.userIcon);
         vh.title.setText(originality.getOriginality_name());
-        vh.userName.setText(originality.getO_nickname());
+        vh.userName.setText(originality.getAccount());
         if (originality.getOriginality_type() != null)
-            vh.type.setText(Integer.parseInt(originality.getOriginality_type()));
+            vh.type.setText(types[Integer.parseInt(originality.getOriginality_type())]);
         vh.content.setText(originality.getOriginality_details());
         //tu
         showImages(act, originality, vh);
@@ -86,10 +86,6 @@ public class OriginalityPLVAdapter extends BaseAdapter {
                     .thumbnail(0.1f)
                     .into(vh.img1);
         }
-    }
-
-    private void setType(TextView textView, int index) {
-        textView.setText(act.getResources().getString(index));
     }
 
     class ViewHolder {

@@ -76,7 +76,7 @@ public class HttpHelper implements NetWorkInterface {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                Log.i("lgst","上传成功");
+                Log.i("lgst","上传成功"+response.body().string());
             }
         });
     }

@@ -52,7 +52,9 @@ public interface NetWorkInterface {
      * 获取我的专利接口
      */
     public static final String GET_MINE_PATENT = HOST + "/finfMyPatent.do";
-    /**根据id查询订制 代工*/
+    /**
+     * 根据id查询订制 代工
+     */
     public static final String GET_ORDER_BY_ID = HOST + "/findMyCustom_made.do";
     /**
      * 获取全部创意接口
@@ -70,7 +72,9 @@ public interface NetWorkInterface {
      * 获取我的创意接口
      */
     public static final String GET_MINE_ORIGINALITY = HOST + "/finfMyOriginality.do";
-    /**获取我的全部项目统计数量*/
+    /**
+     * 获取我的全部项目统计数量
+     */
     public static final String GET_MINE = HOST + "/get_mine_count.do";
     /**
      * 获取订制接口
@@ -105,16 +109,52 @@ public interface NetWorkInterface {
      * 获取创意详情页
      */
     public static final String GET_ORIGINALITY_DETAILS = HOST + "/originalityDet.do";
-    /**获取专利详情页*/
+    /**删除创意*/
+    public static final String DELETE_ORIGINALITY = HOST + "/delOriginality.do";
+    /**
+     * 获取专利详情页
+     */
     public static final String GET_PATENT_DETAILS = HOST + "/patentDet.do";
     /**
      * 获取订制详情页
      */
     public static final String GET_ORDER_DETAILS = HOST + "/Custom_madeDetails.do";
-    /**获取订制工厂详情*/
+    /**
+     * 获取订制工厂详情
+     */
     public static final String GET_ORDER_FACTORY_DETAILS = HOST + "/factorydetails.do";
-    /**获取代工产品*/
+    /**
+     * 获取代工产品
+     */
     public static final String GET_ORDER_PRODUCT_DETAILS = HOST + "/foundryDetails.do ";
 
+
+    /**
+     * 获取工厂接口
+     */
+    public static final String GET_FACILITATORMADE = HOST + "/findFacilitatorMade.do";
+    /**
+     * 获取产品接口
+     */
+    public static final String GET_PRODUCTMADE = HOST + "/findAllOriginalityTwo.do";
+    /***
+     * 获取工厂详情接口
+     */
+    public static final String GET_FAC_DETAILS = HOST + "/factorydetails.do";
+    /***
+     * 获取创意产品详情接口
+     * OriginalityDetails.do
+     */
+    public static final String GET__PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
+
+    /**
+     * 版本更新检查
+     */
+    public static final String CHECK_UPDATE = HOST + "/updateVersions.do";
+
+    /**
+     * 获取自己的订制接口
+     */
+    public static final String GET_MINE_ORDER = HOST + "/findMyCustom_made.do";
 
 }

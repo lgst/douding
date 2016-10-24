@@ -116,6 +116,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
             @Override
             public void onResponse(String response, int id) {
+                Log.i(TAG, "onResponse: "+response);
                 try {
                     JSONObject jo = new JSONObject(response);
                     int status = jo.getInt("status");
@@ -127,6 +128,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                         for (int i = 0; i < ja.length(); i++) {
                             String patentStr = ja.getJSONObject(i).toString();
                             Patent patent = new Gson().fromJson(patentStr, Patent.class);
+                            if(classes==MINE)
+                                patent.setHead_picture(UserHelper.getInstance().getUser().getHead_picture());
                             mPatents.add(patent);
                         }
                         if (flag == LOAD) {
@@ -203,7 +206,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                             Log.e("lgst", url);
                             startActivity(new Intent(PatentActivity.this, WebActivity.class)
                                     .putExtra("title", originality.getPatent_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", originality.getAccount()));
                         }
                     }
                 });

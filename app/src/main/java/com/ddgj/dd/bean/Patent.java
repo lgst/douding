@@ -57,6 +57,16 @@ public class Patent implements Serializable{
     private String p_account_id;
     private String p_nickname;
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    private String account;
+
     public int getPageNumber() {
         return pageNumber;
     }

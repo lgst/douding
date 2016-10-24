@@ -7,9 +7,16 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
+    <com.baoyz.swipemenulistview.SwipeMenuListView
+        android:id="@+id/listView"
+        android:focusable="true"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <LinearLayout
         android:id="@+id/loading"
         android:layout_width="match_parent"

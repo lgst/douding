@@ -19,7 +19,9 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -110,6 +112,22 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initTypeSpinner() {
+        String[] mItems1 = getResources().getStringArray(R.array.originalityTypes);
+        ArrayAdapter spinnerAdapter1 = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems1);
+        spinnerPatentCategory.setAdapter(spinnerAdapter1);
+        spinnerPatentCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sPatentCategory = String.valueOf(position);
+
+                //Toast.makeText(PublishCreativeActivity.this, "你点击的是:"+position, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         String[] mItems = getResources().getStringArray(R.array.patent_type);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems);
         spinnerPatentType.setAdapter(spinnerAdapter);
@@ -157,7 +175,6 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         if (check(sPatentName, sPatentIntro, sPatentInfor, sPatentUserName, sPatentUserEmail, sPatentUserPhone, sPatentNumber, sPatentEmpower, sPatentAssignmentPrice)) {
             dialog = showLoadingDialog("", "正在发送您的专利");
 
-
             Map<String, String> params = new HashMap<String, String>();
             params.put("patent_name", String.valueOf(sPatentName));
             params.put("patent_introduce", String.valueOf(sPatentIntro));
@@ -172,9 +189,8 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
             params.put("p_authorization_price", String.valueOf(sPatentEmpower));
             params.put("p_transfer_price", String.valueOf(sPatentAssignmentPrice));
             params.put("p_authorization_state", String.valueOf(checked));
-
-            params.put("o_account_id", "o_account_id");
-            params.put("o_nickname", "o_nickname");
+            params.put("p_account_id",UserHelper.getInstance().getUser().getAccount_id());
+            params.put("p_nickname", "o_nickname");
             params.put("head_picture", "head_picture");
 
 
@@ -228,7 +244,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         sPatentNumber = patentNumber.getText().toString().trim();
         sPatentEmpower = patentEmpower.getText().toString().trim();
         sPatentAssignmentPrice = patentAssignmentPrice.getText().toString().trim();
-        sPatentCategory = (String) this.spinnerPatentCategory.getSelectedItem();
+
         checked = assignmentCheck.isChecked();
         Log.e("getinfo", sPatentName +
                 sPatentIntro +
@@ -280,16 +296,25 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     public void onFocusChange(View view, boolean b) {
         switch (view.getId()) {
             case R.id.patent_user_email:
-                showToastShort("邮箱格式不正确");
-            /*    if (!TextCheck.checkEmail(sPatentUserEmail)){
-                    showToastShort("邮箱格式不正确");
-                }*/
+                if (b) {
+                    // 此处为得到焦点时的处理内容
+                    //showToastShort("此处为得到焦点时的处理内容");
+                } else {
+                    // 此处为失去焦点时的处理内容
+                    sPatentUserEmail = patentUserEmail.getText().toString().trim();
+                    if (!TextCheck.checkEmail(sPatentUserEmail)){
+                        showToastShort("邮箱格式不正确");
+                    }
+                }
                 break;
             case R.id.patent_user_phone:
-              /*  if (!TextCheck.checkPhoneNumber(sPatentUserPhone)){
-                    showToastShort("手机号码格式不正确");
-                }*/
-                showToastShort("手机号码格式不正确");
+                if (b) {
+                } else {
+                    sPatentUserPhone = patentUserPhone.getText().toString().trim();
+                    if (!TextCheck.checkPhoneNumber(sPatentUserPhone)){
+                        showToastShort("手机号码格式不正确");
+                    }
+                }
             default:
                 break;
         }
@@ -297,5 +322,3 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
 
 
 }
-
-

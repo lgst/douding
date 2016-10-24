@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
@@ -20,7 +19,6 @@ import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -43,7 +41,7 @@ import okhttp3.Call;
 public class MineOrderFragment extends BaseFragment implements NetWorkInterface{
     private PullToRefreshListView mplv;
     private LinearLayout mLoading;
-    private List<Order> mPatents = new ArrayList<Order>();
+    private List<Order> mOders = new ArrayList<Order>();
     private OrderAdapter mAdapter;
     private BaseActivity activity;
 
@@ -58,26 +56,20 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface{
     protected void initView() {
         mplv = (PullToRefreshListView)findViewById(R.id.list);
         mLoading = (LinearLayout)findViewById(R.id.loading);
-        mplv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                initData();
-            }
-        });
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        final Order order = mPatents.get(position-1);
+                        final Order order = mOders.get(position-1);
                         Map<String, String> params = new HashMap<String, String>();
                         params.put("client_side", "app");
-                        params.put("patent_id", order.getMade_id());
-                        OkHttpUtils.post().url(GET_PATENT_DETAILS).params(params).build().execute(new StringCallback() {
+                        params.put("made_id", order.getMade_id());
+                        OkHttpUtils.post().url(GET_ORDER_DETAILS).params(params).build().execute(new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
+                                Log.e("lgst", "获取我的订制详情页失败：" + e.getMessage());
                             }
 
                             @Override
@@ -87,7 +79,7 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface{
                                     String url = responseInfo.getData();
                                     Log.e("lgst", url);
                                     startActivity(new Intent(activity, WebActivity.class)
-                                            .putExtra("title", order.getMade_id())
+                                            .putExtra("title", order.getMade_name())
                                             .putExtra("url", HOST + url));
                                 }
                             }
@@ -114,6 +106,10 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface{
             activity.showToastNotNetWork();
             return;
         }
+        if(mOders.size()>0)
+        {
+            return;
+        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
         params.put("pageSingle", "1000");
@@ -121,10 +117,9 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface{
         params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
 //        params.put("originality_differentiate",String.valueOf(0));
 
-        OkHttpUtils.post().url(GET_MINE_PATENT).params(params).build().execute(new StringCallback() {
+        OkHttpUtils.post().url(GET_MINE_ORDER).params(params).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                mplv.onRefreshComplete();
                 activity.showToastNotNetWork();
             }
 
@@ -137,14 +132,12 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface{
                     if (status == STATUS_SUCCESS) {
                         JSONArray ja = jo.getJSONArray("data");
                         for (int i = 0; i < ja.length(); i++) {
-                            String patentStr = ja.getJSONObject(i).toString();
-                            Order order = new Gson().fromJson(patentStr, Order.class);
-                            mPatents.add(order);
+                            String orderStr = ja.getJSONObject(i).toString();
+                            Order order = new Gson().fromJson(orderStr, Order.class);
+                            mOders.add(order);
                         }
-                            mAdapter = new OrderAdapter(mPatents);
+                            mAdapter = new OrderAdapter(mOders);
                             mplv.setAdapter(mAdapter);
-                        if (mplv.isRefreshing())//关闭刷新
-                            mplv.onRefreshComplete();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
                             mLoading.setVisibility(View.GONE);
                     }

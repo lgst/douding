@@ -25,6 +25,10 @@ import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -102,6 +106,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         //用户身份
         userType = (TextView) findViewById(R.id.user_type);
 
+        if (UserHelper.getInstance().getUser() != null &&
+                UserHelper.getInstance().getUser().getAccount_type().equals("0")) {
+            findViewById(R.id.oem).setVisibility(View.GONE);
+        }
         findViewById(R.id.oem).setOnClickListener(this);
         mOemCount = (TextView) findViewById(R.id.oem_count);
         findViewById(R.id.order).setOnClickListener(this);
@@ -140,7 +148,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                                                  mOemCount.setText(jo.getString("OEM"));
                                                  mPatentCount.setText(jo.getString("patent"));
                                              }
-                                         }catch (JSONException e) {
+                                         } catch (JSONException e) {
                                              e.printStackTrace();
                                          }
                                      }
@@ -198,6 +206,37 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
      * 点击分享
      */
     private void clickShare() {
+        final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
+                SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE};
+        new ShareAction(getActivity())
+                .setDisplayList(displaylist)
+                .withText("分享测试")
+                .withTitle("豆丁工匠")
+//                .withTargetUrl("")
+                .withMedia(
+                        new UMImage(getActivity(), R.drawable.sina_web_default))
+                .setListenerList(new UMShareListener() {
+                    @Override
+                    public void onResult(SHARE_MEDIA arg0) {
+                        Toast.makeText(getActivity(), "分享已完成！",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA arg0, Throwable arg1) {
+                        Toast.makeText(getActivity(), "分享出错！",
+                                Toast.LENGTH_SHORT).show();
+                        arg1.printStackTrace();
+                        Log.e("lgst", arg1.getMessage());
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA arg0) {
+                        Toast.makeText(getActivity(), "分享已取消！",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).open();
     }
 
     /**

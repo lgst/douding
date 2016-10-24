@@ -11,6 +11,7 @@ import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.adapter.OrderClassesAdapter;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CustomGridView;
@@ -47,7 +48,12 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         initView();
+        initCache();
         initDatas();
+    }
+
+    private void initCache() {
+        analysisOrderJson(FileUtil.readJsonFromCacha("order"));
     }
 
     @Override
@@ -79,7 +85,7 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                         startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[5]).putExtra("classes", 6));
                         break;
                     case 6://工厂
-                        startActivity(new Intent(OrderActivity.this, OrderFactoryActivity.class).putExtra("classes", "2"));
+                        startActivity(new Intent(OrderActivity.this, OEMFactoryActivity.class).putExtra("classes", "2"));
                         break;
                     case 7://发布
                         if (UserHelper.getInstance().isLogined()) {
@@ -109,28 +115,14 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Log.e("lgst", "获取订制成功案例失败：" + e.getMessage());
-                        showToastShort("获取成功案例出错！");
+                        showToastShort("请求失败，请稍后重试！");
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
                         Log.i("lgst", response);
-                        try {
-                            JSONObject jo = new JSONObject(response);
-                            int status = jo.getInt("status");
-                            if (status == STATUS_SUCCESS) {
-                                mOrders = new ArrayList<Order>();
-                                JSONArray ja = jo.getJSONArray("data");
-                                for (int i = 0; i < ja.length(); i++) {
-                                    String orderStr = ja.getJSONObject(i).toString();
-                                    Order order = new Gson().fromJson(orderStr, Order.class);
-                                    mOrders.add(order);
-                                }
-                                mSuccess.setAdapter(new OrderAdapter(mOrders));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        analysisOrderJson(response);
+                        FileUtil.saveJsonToCacha(response,"order");
                     }
                 });
         mSuccess.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,7 +135,7 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                 OkHttpUtils.post().url(GET_ORDER_DETAILS).params(params).build().execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
+                        Log.e("lgst", "获取订制 详情页失败：" + e.getMessage());
                     }
 
                     @Override
@@ -160,5 +152,26 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                 });
             }
         });
+    }
+
+    private void analysisOrderJson(String json){
+        if(json==null)
+            return;
+        try {
+            JSONObject jo = new JSONObject(json);
+            int status = jo.getInt("status");
+            if (status == STATUS_SUCCESS) {
+                mOrders = new ArrayList<Order>();
+                JSONArray ja = jo.getJSONArray("data");
+                for (int i = 0; i < ja.length(); i++) {
+                    String orderStr = ja.getJSONObject(i).toString();
+                    Order order = new Gson().fromJson(orderStr, Order.class);
+                    mOrders.add(order);
+                }
+                mSuccess.setAdapter(new OrderAdapter(mOrders));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

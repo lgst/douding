@@ -183,7 +183,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                             Log.e("lgst", url);
                             startActivity(new Intent(OrderListActivity.this, WebActivity.class)
                                     .putExtra("title", order.getMade_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", order.getAccount()));
                         }
                     }
                 });

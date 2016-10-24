@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
+
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
@@ -96,7 +97,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private void initOriginality() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
-        params.put("pageSingle", "5");
+        params.put("pageSingle", "3");
         params.put("originality_differentiate", "0");
         OkHttpUtils.post().url(GET_HOT_ORIGINALITY).params(params).build().execute(
                 new StringCallback() {
@@ -107,8 +108,9 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst",response);
+                        Log.i("lgst", response);
                         analysisAndLoadOriginality(response);
+                        FileUtil.saveJsonToCacha(response, "originality");
                     }
                 }
         );
@@ -133,7 +135,8 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                             Log.e("lgst", url);
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getOriginality_name())
-                                    .putExtra("url", url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", originality.getAccount()));
                         }
                     }
                 });
@@ -152,7 +155,6 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             JSONObject jo = new JSONObject(response);
             int status = jo.getInt("status");
             if (status == STATUS_SUCCESS) {
-                FileUtil.saveJsonToCacha(response, "originality");
                 mOriginalitys = new ArrayList<Originality>();
                 JSONArray ja = jo.getJSONArray("data");
                 for (int i = 0; i < ja.length(); i++) {
@@ -173,7 +175,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private void initPatent() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
-        params.put("pageSingle", "5");
+        params.put("pageSingle", "3");
         OkHttpUtils.post().url(GET_HOT_PATENT).params(params).build().execute(
                 new StringCallback() {
                     @Override
@@ -183,7 +185,10 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.i("lgst", response);
                         analysisAndLoadPatent(response);
+//                写入json缓存
+                        FileUtil.saveJsonToCacha(response, "patent");
                     }
                 }
 
@@ -209,7 +214,8 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                             Log.e("lgst", url);
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getPatent_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", originality.getAccount()));
                         }
                     }
                 });
@@ -240,6 +246,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             @Override
             public void onResponse(String response, int id) {
                 analysisAndLoadAD(response);
+                FileUtil.saveJsonToCacha(response, "ad");
             }
         });
     }
@@ -254,7 +261,6 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         try {
             JSONObject jo = new JSONObject(response);
             if (STATUS_SUCCESS == jo.getInt("status")) {
-                FileUtil.saveJsonToCacha(response, "ad");
                 JSONArray array = jo.getJSONArray("data");
                 List<ADBean> adBeens = new ArrayList<ADBean>();
                 for (int i = 0; i < array.length(); i++) {
@@ -276,7 +282,9 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         }
     }
 
-    /**解析专利json数据*/
+    /**
+     * 解析专利json数据
+     */
     public void analysisAndLoadPatent(String response) {
         if (response == null) {
             return;
@@ -286,8 +294,6 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             JSONObject jo = new JSONObject(response);
             int status = jo.getInt("status");
             if (status == STATUS_SUCCESS) {
-//                写入json缓存
-                FileUtil.saveJsonToCacha(response, "patent");
                 JSONArray ja = jo.getJSONArray("data");
                 for (int i = 0; i < ja.length(); i++) {
                     String patentStr = ja.getJSONObject(i).toString();

@@ -10,7 +10,7 @@ import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.fragment.EnterpriseFragment;
 import com.ddgj.dd.fragment.PersonalFragment;
 import com.ddgj.dd.util.user.UserHelper;
-
+import com.hyphenate.chat.EMClient;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -81,10 +81,9 @@ public class UserCenterActivity extends BaseActivity {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-
                         MainActivity.update = true;
                         UserHelper.getInstance().logout();
-                       /* EMClient.getInstance().logout(true);*/
+                        EMClient.getInstance().logout(true);
                         sweetAlertDialog.dismiss();
                         finish();
                     }

@@ -3,8 +3,6 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +18,9 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -34,7 +34,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-public class OEMAddActivity extends BaseActivity implements View.OnClickListener {
+public class OEMAddActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private EditText productName;
     private EditText orderTitle;
@@ -113,22 +113,6 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         productName = (EditText) findViewById(R.id.product_name);
-        productName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         orderTitle = (EditText) findViewById(R.id.order_title);
         orderPrice = (EditText) findViewById(R.id.order_price);
         orderNumber = (EditText) findViewById(R.id.order_number);
@@ -138,7 +122,9 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         productInfor = (EditText) findViewById(R.id.product_infor);
         orderUserName = (EditText) findViewById(R.id.order_user_name);
         orderUserPhone = (EditText) findViewById(R.id.order_user_phone);
+        orderUserPhone.setOnFocusChangeListener(this);
         orderUserEmail = (EditText) findViewById(R.id.order_user_email);
+        orderUserEmail.setOnFocusChangeListener(this);
         orderUserAddress = (EditText) findViewById(R.id.order_user_address);
         madeType = (Spinner) findViewById(R.id.made_type_spinner);
         madeState = (Spinner) findViewById(R.id.made_state);
@@ -207,7 +193,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
             params.put("made_u_email", String.valueOf(sOrderUserEmail));
             params.put("made_u_address", String.valueOf(sOrderUserAddress));
             params.put("made_state", sMadeStateSpinner);
-            params.put("m_a_id", "m_a_id");
+            params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
             params.put("head_picture", "head_picture");
             params.put("made_differentiate", "1");
 
@@ -265,7 +251,34 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         sOrderUserPhone = orderUserPhone.getText().toString().trim();
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
         sOrderUserAddress = orderUserAddress.getText().toString().trim();
-        sMadeType = (String) this.madeType.getSelectedItem();
+        switch ((String) this.madeType.getSelectedItem()) {
+            case "家具订制":
+                sMadeType = "0";
+                break;
+            case "服装订制":
+                sMadeType = "1";
+                break;
+            case "礼品订制":
+                sMadeType = "2";
+                break;
+            case "机械产品":
+                sMadeType = "3";
+                break;
+            case "电子产品":
+                sMadeType = "4";
+                break;
+            case "其他":
+                sMadeType = "5";
+                break;
+            case "订制工厂":
+                sMadeType = "6";
+                break;
+            case "发布订制":
+                sMadeType = "7";
+                break;
+            default:
+                break;
+        }
 
     }
 
@@ -331,6 +344,34 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 }
 
             }
+        }
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch (view.getId()) {
+            case R.id.order_user_email:
+                if (b) {
+                    // 此处为得到焦点时的处理内容
+                    //showToastShort("此处为得到焦点时的处理内容");
+                } else {
+                    // 此处为失去焦点时的处理内容
+                    sOrderUserEmail = orderUserEmail.getText().toString().trim();
+                    if (!TextCheck.checkEmail(sOrderUserEmail)){
+                        showToastShort("邮箱格式不正确");
+                    }
+                }
+                break;
+            case R.id.order_user_phone:
+                if (b) {
+                } else {
+                    sOrderUserPhone = orderUserPhone.getText().toString().trim();
+                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)){
+                        showToastShort("手机号码格式不正确");
+                    }
+                }
+            default:
+                break;
         }
     }
 }
