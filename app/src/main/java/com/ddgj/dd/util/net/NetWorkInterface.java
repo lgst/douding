@@ -105,10 +105,22 @@ public interface NetWorkInterface {
      * 获取订制详情页
      */
     public static final String GET_ORDER_DETAILS = HOST + "/Custom_madeDetails.do";
-    /**获取订制工厂详情*/
+    /**
+     * 获取订制工厂详情
+     */
     public static final String GET_ORDER_FACTORY_DETAILS = HOST + "/factorydetails.do";
-    /**获取代工产品*/
-    public static final String GET_ORDER_PRODUCT_DETAILS = HOST + "/foundryDetails.do ";
+    /**
+     * 获取代工产品
+     */
+    public static final String GET_ORDER_PRODUCT_DETAILS = HOST + "/foundryDetails.do";
+    /**
+     * 发表帖子
+     */
+    public static final String PUBLISH_BBS = HOST + "/addSendCard.do";
+    /**
+     * 获取全部帖子
+     */
+    public static final String GET_ALL_POST = HOST + "/getAllPost.do";
 
 
 }
