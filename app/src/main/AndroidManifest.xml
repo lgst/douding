@@ -110,6 +110,7 @@
         <activity android:name=".activity.OEMProductActivity">
         </activity>
         <activity android:name=".activity.OEMAddActivity"/>
+        <activity android:name=".fragment.PlateDetailsActivity"></activity>
     </application>
 
 </manifest>

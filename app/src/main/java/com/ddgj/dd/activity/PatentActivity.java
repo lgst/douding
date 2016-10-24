@@ -3,6 +3,7 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -115,7 +116,12 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
             @Override
             public void onResponse(String response, int id) {
+
+                Log.e("weiwei","返回数据"+response);
+                Log.e("weiwei","返回数据"+response);
+                Log.e("weiwei","返回数据"+response);
                 try {
+
                     JSONObject jo = new JSONObject(response);
                     int status = jo.getInt("status");
                     if (status == STATUS_SUCCESS) {

@@ -53,7 +53,7 @@ public class OrderFactoryAdapter extends BaseAdapter {
         }
         EnterpriseUser user = mFactorys.get(position);
         Glide.with(parent.getContext())
-                .load(user.getHead_picture())
+                .load(user.getHead_picture())           
                 .into(viewHolder.icon);
         viewHolder.name.setText(user.getFacilitator_name());
         viewHolder.field.setText(user.getFacilitator_field());

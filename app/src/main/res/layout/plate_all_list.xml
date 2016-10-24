@@ -1,38 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
-        android:padding="5dp"
         android:layout_height="wrap_content"
-        android:text="发布者"/>
+        android:padding="5dp"
+        android:text="发布者" />
 
 
     <TextView
         android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="最新自动送飞机"
         android:layout_alignTop="@+id/sItemIcon"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dip"
         android:layout_toRightOf="@+id/sItemIcon"
         android:gravity="center_vertical"
-        android:layout_marginLeft="20dip"
-        android:layout_centerVertical="true"
-        android:textStyle="bold"
         android:singleLine="true"
+        android:text="最新自动送飞机"
         android:textColor="@color/all_bg_color"
-        android:textSize="20.0sp" />
+        android:textSize="20.0sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="28sp"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:text="2016-3-6" />
+
+        <TextView
+           android:layout_toLeftOf="@+id/comment_number"
+            android:drawableLeft="@mipmap/browse_number"
+            android:id="@+id/browse_number"
+            android:layout_width="wrap_content"
+            android:layout_height="28sp"
+            android:gravity="center"
+            android:layout_gravity=""
+            android:paddingLeft="10dp"
+            android:text="201" />
+
+        <TextView
+            android:drawableLeft="@mipmap/comment_number"
+            android:id="@+id/comment_number"
+            android:layout_width="wrap_content"
+            android:layout_height="28sp"
+            android:paddingRight="10dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="10dp"
+            android:text="32" />
 
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:text="2016-3-6"/>
+    </RelativeLayout>
 
 
 </LinearLayout>
