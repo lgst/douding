@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,16 +18,24 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 
 import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
+import com.ddgj.dd.view.RichTextEditor;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import com.ddgj.dd.view.RichTextEditor.EditData;
 
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
@@ -39,9 +48,18 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
     private TextView commitBBS;
     private ImageView hideKeyboard;
     private ImageView selectPic;
+    private EditText titleName;
+    private RichTextEditor editor;
+    private StringBuilder builder;
+    private File file;
+    private ArrayList<String> picList;
+    private SweetAlertDialog dialog;
 
     @Override
     public void initView() {
+        //富文本编辑器
+        editor = (RichTextEditor) findViewById(R.id.richEditor);
+        titleName = (EditText) findViewById(R.id.title_name);
         commitBBS = (TextView) findViewById(R.id.bbs_commit);
         commitBBS.setOnClickListener(this);
         hideKeyboard = (ImageView) findViewById(R.id.hide_keyboard);
@@ -61,8 +79,9 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bbs_commit:
-                showToastShort("发送一条论坛消息");
-                toCommitBBS();
+                List<EditData> editList = editor.buildEditData();
+                // 下面的代码可以上传、或者保存，请自行实现
+                dealEditData(editList);
                 break;
             case R.id.hide_keyboard:
                 InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
@@ -77,27 +96,59 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 break;
         }
     }
-    private void toCommitBBS() {
+    /**
+     * 负责处理编辑数据提交等事宜，请自行实现
+     */
+    protected void dealEditData(List<EditData> editList) {
+        String title = titleName.getText().toString().trim();
+        builder = new StringBuilder();
+        picList = new ArrayList<>();
+        for (int i = 0; i < editList.size(); i++) {
+            if ( editList.get(i).inputStr != null) {
+                Log.e("fabubbs", "commit inputStr=" +"字符顺序是"+i+","+editList.get(i).inputStr);
 
+                 builder.append(i);
+                 builder.append(",");
+                 builder.append(editList.get(i).inputStr);
+            } else if ( editList.get(i).imagePath!= null) {
+                Log.e("fabubbs", "commit imgePath=" + "图片顺序是"+i+","+editList.get(i).imagePath);
+                picList.add(editList.get(i).imagePath);
+            }
+        }
+        Log.e("editList", "editListeditListeditList" + editList.size());
+
+
+        if (title.isEmpty()){
+            showToastShort("请输入标题");
+        }else if (editList.size()==1&&editList.get(0).inputStr.equals("")){
+            showToastShort("请输入内容");
+        }else {
+                toCommitBBS(title);
+        }
+
+
+    }
+    private void toCommitBBS(String title) {
+        dialog = showLoadingDialog("", "正在发送");
         Map<String, String> params = new HashMap<String, String>();
-        params.put("title", String.valueOf("帖子标题"));
-        params.put("cordcontent", String.valueOf("帖子内容"));
-        params.put("bbs_type", String.valueOf("帖子类型"));
-        params.put("user_id", String.valueOf("用户ID"));
-        params.put("user_name", String.valueOf("用户姓名"));
-        params.put("picture_id", String.valueOf("图片ID"));
+        params.put("title",title);
+        params.put("cordcontent", builder.toString());
+        params.put("bbs_type", String.valueOf("1"));
+        params.put("user_id", UserHelper.getInstance().getUser().getAccount_id());
+
+
 
 
         PostFormBuilder post = OkHttpUtils.post();
 
-     /*   if (path!=null) {
-            for (int i = 0; i < path.size(); i++) {
-                file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
-                String s = "o_picture";
+        if (picList!=null) {
+            for (int i = 0; i < picList.size(); i++) {
+                file = FileUtil.scal(Uri.parse(picList.get(i)), getCacheDir());
+                String s = "picture";
                 post.addFile(s + i, file.getName(), file);
-
+                Log.e("fabubbs",picList.get(i));
             }
-        }*/
+        }
         post.url(NetWorkInterface.PUBLISH_BBS)
                 .params(params).build()
                 .execute(new StringCallback() {
@@ -105,6 +156,8 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                     public void onError(okhttp3.Call call, Exception e, int id) {
                         Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
                         showToastLong("失败");
+                        dialog.dismiss();
+
                     }
 
                     @Override
@@ -112,6 +165,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                         Log.e("fabubbs", " 成功id:" + id);
                         showToastLong("成功");
                         PublishBBSActivity.this.finish();
+                        dialog.dismiss();
                     }
                 });
 
@@ -124,18 +178,22 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 // 获取返回的图片列表
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
+
                 for (String p : path) {
-                    int px = DensityUtil.dp2px(this, 60);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
-                    ImageView imageView = new ImageView(this);
-                    imageView.setLayoutParams(layoutParams);
-                    //addImageGroup.addView(imageView);
-                    Glide.with(this).load(p).into(imageView);
-                   // selectPic.setVisibility(View.GONE);
+                    insertBitmap(p);
                 }
 
             }
         }
+    }
+
+    /**
+     * 添加图片到富文本剪辑器
+     *
+     * @param imagePath
+     */
+    private void insertBitmap(String imagePath) {
+        editor.insertImage(imagePath);
     }
 
 

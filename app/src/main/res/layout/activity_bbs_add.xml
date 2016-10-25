@@ -74,7 +74,7 @@
                     android:text="帖子标题" />
 
                 <EditText
-                    android:id="@+id/patent_name"
+                    android:id="@+id/title_name"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
@@ -95,7 +95,7 @@
                     android:drawablePadding="5dp"
                     android:text="帖子内容" />
 
-                <EditText
+                <RelativeLayout
                     android:id="@+id/patent_intro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,8 +104,19 @@
                     android:gravity="left|top"
                     android:inputType="textMultiLine"
                     android:minLines="15"
+                    android:layout_marginBottom="48dp"
                     android:paddingLeft="4dip"
-                    android:paddingRight="4dip"></EditText>
+                    android:paddingRight="4dip">
+                    <com.ddgj.dd.view.RichTextEditor
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:id="@+id/richEditor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_above="@+id/title"
+                        android:background="#fff" />
+                </RelativeLayout>
+
 
 
             </LinearLayout>
