@@ -177,7 +177,8 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                             startActivity(new Intent(OEMProductActivity.this, WebActivity.class)
                                     .putExtra("title", order.getMade_name())
                                     .putExtra("url", HOST + url)
-                                    .putExtra("account", order.getAccount()));
+                                    .putExtra("account", order.getAccount())
+                                    .putExtra("content", order.getMade_describe()));
                         }
                     }
                 });

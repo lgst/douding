@@ -30,6 +30,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.ddgj.dd.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
 
         <!-- ============================== 友盟 =========================== -->
         <activity
@@ -244,7 +253,10 @@
             android:exported="true">
         </service>
 
-        <activity android:name=".activity.PreviewImageActivity">
+        <activity android:name=".activity.SMSCodeActivity">
+        </activity>
+        <activity android:name=".activity.CommentListActivity"
+                  android:theme="@style/AppThemeLightStatuBar">
         </activity>
     </application>
 

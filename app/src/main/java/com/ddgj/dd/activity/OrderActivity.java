@@ -122,7 +122,7 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                     public void onResponse(String response, int id) {
                         Log.i("lgst", response);
                         analysisOrderJson(response);
-                        FileUtil.saveJsonToCacha(response,"order");
+                        FileUtil.saveJsonToCacha(response, "order");
                     }
                 });
         mSuccess.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -146,7 +146,8 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                             Log.e("lgst", url);
                             startActivity(new Intent(OrderActivity.this, WebActivity.class)
                                     .putExtra("title", order.getMade_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("content", order.getMade_describe()));
                         }
                     }
                 });
@@ -154,8 +155,8 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
         });
     }
 
-    private void analysisOrderJson(String json){
-        if(json==null)
+    private void analysisOrderJson(String json) {
+        if (json == null)
             return;
         try {
             JSONObject jo = new JSONObject(json);

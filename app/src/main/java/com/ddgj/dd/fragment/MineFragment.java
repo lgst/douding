@@ -144,7 +144,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                                                  String str = jsonObject.getString("data");
                                                  JSONObject jo = new JSONObject(str);
                                                  mOriginalityCount.setText(jo.getString("originality"));
-                                                 mOemCount.setText(jo.getString("custom_made"));
+                                                 mOrderCount.setText(jo.getString("custom_made"));
                                                  mOemCount.setText(jo.getString("OEM"));
                                                  mPatentCount.setText(jo.getString("patent"));
                                              }

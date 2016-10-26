@@ -10,7 +10,7 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://117.34.105.120:8080/newdouding";
+    public static final String HOST = "http://www.51douding.com";
     /**
      * 注册接口
      */
@@ -109,16 +109,23 @@ public interface NetWorkInterface {
      * 获取创意详情页
      */
     public static final String GET_ORIGINALITY_DETAILS = HOST + "/originalityDet.do";
-    /**删除创意*/
+    /**
+     * 删除创意
+     */
     public static final String DELETE_ORIGINALITY = HOST + "/delOriginality.do";
     /**
      * 获取专利详情页
      */
     public static final String GET_PATENT_DETAILS = HOST + "/patentDet.do";
     /**
+     * 删除专利
+     */
+    public static final String DELETE_PATENT = HOST + "/delPatent.do";
+    /**
      * 获取订制详情页
      */
     public static final String GET_ORDER_DETAILS = HOST + "/Custom_madeDetails.do";
+    public static final String DELETE_ORDER = HOST + "/delCustom_made.do";
     /**
      * 获取订制工厂详情
      */
@@ -156,5 +163,16 @@ public interface NetWorkInterface {
      * 获取自己的订制接口
      */
     public static final String GET_MINE_ORDER = HOST + "/findMyCustom_made.do";
-
+    /**
+     * 添加评论接口<br>
+     * topic_id 主题id<br>
+     * topic_type 主题类型 0为个人创意评论 1为个人创意产品评论 2为私人订制产品评论 3为代工产品评论<br>
+     * c_content 评论内容<br>
+     * from_u_id 评论用户id
+     */
+    public static final String ADD_COMMENT = HOST + "/addComments.do";
+    /**
+     * 查看评论
+     */
+    public static final String GET_COMMENT = HOST + "/findComments.do";
 }

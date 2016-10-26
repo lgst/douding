@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,7 +122,11 @@ public class EnterpriseFragment extends BaseFragment {
         setIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), CameraActivity.class).putExtra("scaleType", true).putExtra("path", mIconPath),REQUEST_CODE);
+                startActivityForResult(new Intent(getActivity(),
+                        CameraActivity.class)
+                        .putExtra("scaleType", true)
+                        .putExtra("path", mIconPath)
+                        ,REQUEST_CODE);
             }
         });
         Bitmap bitmap = BitmapFactory.decodeFile(mIconPath);
@@ -143,5 +148,11 @@ public class EnterpriseFragment extends BaseFragment {
                 uploadUserIcon(getActivity(), mIconPath);
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
 }

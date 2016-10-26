@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.ResponseInfo;
@@ -30,7 +29,7 @@ public class RegisterActivity extends BaseActivity {
     private EditText userName;
     private EditText passWord;
     private EditText confirm;
-    private Spinner questions;
+//    private Spinner questions;
     private EditText answer;
     private RadioGroup userType;
     private Handler handler = new Handler() {
@@ -42,6 +41,8 @@ public class RegisterActivity extends BaseActivity {
                     Intent intent = new Intent();
                     intent.putExtra("username", (String) msg.obj);
                     setResult(SUCCESS, intent);
+                    LoginActivity.userName= (String) msg.obj;
+//                    注册成功返回手机号
                     RegisterActivity.this.showToastShort("注册完成！");
                     RegisterActivity.this.finish();
                     break;
@@ -63,8 +64,8 @@ public class RegisterActivity extends BaseActivity {
         userName = (EditText) findViewById(R.id.user_name);
         passWord = (EditText) findViewById(R.id.pass_word);
         confirm = (EditText) findViewById(R.id.confirm);
-        questions = (Spinner) findViewById(R.id.question_spinner);
-        answer = (EditText) findViewById(R.id.answer);
+//        questions = (Spinner) findViewById(R.id.question_spinner);
+        answer = (EditText) findViewById(R.id.sms_code);
         userType = (RadioGroup) findViewById(R.id.user_type);
     }
 
@@ -73,8 +74,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void registerClick(View v) {
-        if(!checkNetWork())
-        {
+        if (!checkNetWork()) {
             showToastNotNetWork();
             return;
         }
@@ -85,24 +85,24 @@ public class RegisterActivity extends BaseActivity {
         //获取确认密码
         String confim = this.confirm.getText().toString().trim();
         //获取密保问题
-        String question = (String) this.questions.getSelectedItem();
+//        String question = (String) this.questions.getSelectedItem();
         //获取密保答案
-        String answer = this.answer.getText().toString().trim();
+//        String answer = this.answer.getText().toString().trim();
         //获取用户类型
         int userType = this.userType.getCheckedRadioButtonId() == R.id.personal ? 0 : 1;
-        if (check(username, password, confim, answer)) {
+        if (check(username, password, confim)) {
             //输入检查通过，开始提交注册
             //注册中圆形进度对话框
-            final SweetAlertDialog dialog = showLoadingDialog("注册中...","");
+            final SweetAlertDialog dialog = showLoadingDialog("注册中...", "");
             OkHttpClient client = new OkHttpClient();
             FormEncodingBuilder build = new FormEncodingBuilder();
             build.add("account", username)
                     .add("password", password)
-                    .add("answer", answer)
+                    .add("answer", getIntent().getStringExtra("phone"))
                     .add("account_type", String.valueOf(userType))
-                    .add("question", question)
-                    .add("client_side","app");
-//            Log.i("lgst", "username:" + username + " answer:" + answer + " account_type:" + userType + " question:" + question + " answer:" + answer);
+                    .add("question", "phone")
+                    .add("client_side", "app");
+            Log.i("lgst", "username:" + username + " answer:" + getIntent().getStringExtra("phone") + " account_type:" + userType + " qustion:" + getIntent().getStringExtra("phone"));
             Request request = new Request.Builder()
                     .url(NetWorkInterface.REGISTER)
                     .post(build.build())
@@ -128,10 +128,12 @@ public class RegisterActivity extends BaseActivity {
                     Gson gson = new Gson();
                     ResponseInfo responseInfo = gson.fromJson(responseContent, ResponseInfo.class);
                     if (responseInfo.getStatus() == 0) {
+//                        注册成功
                         msg.what = SUCCESS;
                         msg.obj = username;
                         handler.sendMessage(msg);
                     } else if (responseInfo.getStatus() == NetWorkInterface.STATUS_FAILED) {
+//                        注册失败
                         msg.what = FAILDE;
                         msg.obj = responseInfo.getMsg();
                         handler.sendMessage(msg);
@@ -141,14 +143,13 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-    private boolean check(String username, String password, String confirm, String answer) {
+    private boolean check(String username, String password, String confirm) {
         if (username.isEmpty()) {
             showToastShort(getResources().getString(R.string.please_input_username));
             userName.requestFocus();
             return false;
         }
-        if(!username.matches("([0-9]|[A-Za-z]|[_])+"))
-        {
+        if (!username.matches("([0-9]|[A-Za-z]|[_])+")) {
             showToastShort("用户名只能由字母、数字、下划线组成！");
             userName.requestFocus();
             return false;
@@ -170,11 +171,11 @@ public class RegisterActivity extends BaseActivity {
             this.passWord.requestFocus();
             return false;
         }
-        if (answer.isEmpty()) {
-            showToastShort(getResources().getString(R.string.please_input_answer));
-            this.answer.requestFocus();
-            return false;
-        }
+//        if (answer.isEmpty()) {
+//            showToastShort(getResources().getString(R.string.please_input_answer));
+//            this.answer.requestFocus();
+//            return false;
+//        }
         return true;
     }
 }

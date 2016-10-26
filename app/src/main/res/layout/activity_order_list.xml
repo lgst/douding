@@ -38,7 +38,7 @@
             android:clickable="true"
             android:gravity="center"
             android:padding="8dp"
-            android:text="西安"/>
+            android:text="地区"/>
         <View android:layout_width="1px" android:layout_height="match_parent"
               android:background="@color/grey_light"/>
         <TextView
@@ -49,7 +49,7 @@
             android:clickable="true"
             android:gravity="center"
             android:padding="8dp"
-            android:text="1-1000"/>
+            android:text="全部价格"/>
 
     </LinearLayout>
     <View style="@style/LineGrey1px"/>

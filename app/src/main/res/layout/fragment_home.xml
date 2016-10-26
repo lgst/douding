@@ -35,10 +35,10 @@
                       android:orientation="vertical">
             <include layout="@layout/item_home_list_ad"/><!--轮播图-->
             <include layout="@layout/item_home_list_class"/><!--分类-->
-            <include layout="@layout/item_home_list_patent_title"/><!--专利标题-->
-            <include layout="@layout/item_home_list_patent_list"/><!--专利列表-->
             <include layout="@layout/item_home_list_originality_title"/><!--创意标题-->
             <include layout="@layout/item_home_list_originality_list"/><!--创意列表-->
+            <include layout="@layout/item_home_list_patent_title"/><!--专利标题-->
+            <include layout="@layout/item_home_list_patent_list"/><!--专利列表-->
         </LinearLayout>
     </ScrollView>
     <!--<android.support.v4.widget.SwipeRefreshLayout

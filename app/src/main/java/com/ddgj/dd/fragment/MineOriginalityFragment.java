@@ -26,7 +26,6 @@ import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -49,7 +48,6 @@ import static com.ddgj.dd.R.id.listView;
  */
 
 public class MineOriginalityFragment extends BaseFragment implements NetWorkInterface {
-    private PullToRefreshListView mplv;
     private LinearLayout mLoading;
     private List<Originality> mOriginalitys = new ArrayList<Originality>();
     private OriginalityPLVAdapter mAdapter;
@@ -66,7 +64,6 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
 
     @Override
     protected void initView() {
-        mplv = (PullToRefreshListView) findViewById(R.id.list);
         mLoading = (LinearLayout) findViewById(R.id.loading);
         mListView = (SwipeMenuListView) findViewById(listView);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -155,7 +152,7 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
     }
 
     /**删除数据*/
-    private void deleteData(int position) {
+    private void deleteData(final int position) {
         Originality ori = mOriginalitys.get(position);
         String id = ori.getOriginality_id();
         OkHttpUtils.get().url(DELETE_ORIGINALITY+"?"+"originality_id="+id).build().execute(new StringCallback() {
@@ -167,6 +164,8 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
 
             @Override
             public void onResponse(String response, int id) {
+                mOriginalitys.remove(position);
+                mAdapter.notifyDataSetInvalidated();
                 Toast.makeText(getActivity(),"删除成功！",Toast.LENGTH_SHORT).show();
                 mDialog.dismiss();
             }

@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context=".activity.SplashScreenActivity">
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_splash_bg"
+    android:scaleType="fitXY"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

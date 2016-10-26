@@ -116,13 +116,14 @@
     </string-array>
 
     <string-array name="price">
+        <item>全部价格</item>
         <item>1-1000</item>
         <item>1001-5000</item>
         <item>5001-10000</item>
         <item>10001-20000</item>
         <item>20001-50000</item>
         <item>50000-100000</item>
-        <item>100000+</item>
+        <item>100000-1000000</item>
     </string-array>
 
 
@@ -148,11 +149,12 @@
     <string name="enterprise_link_name">联系人</string>
     <string name="enterprise_contact">联系方式</string>
     <string name="about_us_content">
-        豆丁工匠于2014年底策划，并于2015年成立于陕西西安市国际港务区，前身为西安快租商贸有限公司国际港务区第一分公司，现更名为西安豆丁工匠网络科技有限公司。
-        豆丁工匠前期主要为租天下研发并生产智能充电站，包括：进行投币式充电站、无线式充电站、19寸LCD无线充电站等三代产品，目前主产第四代42寸LED无线局域网充电站,全息产品及其衍生产品等。
-        豆丁工匠为租天下代工可以视为一个整体的项目代工，该项目主要包括产品代工，创意设计，专利代申请，产品众筹，产品委托加工、代产，产品研发等功能。
-        因此，我们将豆丁工匠网络科技有限公司视为产品私人订制平台领域的试验审核基地、制造业的威客网，专利的孵化器。 我们是一群热衷个人知识产权的维权者，我们时刻准备着为您服务。
+        豆丁工匠于2014年底策划，前身为西安快租商贸有限公司国际港务区第一分公司，2016年6月正式注册为西安豆丁工匠网络科技有限公司。
+        豆丁工匠前期主要为租天下研发并生产智能手机充电站，包括：进行投币式充电站、无线式充电站、19寸LCD无线充电站等三代产品，目前主产第四代42寸LED无线局域网充电站,全息产品及其衍生产品等。
+        豆丁工匠APP现已上线，该项目主要包括创新创意、专利服务、悬赏竞标、技能共享、代工众筹、制造社区、私人订制、制造论坛、合作对接等9大服务模块。
+        因此，我们将豆丁工匠网络科技有限公司视为产品私人订制平台领域的试验审核基地、制造业的威客网，专利的孵化器。
     </string>
+    <string name="app_share_text">让智慧照进现实、让创意成为产品。汇众智，共创造，让世界爱上中国制造</string>
     <string name="search">搜索</string>
     <string name="input_text_search">输入关键字搜索</string>
     <string name="patent">专利</string>
@@ -260,5 +262,6 @@
     <string name="mine_patent">我的专利</string>
     <string name="mine_order">我的订制</string>
     <string name="mine_oem">我的代工</string>
+    <string name="comment">评论</string>
 
 </resources>

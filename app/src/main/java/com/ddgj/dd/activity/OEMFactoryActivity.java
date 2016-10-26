@@ -145,7 +145,7 @@ public class OEMFactoryActivity extends BaseActivity implements View.OnClickList
         mplv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPageNumber=1;
+                mPageNumber = 1;
                 initData(LOAD);
             }
 
@@ -157,8 +157,8 @@ public class OEMFactoryActivity extends BaseActivity implements View.OnClickList
         });
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-                final EnterpriseUser user = mFactorys.get(position-1);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final EnterpriseUser user = mFactorys.get(position - 1);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("acilitator_id", user.getAccount_id());
@@ -170,7 +170,7 @@ public class OEMFactoryActivity extends BaseActivity implements View.OnClickList
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst",response);
+                        Log.i("lgst", response);
                         ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
@@ -178,7 +178,8 @@ public class OEMFactoryActivity extends BaseActivity implements View.OnClickList
                             startActivity(new Intent(OEMFactoryActivity.this, WebActivity.class)
                                     .putExtra("title", user.getFacilitator_name())
                                     .putExtra("url", HOST + url)
-                                    .putExtra("account", user.getAccount()));
+                                    .putExtra("account", user.getAccount())
+                                    .putExtra("content", ""));
                         }
                     }
                 });

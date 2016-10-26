@@ -110,7 +110,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         {
             ViewHolderTitle holderTitle = (ViewHolderTitle) holder;
             holderTitle.mTextView.setText((CharSequence) mValues.get(position));
-            holderTitle.mImageView.setImageResource(R.mipmap.ic_custom);
+            holderTitle.mImageView.setImageResource(R.mipmap.ic_patent);
         }
     }
 

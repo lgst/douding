@@ -56,6 +56,8 @@
                 android:layout_height="wrap_content"
                 android:text="企业用户"/>
         </RadioGroup>
+
+
         <com.ddgj.dd.view.ClearEditText
             android:id="@+id/pass_word"
             android:layout_width="match_parent"
@@ -89,7 +91,8 @@
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginTop="8dp"
-                      android:orientation="horizontal">
+                      android:orientation="horizontal"
+                      android:visibility="gone">
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:padding="8dp"
@@ -100,19 +103,7 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/questions"/>
         </LinearLayout>
-        <com.ddgj.dd.view.ClearEditText
-            android:id="@+id/answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_login_edit_text_bg"
-            android:drawableLeft="@mipmap/ic_question_answer_grey600_24dp"
-            android:hint="@string/answerquetion"
-            android:paddingBottom="8dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="8dp"
-            android:singleLine="true"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="40dp"

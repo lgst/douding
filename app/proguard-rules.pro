@@ -104,3 +104,10 @@ public static final ** CREATOR;
 
 -keep class com.linkedin.** { *; }
 -keepattributes Signature
+
+#去除Log打印代码
+#-assumenosideeffects class android.util.Log {
+#    public static *** d(...);
+#    public static *** v(...);
+#    public static *** i(...);
+#}

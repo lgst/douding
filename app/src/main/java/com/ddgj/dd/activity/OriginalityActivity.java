@@ -139,7 +139,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                             String patentStr = ja.getJSONObject(i).toString();
 //                            Log.i("lgst",patentStr);
                             Originality originality = new Gson().fromJson(patentStr, Originality.class);
-                            if(classes==MINE)
+                            if (classes == MINE)
                                 originality.setHead_picture(UserHelper.getInstance().getUser().getHead_picture());
                             mOriginalitys.add(originality);
                         }
@@ -221,7 +221,10 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                             startActivity(new Intent(OriginalityActivity.this, WebActivity.class)
                                     .putExtra("title", originality.getOriginality_name())
                                     .putExtra("url", HOST + url)
-                                    .putExtra("account", originality.getAccount()));
+                                    .putExtra("account", originality.getAccount())
+                                    .putExtra("content", originality.getOriginality_details())
+                                    .putExtra("id",originality.getOriginality_id())
+                                    .putExtra("classes", 0));
                         }
                     }
                 });

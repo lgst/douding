@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.net.NetWorkInterface;
@@ -58,6 +59,8 @@ public class UpdateUtils implements NetWorkInterface {
                     if (STATUS_SUCCESS == status) {
                         String url = "http://" + jo.getString("data");
                         showUpdate(url);
+                    }else{
+                        Toast.makeText(mContext,"已经是最新版本！",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

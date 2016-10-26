@@ -116,7 +116,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
             @Override
             public void onResponse(String response, int id) {
-                Log.i(TAG, "onResponse: "+response);
+                Log.i(TAG, "onResponse: " + response);
                 try {
                     JSONObject jo = new JSONObject(response);
                     int status = jo.getInt("status");
@@ -128,7 +128,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                         for (int i = 0; i < ja.length(); i++) {
                             String patentStr = ja.getJSONObject(i).toString();
                             Patent patent = new Gson().fromJson(patentStr, Patent.class);
-                            if(classes==MINE)
+                            if (classes == MINE)
                                 patent.setHead_picture(UserHelper.getInstance().getUser().getHead_picture());
                             mPatents.add(patent);
                         }
@@ -188,7 +188,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Patent originality = mPatents.get(position-1);
+                final Patent originality = mPatents.get(position - 1);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("patent_id", originality.getPatent_id());
@@ -207,7 +207,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                             startActivity(new Intent(PatentActivity.this, WebActivity.class)
                                     .putExtra("title", originality.getPatent_name())
                                     .putExtra("url", HOST + url)
-                                    .putExtra("account", originality.getAccount()));
+                                    .putExtra("account", originality.getAccount())
+                                    .putExtra("content", originality.getPatent_details()));
                         }
                     }
                 });

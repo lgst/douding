@@ -136,7 +136,10 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getOriginality_name())
                                     .putExtra("url", HOST + url)
-                                    .putExtra("account", originality.getAccount()));
+                                    .putExtra("account", originality.getAccount())
+                                    .putExtra("content", originality.getOriginality_details())
+                                    .putExtra("id",originality.getOriginality_id())
+                                    .putExtra("classes", 0));
                         }
                     }
                 });
@@ -215,7 +218,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getPatent_name())
                                     .putExtra("url", HOST + url)
-                                    .putExtra("account", originality.getAccount()));
+                                    .putExtra("account", originality.getAccount()).putExtra("content", originality.getPatent_details()));
                         }
                     }
                 });

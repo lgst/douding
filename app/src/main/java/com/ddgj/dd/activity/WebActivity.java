@@ -1,9 +1,11 @@
 package com.ddgj.dd.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -12,35 +14,53 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.PinchImageView;
+import com.google.gson.Gson;
 import com.hyphenate.easeui.EaseConstant;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
-public class WebActivity extends BaseActivity implements View.OnClickListener {
+import okhttp3.Call;
+
+public class WebActivity extends BaseActivity implements Animation.AnimationListener {
     private RelativeLayout mContainer;
     private WebView mWebView;
     private android.widget.TextView mTitle;
     private String mAccount;
     private String mUrl;
+    private String mContentText;
     private PinchImageView mPiv;
+    private EditText commentEt;
+    private LinearLayout commentContainerLL;
+    private FloatingActionButton fab;
+    private InputMethodManager imm;
+    private boolean isShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +108,66 @@ public class WebActivity extends BaseActivity implements View.OnClickListener {
         JavaScriptInterface javascriptInterface = new JavaScriptInterface();
         mWebView.addJavascriptInterface(javascriptInterface, "imagelistner");
         mWebView.loadUrl(mUrl);
+        Log.i(TAG, "initWebView: " + mUrl);
     }
 
     @Override
     public void initView() {
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //        标题
         mTitle = (TextView) findViewById(R.id.title);
         mTitle.setText(getIntent().getStringExtra("title"));
+        commentEt = (EditText) findViewById(R.id.comment_content);
+        commentContainerLL = (LinearLayout) findViewById(R.id.comment_container);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnTouchListener(this);
+        if (getIntent().getIntExtra("classes", -1) != -1) {
+            if (getIntent().getIntExtra("classes", -1) == 0)
+                fab.setVisibility(View.VISIBLE);
+        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!UserHelper.getInstance().isLogined()) {
+                    showToastShort("请您登录后进行评论！");
+                    startActivity(new Intent(WebActivity.this, LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+                    return;
+                }
+                if (!isShow) {
+                    imm.showSoftInput(commentEt, InputMethodManager.SHOW_FORCED);
+                    isShow = !isShow;
+                } else {
+                    imm.hideSoftInputFromWindow(commentEt.getWindowToken(), 0); //强制隐藏键盘
+                    isShow = !isShow;
+                }
+                if (commentContainerLL.getVisibility() == View.VISIBLE) {//隐藏
+                    commentContainerLL.clearAnimation();
+                    Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_out_to_bottom);
+                    animation.setAnimationListener(WebActivity.this);
+                    commentContainerLL.setAnimation(animation);
+                } else {//显示
+                    commentContainerLL.clearAnimation();
+                    Animation anim = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_in_from_bottom);
+                    commentContainerLL.setAnimation(anim);
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            commentContainerLL.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+            }
+        });
 //
         mContainer = (RelativeLayout) findViewById(R.id.content_container);
         mWebView = new WebView(getApplicationContext());
@@ -117,6 +190,8 @@ public class WebActivity extends BaseActivity implements View.OnClickListener {
                     public void onAnimationEnd(Animation animation) {
                         mPiv.setImageResource(R.drawable.shape_alpha_img);
                         v.setVisibility(View.GONE);
+                        if (getIntent().getIntExtra("classes", -1) == 0)
+                            fab.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -187,16 +262,20 @@ public class WebActivity extends BaseActivity implements View.OnClickListener {
         popup.show(); //showing popup menu
     }
 
+    /**
+     * 分享
+     */
     private void share() {
+        mContentText = getIntent().getStringExtra("content");
         final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{
                 SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
                 SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE};
         new ShareAction(this)
                 .setDisplayList(displaylist)
                 .withTitle(getIntent().getStringExtra("title"))
+                .withText(mContentText)
                 .withTargetUrl(mUrl)
-                .withMedia(
-                        new UMImage(this, R.drawable.sina_web_default))
+                .withMedia(new UMImage(this, R.drawable.sina_web_default))
                 .setListenerList(new UMShareListener() {
                     @Override
                     public void onResult(SHARE_MEDIA arg0) {
@@ -220,11 +299,65 @@ public class WebActivity extends BaseActivity implements View.OnClickListener {
                 }).open();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (mPiv.getVisibility() == View.VISIBLE) {
-            mPiv.setVisibility(View.GONE);
+//    @Override
+//    public void onClick(View v) {
+//        if (mPiv.getVisibility() == View.VISIBLE) {
+//            mPiv.setVisibility(View.GONE);
+//            fab.setVisibility(View.VISIBLE);
+//        }
+//    }
+
+    public void showCommentClick(View v) {
+//        commentContainerLL.clearAnimation();
+//        Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_out_to_bottom);
+//        animation.setAnimationListener(WebActivity.this);
+//        commentContainerLL.setAnimation(animation);
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        startActivity(new Intent(this, CommentListActivity.class)
+                .putExtra("topic_id", getIntent().getStringExtra("id")));
+    }
+
+    public void sendCommentClick(View v) {
+        if (!checkNetWork()) {
+            showToastNotNetWork();
+            return;
         }
+        final String comment = commentEt.getText().toString();
+        if (comment.isEmpty()) {
+            showToastShort("请输入评论内容！");
+            return;
+        }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("topic_id", getIntent().getStringExtra("id"));
+        params.put("topic_type", String.valueOf(getIntent().getIntExtra("classes", -1)));
+        params.put("c_content", comment);
+        params.put("from_u_id", UserHelper.getInstance().getUser().getAccount_id());
+        OkHttpUtils.post().url(NetWorkInterface.ADD_COMMENT).params(params).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "onError: 评论出错！" + e.getMessage());
+                showToastShort("网络连接失败，请稍后重试！");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+                if (responseInfo.getStatus() == 0) {
+                    Log.i(TAG, "onResponse: 评论成功！");
+                    commentEt.setText(null);
+                    showToastShort("评论成功！");
+//                    commentContainerLL.clearAnimation();
+//                    Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_out_to_bottom);
+//                    animation.setAnimationListener(WebActivity.this);
+//                    commentContainerLL.setAnimation(animation);
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                } else {
+                    showToastShort("评论失败，请稍后重试！");
+                }
+            }
+        });
     }
 
     private void imgReset() {
@@ -258,25 +391,26 @@ public class WebActivity extends BaseActivity implements View.OnClickListener {
             super.handleMessage(msg);
             final String img = (String) msg.obj;
             mPiv.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.INVISIBLE);
             Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.alpha);
             Glide.with(WebActivity.this).load(img).animate(R.anim.alpha).into(mPiv);
             mPiv.setAnimation(animation);
-//            animation.setAnimationListener(new Animation.AnimationListener() {
-//                @Override
-//                public void onAnimationStart(Animation animation) {
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animation animation) {
-////                    mPiv.setImageResource(R.mipmap.ic_crop_original_grey600_48dp);
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animation animation) {
-//                }
-//            });
         }
     };
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        commentContainerLL.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 
     class JavaScriptInterface {
 
