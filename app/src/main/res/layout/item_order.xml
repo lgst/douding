@@ -30,27 +30,31 @@
                   android:maxLines="3"
                   android:textColor="@color/grey"
                   android:textSize="12sp"/>
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:drawableLeft="@mipmap/ic_location_on_grey600_24dp"
-                  android:gravity="center_vertical"
-                  android:maxLines="1"
-                  android:textColor="@color/grey"
-                  android:textSize="12sp"/>
+
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="￥"
+                android:textColor="@color/red"
+                android:textSize="14sp"/>
             <TextView
                 android:id="@+id/browse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:drawableLeft="@mipmap/ic_visibility_grey600_24dp"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="12sp"/>
+                android:text="1000"
+                android:textColor="@color/red"
+                android:textSize="14sp"/>
             <TextView
                 android:id="@+id/date"
                 android:layout_width="0dp"
@@ -61,7 +65,16 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="12sp"/>
+                android:textSize="14sp"
+                android:visibility="gone"/>
         </LinearLayout>
+        <TextView android:id="@+id/address"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:drawableLeft="@mipmap/ic_location_on_grey600_24dp"
+                  android:gravity="center_vertical"
+                  android:maxLines="1"
+                  android:textColor="@color/grey"
+                  android:textSize="12sp"/>
     </LinearLayout>
 </LinearLayout>

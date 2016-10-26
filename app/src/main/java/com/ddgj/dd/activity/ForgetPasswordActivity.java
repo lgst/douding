@@ -7,7 +7,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.ResponseInfo;
@@ -26,8 +25,8 @@ public class ForgetPasswordActivity extends BaseActivity {
     private EditText userName;
     private EditText passWord;
     private EditText confirm;
-    private Spinner questions;
-    private EditText answer;
+//    private Spinner questions;
+//    private EditText answer;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -40,11 +39,14 @@ public class ForgetPasswordActivity extends BaseActivity {
             }
         }
     };
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
+//        获取验证手机号
+        phone = getIntent().getStringExtra("phone");
         initView();
     }
 
@@ -60,21 +62,22 @@ public class ForgetPasswordActivity extends BaseActivity {
         final String username = userName.getText().toString().trim();
         String password = passWord.getText().toString().trim();
         String confim = this.confirm.getText().toString().trim();
-        String answer = this.answer.getText().toString().trim();
-        String question = (String) this.questions.getSelectedItem();
-        if (check(username, password, confim, answer)) {
+//        String answer = this.answer.getText().toString().trim();
+//        String question = (String) this.questions.getSelectedItem();
+        if (check(username, password, confim)) {
             //找回密码
             OkHttpClient client = new OkHttpClient();
             FormEncodingBuilder builder = new FormEncodingBuilder();
             builder.add("account", username)
                     .add("password", password)
-                    .add("question", question)
+                    .add("question", "phone")
                     .add("client_side", "app")
-                    .add("answer", answer);
+                    .add("answer", phone);
             Request request = new Request.Builder()
                     .url(NetWorkInterface.FORGET_PASSWORD)
                     .post(builder.build())
                     .build();
+            Log.i(TAG, "forgetPasswordClick: account:"+username+"   phone"+phone);
             Call call = client.newCall(request);
             call.enqueue(new Callback() {
                 @Override
@@ -90,10 +93,12 @@ public class ForgetPasswordActivity extends BaseActivity {
                     ResponseInfo responseInfo = new Gson().fromJson(responseContent, ResponseInfo.class);
                     Message msg = new Message();
                     if (responseInfo.getStatus() == NetWorkInterface.STATUS_SUCCESS) {
+//                        找回密码成功
                         msg.what = SUCCESS;
                         msg.obj = username;
                         handler.sendMessage(msg);
                     } else {
+//                        找回密码失败
                         msg.what = FAILDE;
                         msg.obj = responseInfo.getMsg();
                         handler.sendMessage(msg);
@@ -108,11 +113,11 @@ public class ForgetPasswordActivity extends BaseActivity {
         userName = (EditText) findViewById(R.id.user_name);
         passWord = (EditText) findViewById(R.id.pass_word);
         confirm = (EditText) findViewById(R.id.confirm);
-        questions = (Spinner) findViewById(R.id.question_spinner);
-        answer = (EditText) findViewById(R.id.answer);
+//        questions = (Spinner) findViewById(R.id.question_spinner);
+//        answer = (EditText) findViewById(R.id.sms_code);
     }
 
-    private boolean check(String username, String password, String confirm, String answer) {
+    private boolean check(String username, String password, String confirm) {
         if (username.length() < 1) {
             showToastShort(getResources().getString(R.string.please_input_username));
             passWord.requestFocus();
@@ -135,11 +140,11 @@ public class ForgetPasswordActivity extends BaseActivity {
             this.passWord.requestFocus();
             return false;
         }
-        if (answer.isEmpty()) {
-            showToastShort(getResources().getString(R.string.please_input_answer));
-            this.answer.requestFocus();
-            return false;
-        }
+//        if (answer.isEmpty()) {
+//            showToastShort(getResources().getString(R.string.please_input_answer));
+//            this.answer.requestFocus();
+//            return false;
+//        }
         return true;
     }
 }

@@ -34,6 +34,7 @@ public class FileUtil {
     private String mImageCache;
 
     private static FileUtil instance;
+    private String mPrivateCache;
 
     private FileUtil() {
     }
@@ -117,12 +118,15 @@ public class FileUtil {
 		}
 		return outputFile;
 
+    }
+
+    public static Uri createImageFile(File dir) {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
 	}
-	public static Uri createImageFile(File dir){
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = "JPEG_" + timeStamp + "_";
-		File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
 
 
@@ -208,6 +212,8 @@ public class FileUtil {
         this.mContext = mContext;
         mImageCache = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/";
         mTempCache = mContext.getExternalCacheDir().getAbsolutePath() + "/";
+        mPrivateCache = mContext.getCacheDir().getAbsolutePath() + "/";
+//        Log.i("lgst", mPrivateCache);
     }
 
     public void deleteUserIcon() {
@@ -218,22 +224,68 @@ public class FileUtil {
     public long getCacheSize() {
         File imageCache = new File(mImageCache);
         File tempCache = new File(mTempCache);
+        File privateCache = new File(mPrivateCache);
         long size = 0;
         if (imageCache.exists()) {
-            size += imageCache.length();
+            size += getFolderSize(imageCache);
         }
         if (tempCache.exists()) {
-            size += tempCache.length();
+            size += getFolderSize(tempCache);
         }
+        if (privateCache.exists())
+            size += getFolderSize(privateCache);
         return size;
     }
 
     public void clearCache() {
-        deleteFile(new File(mImageCache));
-        deleteFile(new File(mTempCache));
+        File file1 = new File(mImageCache);
+        File file2 = new File(mTempCache);
+        File file3 = new File(mPrivateCache);
+        File[] files1 = file1.listFiles();
+        File[] files2 = file2.listFiles();
+        File[] files3 = file3.listFiles();
+        for (int i = 0; i < files1.length; i++) {
+            deleteFile(files1[i]);
+        }
+        for (int i = 0; i < files2.length; i++) {
+            deleteFile(files2[i]);
+        }
+        for (int i = 0; i < files3.length; i++) {
+            deleteFile(files3[i]);
+        }
     }
 
-    /**文件删除*/
+    /**
+     * 获取文件夹大小
+     *
+     * @param file File实例
+     * @return long
+     */
+    public static long getFolderSize(java.io.File file) {
+
+        long size = 0;
+        try {
+            java.io.File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+
+                } else {
+                    size = size + fileList[i].length();
+
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //return size/1048576;
+        return size;
+    }
+
+    /**
+     * 文件删除
+     */
     public static void deleteFile(File file) {
         if (!file.exists()) {
             return;

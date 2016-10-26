@@ -13,6 +13,7 @@ import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -63,27 +64,32 @@ public class OrderAdapter extends BaseAdapter {
                         .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
                         .thumbnail(0.1f)
                         .into(vh.img);
+                File file = Glide.getPhotoCacheDir(parent.getContext());
+//                Log.i("lgst",file.getAbsolutePath());
                 break;
             }
         }
-        vh.title_text.setText(order.getMade_title());
+        vh.title_text.setText(order.getMade_name());
         vh.content_text.setText(order.getMade_describe());
-        vh.browse.setText(String.valueOf((int) (Math.random() * 100)));
+        vh.mAddress.setText(order.getMade_u_address());
+        vh.browse.setText(order.getMade_price());
         vh.date.setText(StringUtils.getDate(order.getMade_time()));
         return convertView;
     }
 
 
-    class ViewHolder {
+    public static class ViewHolder {
         public View rootView;
         public ImageView img;
         public TextView title_text;
         public TextView content_text;
         public TextView browse;
         public TextView date;
+        public TextView mAddress;
 
         public ViewHolder(View rootView) {
             this.rootView = rootView;
+            this.mAddress = (TextView) rootView.findViewById(R.id.address);
             this.img = (ImageView) rootView.findViewById(R.id.img);
             this.title_text = (TextView) rootView.findViewById(R.id.title_text);
             this.content_text = (TextView) rootView.findViewById(R.id.content_text);
@@ -92,4 +98,5 @@ public class OrderAdapter extends BaseAdapter {
         }
 
     }
+
 }

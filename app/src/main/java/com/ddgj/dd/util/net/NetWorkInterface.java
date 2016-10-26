@@ -10,7 +10,7 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://www.51douding.com/newdouding";
+    public static final String HOST = "http://www.51douding.com";
     /**
      * 注册接口
      */
@@ -53,6 +53,10 @@ public interface NetWorkInterface {
      */
     public static final String GET_MINE_PATENT = HOST + "/finfMyPatent.do";
     /**
+     * 根据id查询订制 代工
+     */
+    public static final String GET_ORDER_BY_ID = HOST + "/findMyCustom_made.do";
+    /**
      * 获取全部创意接口
      */
     public static final String GET_ALL_ORIGINALITY = HOST + "/findAllOriginalityTwo.do";
@@ -68,6 +72,10 @@ public interface NetWorkInterface {
      * 获取我的创意接口
      */
     public static final String GET_MINE_ORIGINALITY = HOST + "/finfMyOriginality.do";
+    /**
+     * 获取我的全部项目统计数量
+     */
+    public static final String GET_MINE = HOST + "/get_mine_count.do";
     /**
      * 获取订制接口
      */
@@ -100,11 +108,24 @@ public interface NetWorkInterface {
     /**
      * 获取创意详情页
      */
-    public static final String GET_ORIGINALITY_DETAILS = HOST + "/OriginalityDet.do";
+    public static final String GET_ORIGINALITY_DETAILS = HOST + "/originalityDet.do";
+    /**
+     * 删除创意
+     */
+    public static final String DELETE_ORIGINALITY = HOST + "/delOriginality.do";
+    /**
+     * 获取专利详情页
+     */
+    public static final String GET_PATENT_DETAILS = HOST + "/patentDet.do";
+    /**
+     * 删除专利
+     */
+    public static final String DELETE_PATENT = HOST + "/delPatent.do";
     /**
      * 获取订制详情页
      */
     public static final String GET_ORDER_DETAILS = HOST + "/Custom_madeDetails.do";
+    public static final String DELETE_ORDER = HOST + "/delCustom_made.do";
     /**
      * 获取订制工厂详情
      */
@@ -152,4 +173,43 @@ public interface NetWorkInterface {
     public static final String GET__PRODUCT_DETAILS= HOST + "/OriginalityDetails.do";
 
 
+    /**
+     * 获取工厂接口
+     */
+    public static final String GET_FACILITATORMADE = HOST + "/findFacilitatorMade.do";
+    /**
+     * 获取产品接口
+     */
+    public static final String GET_PRODUCTMADE = HOST + "/findAllOriginalityTwo.do";
+    /***
+     * 获取工厂详情接口
+     */
+    public static final String GET_FAC_DETAILS = HOST + "/factorydetails.do";
+    /***
+     * 获取创意产品详情接口
+     * OriginalityDetails.do
+     */
+    public static final String GET__PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
+
+    /**
+     * 版本更新检查
+     */
+    public static final String CHECK_UPDATE = HOST + "/updateVersions.do";
+
+    /**
+     * 获取自己的订制接口
+     */
+    public static final String GET_MINE_ORDER = HOST + "/findMyCustom_made.do";
+    /**
+     * 添加评论接口<br>
+     * topic_id 主题id<br>
+     * topic_type 主题类型 0为个人创意评论 1为个人创意产品评论 2为私人订制产品评论 3为代工产品评论<br>
+     * c_content 评论内容<br>
+     * from_u_id 评论用户id
+     */
+    public static final String ADD_COMMENT = HOST + "/addComments.do";
+    /**
+     * 查看评论
+     */
+    public static final String GET_COMMENT = HOST + "/findComments.do";
 }

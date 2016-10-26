@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.PatentPLVAdapter;
 import com.ddgj.dd.bean.Patent;
+import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
@@ -32,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
-
-import static com.ddgj.dd.R.id.floatingActionButton;
 
 public class PatentActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, NetWorkInterface {
 
@@ -116,12 +116,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
             @Override
             public void onResponse(String response, int id) {
-
-                Log.e("weiwei","返回数据"+response);
-                Log.e("weiwei","返回数据"+response);
-                Log.e("weiwei","返回数据"+response);
+                Log.i(TAG, "onResponse: " + response);
                 try {
-
                     JSONObject jo = new JSONObject(response);
                     int status = jo.getInt("status");
                     if (status == STATUS_SUCCESS) {
@@ -132,6 +128,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                         for (int i = 0; i < ja.length(); i++) {
                             String patentStr = ja.getJSONObject(i).toString();
                             Patent patent = new Gson().fromJson(patentStr, Patent.class);
+                            if (classes == MINE)
+                                patent.setHead_picture(UserHelper.getInstance().getUser().getHead_picture());
                             mPatents.add(patent);
                         }
                         if (flag == LOAD) {
@@ -187,13 +185,47 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                 initDatas(UPDATE, classes);
             }
         });
+        mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Patent originality = mPatents.get(position - 1);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("client_side", "app");
+                params.put("patent_id", originality.getPatent_id());
+                OkHttpUtils.post().url(GET_PATENT_DETAILS).params(params).build().execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        Log.e("lgst", "获取专利详情页失败：" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
+                            String url = responseInfo.getData();
+                            Log.e("lgst", url);
+                            startActivity(new Intent(PatentActivity.this, WebActivity.class)
+                                    .putExtra("title", originality.getPatent_name())
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", originality.getAccount())
+                                    .putExtra("content", originality.getPatent_details()));
+                        }
+                    }
+                });
+            }
+        });
         mRg.setOnCheckedChangeListener(this);
         content = (TextView) findViewById(R.id.search_edit_text);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PatentActivity.this,PublishPatentActivity.class));
+                if (UserHelper.getInstance().isLogined()) {
+                    startActivity(new Intent(PatentActivity.this, PublishPatentActivity.class));
+                } else {
+                    showToastShort("请先登录！");
+                    startActivity(new Intent(PatentActivity.this, LoginActivity.class).putExtra("flag", "back"));
+                }
             }
         });
     }
@@ -204,7 +236,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
             content.setText(text);
-            initDatas(UPDATE,classes);
+            initDatas(UPDATE, classes);
         }
     }
 
@@ -213,7 +245,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     }
 
     public void searchClick(View v) {
-        startActivityForResult(new Intent(this,SearchActivity.class).putExtra("content","专利"),1);
+        startActivityForResult(new Intent(this, SearchActivity.class).putExtra("content", "专利"), 1);
     }
 
     @Override

@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/send_message"
+        android:icon="@mipmap/ic_send_grey600_24dp"
+        android:title="发送消息"/>
+
+    <item
+        android:id="@+id/share"
+        android:icon="@mipmap/ic_share_grey600_24dp"
+        android:title="分享"/>
+
+</menu>

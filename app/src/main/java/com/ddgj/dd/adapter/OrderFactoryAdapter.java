@@ -53,7 +53,7 @@ public class OrderFactoryAdapter extends BaseAdapter {
         }
         EnterpriseUser user = mFactorys.get(position);
         Glide.with(parent.getContext())
-                .load(user.getHead_picture())           
+                .load(NetWorkInterface.HOST+"/"+user.getFacilitator_head())
                 .into(viewHolder.icon);
         viewHolder.name.setText(user.getFacilitator_name());
         viewHolder.field.setText(user.getFacilitator_field());
@@ -78,22 +78,6 @@ public class OrderFactoryAdapter extends BaseAdapter {
             if (index >= 3) {
                 break;
             }
-//            switch (i) {
-//                case 0:
-//                    break;
-//                case 1:
-//                    viewHolder.img2.setVisibility(View.VISIBLE);
-//                    Glide.with(parent.getContext())
-//                            .load(NetWorkInterface.HOST + "/" + strs[i])
-//                            .into(viewHolder.img2);
-//                    break;
-//                case 2:
-//                    viewHolder.img3.setVisibility(View.VISIBLE);
-//                    Glide.with(parent.getContext())
-//                            .load(NetWorkInterface.HOST + "/" + strs[i])
-//                            .into(viewHolder.img3);
-//                    break;
-//            }
         }
     }
 

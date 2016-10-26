@@ -16,6 +16,7 @@ import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -74,7 +75,7 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
             return;
         }
 
-        OkHttpUtils.post().url(GET_ORDER).addParams("made_state", "2")
+        OkHttpUtils.post().url(GET_ORDER).addParams("made_state", "2")//后台初始值位0会查不出来数据
                 .addParams("made_differentiate", "1")
                 .addParams("pageNumber", String.valueOf(mPageNumber))
                 .addParams("pageSingle", String.valueOf(mPageSingle))
@@ -175,7 +176,9 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                             Log.e("lgst", url);
                             startActivity(new Intent(OEMProductActivity.this, WebActivity.class)
                                     .putExtra("title", order.getMade_name())
-                                    .putExtra("url", HOST + url));
+                                    .putExtra("url", HOST + url)
+                                    .putExtra("account", order.getAccount())
+                                    .putExtra("content", order.getMade_describe()));
                         }
                     }
                 });
@@ -183,6 +186,10 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
         });
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
+        if (UserHelper.getInstance().getUser() != null &&
+                UserHelper.getInstance().getUser().getAccount_type().equals("1")) {
+            mFab.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -192,7 +199,16 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.fab:
-                startActivity(new Intent(this,OEMAddActivity.class));
+                if (UserHelper.getInstance().isLogined()) {
+                    if (UserHelper.getInstance().getUser().getAccount_type().equals("0")) {
+                        showToastShort("只有企业用户可以发布代工产品！");
+                        return;
+                    }
+                    startActivity(new Intent(this, OEMAddActivity.class));
+                } else {
+                    showToastShort("请先登录！");
+                    startActivity(new Intent(this, LoginActivity.class).putExtra("flag", "back"));
+                }
                 break;
         }
     }

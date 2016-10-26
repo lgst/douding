@@ -25,7 +25,7 @@ public class AllFragment extends BaseFragment {
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
 
     }
 }

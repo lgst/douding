@@ -52,6 +52,12 @@ public class Originality implements Serializable {
     private String head_picture;
     private String facilitator_name;
 
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    private String account;
+
     public String getFacilitator_name() {
         return facilitator_name;
     }
@@ -210,6 +216,10 @@ public class Originality implements Serializable {
 
     public void setOriginality_differentiate(String originality_differentiate) {
         this.originality_differentiate = originality_differentiate;
+    }
+
+    public String getAccount() {
+        return account;
     }
 
     public String getHead_picture() {

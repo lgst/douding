@@ -31,12 +31,18 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * 用户登录界面
+ * flag:back
  */
 public class LoginActivity extends BaseActivity implements NetWorkInterface {
     public static final String BACK = "back";
+    private static final int REGISTER_CODE = 102;
+    private static final int FORGET_CODE = 103;
+    private static final int FORGET_SMS_CODE = 104;
+    private static final int REGISTER_SMS_CODE = 105;
     private EditText usernaemEt;
     private EditText pwdEt;
-    private static final int REQUEST_CODE = 101;
+    private String phone = "18165157887";
+    public static String userName;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -76,6 +82,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
         if (UserHelper.getInstance().isLogined()) {
             startActivity(new Intent(this, MainActivity.class));
         }
+        usernaemEt.setText(userName);
     }
 
     public void initView() {
@@ -116,7 +123,6 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
 
                 @Override
                 public void onResponse(Response response) throws IOException {
-                    dialog.dismiss();
                     String responseContent = response.body().string();
                     Log.i("lgst", responseContent);
                     ResponseInfo responseInfo = null;
@@ -156,7 +162,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
 
                             @Override
                             public void onError(int code, String message) {
-                                Log.i("main", "登录聊天服务器失败！");
+                                Log.i("main", "登录聊天服务器失败！" + message);
                                 msg.what = FAILDE;
                                 msg.obj = "登录失败";
                                 handler.sendMessage(msg);
@@ -191,14 +197,29 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
      * 注册点击事件
      */
     public void registerClick(View v) {
-        startActivityForResult(new Intent(this, RegisterActivity.class), REQUEST_CODE);
+//        短信验证
+        startActivityForResult(new Intent(this, SMSCodeActivity.class), REGISTER_SMS_CODE);
+//        startActivityForResult(new Intent(this, RegisterActivity.class).putExtra("phone", phone), REGISTER_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == SUCCESS) {
+        if (data != null)
+            phone = data.getStringExtra("phone");
+        if (requestCode == REGISTER_SMS_CODE && resultCode == SUCCESS) {
+//            注册短信验证成功，跳转到注册页面，带上手机号
+            startActivityForResult(new Intent(this, RegisterActivity.class).putExtra("phone", phone), REGISTER_CODE);
+            showToastShort("手机验证成功");
+        } else if (requestCode == FORGET_SMS_CODE && resultCode == SUCCESS) {
+//            找回密码短信验证成功，跳转到找回密码界面，带上手机号码
+            startActivityForResult(new Intent(this, ForgetPasswordActivity.class).putExtra("phone", phone), FORGET_CODE);
+        } else if (requestCode == REGISTER_CODE && resultCode == SUCCESS) {
             //注册成功，自动填充用户名，光标设置到密码框
+            usernaemEt.setText(data.getStringExtra("username"));
+            pwdEt.requestFocus();
+        } else if (requestCode == FORGET_CODE && resultCode == SUCCESS) {
+//            找回密码成功
             usernaemEt.setText(data.getStringExtra("username"));
             pwdEt.requestFocus();
         }
@@ -208,7 +229,8 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
      * 忘记密码点击事件
      */
     public void forgetPasswordClick(View v) {
-        startActivityForResult(new Intent(this, ForgetPasswordActivity.class), REQUEST_CODE);
+//        短信验证
+        startActivityForResult(new Intent(this, SMSCodeActivity.class), FORGET_SMS_CODE);
 //        startActivity(new Intent(this,UpdatePasswordActivity.class));
     }
 

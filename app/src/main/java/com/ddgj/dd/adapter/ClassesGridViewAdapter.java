@@ -75,6 +75,7 @@ public class ClassesGridViewAdapter extends BaseAdapter {
                         break;
                     case 4://众筹
 //                        context.startActivity(new Intent(context, .class).putExtra("page",5));
+                        showLoadingDialog("提示","该模块暂未开通！");
                         break;
                     case 5://工厂 中国智造
                         context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page",6));

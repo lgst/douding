@@ -322,5 +322,3 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
 
 
 }
-
-

@@ -105,6 +105,7 @@ public class UpdatePasswordActivity extends BaseActivity {
             return;
         }
         String username = getIntent().getStringExtra("user_id");
+//        Log.i(TAG, "updatePasswordClick: username:"+username);
         String oldpassword = oldPassword.getText().toString().trim();
         String newpassword = newPassword.getText().toString().trim();
         String confirm = this.confirm.getText().toString().trim();

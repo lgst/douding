@@ -90,6 +90,7 @@
             <TextView
                 android:id="@+id/enterprise_address"
                 style="@style/UserInfoValues"
+                android:maxLines="2"
                 android:text="@string/not_set"/>
         </LinearLayout>
         <View style="@style/LineGrey1px"

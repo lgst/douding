@@ -23,7 +23,6 @@ public class OEMActivity extends BaseActivity implements View.OnClickListener,Ne
 
     @Override
     public void initView() {
-
         back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(this);
         factory = (ImageView) findViewById(R.id.factory);
@@ -39,7 +38,7 @@ public class OEMActivity extends BaseActivity implements View.OnClickListener,Ne
                 finish();
                 break;
             case R.id.factory:
-                startActivity(new Intent(this,OrderFactoryActivity.class).putExtra("classes","1"));
+                startActivity(new Intent(this,OEMFactoryActivity.class).putExtra("classes","1"));
                 break;
             case R.id.product:
                 startActivity(new Intent(this, OEMProductActivity.class));

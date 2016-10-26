@@ -11,6 +11,14 @@ import java.io.Serializable;
  */
 public class EnterpriseUser extends User implements Serializable {
 
+    public String getFacilitator_head() {
+        return facilitator_head;
+    }
+
+    public void setFacilitator_head(String facilitator_head) {
+        this.facilitator_head = facilitator_head;
+    }
+
     /**
      * password : 123123
      * account : 用户名
@@ -52,6 +60,7 @@ public class EnterpriseUser extends User implements Serializable {
      *
      */
 
+    private String facilitator_head;
     private String password;
     private String acilitator_id;
     private String facilitator_name;

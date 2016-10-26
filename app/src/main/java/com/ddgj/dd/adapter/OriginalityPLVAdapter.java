@@ -12,6 +12,7 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 
 import java.util.List;
 
@@ -64,11 +65,22 @@ public class OriginalityPLVAdapter extends BaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
         Originality originality = originalitys.get(position);
-        Glide.with(act).load(NetWorkInterface.HOST + "/" + originality.getHead_picture()).thumbnail(0.1f).into(vh.userIcon);
+        //用户图像
+        String userIcon = originality.getHead_picture();
+        if (userIcon == null)
+            userIcon = UserHelper.getInstance().getUser().getHead_picture();
+        Glide.with(act)
+                .load(NetWorkInterface.HOST + "/" + userIcon)
+                .thumbnail(0.5f)
+                .into(vh.userIcon);
+//        标题
         vh.title.setText(originality.getOriginality_name());
-        vh.userName.setText(originality.getO_nickname());
+//        用户名
+        vh.userName.setText(originality.getAccount());
+//        类型
         if (originality.getOriginality_type() != null)
-            vh.type.setText(originality.getOriginality_type());
+            vh.type.setText(types[Integer.parseInt(originality.getOriginality_type())]);
+//        介绍
         vh.content.setText(originality.getOriginality_details());
         //tu
         showImages(act, originality, vh);
@@ -86,10 +98,6 @@ public class OriginalityPLVAdapter extends BaseAdapter {
                     .thumbnail(0.1f)
                     .into(vh.img1);
         }
-    }
-
-    private void setType(TextView textView, int index) {
-        textView.setText(act.getResources().getString(index));
     }
 
     class ViewHolder {

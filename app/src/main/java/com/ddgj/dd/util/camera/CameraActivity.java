@@ -6,14 +6,17 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
+import com.ddgj.dd.BuildConfig;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
 import com.ddgj.dd.util.FileUtil;
@@ -27,6 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static android.graphics.BitmapFactory.decodeFile;
+import static com.umeng.socialize.utils.DeviceConfig.context;
 
 /**
  * 从相册或相机获取图片并裁剪<br>
@@ -89,7 +93,15 @@ public class CameraActivity extends BaseActivity {
      */
     public void graphClick(View v) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(tmpPath)));
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID
+                    + ".fileProvider", new File(tmpPath));
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        } else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(tmpPath)));
+        }
         startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 

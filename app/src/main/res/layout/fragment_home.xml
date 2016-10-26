@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragment.HomeFragment">
-    <RelativeLayout
+    <!--<RelativeLayout
         style="@style/ActionBarTheme">
         <TextView
             android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
         <TextView
             style="@style/TitleBarTextTheme"
             android:text="@string/app_name"/>
-    </RelativeLayout>
+    </RelativeLayout>-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,10 +35,10 @@
                       android:orientation="vertical">
             <include layout="@layout/item_home_list_ad"/><!--轮播图-->
             <include layout="@layout/item_home_list_class"/><!--分类-->
-            <include layout="@layout/item_home_list_patent_title"/><!--专利标题-->
-            <include layout="@layout/item_home_list_patent_list"/><!--专利列表-->
             <include layout="@layout/item_home_list_originality_title"/><!--创意标题-->
             <include layout="@layout/item_home_list_originality_list"/><!--创意列表-->
+            <include layout="@layout/item_home_list_patent_title"/><!--专利标题-->
+            <include layout="@layout/item_home_list_patent_list"/><!--专利列表-->
         </LinearLayout>
     </ScrollView>
     <!--<android.support.v4.widget.SwipeRefreshLayout

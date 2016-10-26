@@ -9,7 +9,9 @@ android {
         minSdkVersion 14
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -17,12 +19,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+        disable 'MissingTranslation'
+    }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     //    compile 'com.android.support:appcompat-v7:24.2.1'
+    //    compile 'com.android.support:support-v4:24.2.1'
+    //    compile 'com.android.support:support-v13:24.2.1'
+    compile project(':umeng_library')
+    compile project(':pull-to-refresh-library')
+    //    compile 'com.github.bumptech.glide:glide:3.7.0'
+    /* compile project(':easeui')*/
+    //    compile 'org.xutils:xutils:3.3.36'
+    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:cardview-v7:24.2.1'
     //    compile 'com.android.support:support-v4:24.2.1'
@@ -44,5 +64,9 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     /* compile project(':easeui')*/
     //    compile 'org.xutils:xutils:3.3.36'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile project(':easeui')
+    //左滑删除列表
+    compile 'com.baoyz.swipemenulistview:library:1.3.0'
+    compile name:'SMSSDK-2.1.2', ext:'aar'
+    testCompile 'junit:junit:4.12'
 }

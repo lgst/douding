@@ -11,6 +11,7 @@ import com.ddgj.dd.fragment.CommunityFragment;
 import com.ddgj.dd.fragment.HomeFragment;
 import com.ddgj.dd.fragment.MessageFragment;
 import com.ddgj.dd.fragment.MineFragment;
+import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.view.CustomViewPager;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
  * 主界面
  * ViewPager（界面） + RadioButton（指示器）
  * */
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,NetWorkInterface {
     private RadioGroup mRadioGroup;
     /**更新我的界面标志位*/
     public static boolean update = false;
@@ -46,13 +47,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     /**点击两次退出，第一次点击时间*/
     private long backTime;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initFragment();
         initView();
+//        new UpdateUtils(this).checkVersion();
     }
+
 
     /**初始化fragment*/
     private void initFragment() {
@@ -123,4 +127,5 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

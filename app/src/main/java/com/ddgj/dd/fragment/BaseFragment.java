@@ -26,5 +26,5 @@ public abstract class BaseFragment extends Fragment {
         return getView().findViewById(id);
     }
 
-    protected abstract void initViews();
+    protected abstract void initView();
 }

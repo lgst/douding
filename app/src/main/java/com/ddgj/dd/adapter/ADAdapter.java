@@ -23,7 +23,7 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
     private Activity act;
     private List<ADBean> ads;
 
-    public ADAdapter( Activity act,List<ADBean> ads) {
+    public ADAdapter(Activity act, List<ADBean> ads) {
         this.ads = ads;
         this.act = act;
     }
@@ -51,10 +51,11 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("lgst","Url:"+ad.getLink_address());
+                Log.i("lgst", "Url:" + ad.getLink_address());
                 act.startActivity(new Intent(act, WebActivity.class)
-                        .putExtra("url","http://"+ad.getLink_address())
-                .putExtra("title",ad.getNote()));
+                        .putExtra("url", "http://" + ad.getLink_address())
+                        .putExtra("title", ad.getNote())
+                        .putExtra("flag", "ad"));
             }
         });
         container.addView(imageView);

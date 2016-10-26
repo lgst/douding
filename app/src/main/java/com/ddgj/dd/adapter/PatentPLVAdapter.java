@@ -12,6 +12,7 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Patent;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 
 import java.util.List;
 
@@ -67,13 +68,16 @@ public class PatentPLVAdapter extends BaseAdapter {
         }
         Patent patent = patents.get(position);
 
+        String userIcon = patent.getHead_picture();
+        if(patent.getHead_picture().equals("head_picture"))
+            userIcon = UserHelper.getInstance().getUser().getHead_picture();
         Glide.with(act)
-                .load(NetWorkInterface.HOST + "/" + patent.getHead_picture())
-                .thumbnail(0.1f)
+                .load(NetWorkInterface.HOST + "/" + userIcon)
+                .thumbnail(0.5f)
                 .into(vh.userIcon);
         vh.title.setText(patent.getPatent_name());
-        vh.userName.setText(patent.getP_user_name());
-        vh.type.setText(patent.getPatent_type());
+        vh.userName.setText(patent.getAccount());
+        vh.type.setText(types[Integer.parseInt(patent.getPatent_type())]);
         vh.content.setText(patent.getPatent_details());
         setImages(patent, vh);
         vh.approve.setText(String.valueOf((int) (Math.random() * 100)));
