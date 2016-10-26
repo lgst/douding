@@ -10,7 +10,7 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://117.34.105.120:8080/newdouding";
+    public static final String HOST = "http://www.51douding.com/newdouding";
     /**
      * 注册接口
      */
@@ -121,6 +121,14 @@ public interface NetWorkInterface {
      * 获取全部帖子
      */
     public static final String GET_ALL_POST = HOST + "/getAllPost.do";
+    /**
+     * 获取全部帖子
+     */
+    public static final String GET_HOT_POST = HOST + "/findHotPost.do";
+    /**
+     * 获取全部帖子
+     */
+    public static final String GET_POST_DETAIL = HOST + "/findPostDetail.do";
 
 
 }

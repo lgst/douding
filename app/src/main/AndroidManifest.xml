@@ -110,7 +110,8 @@
         <activity android:name=".activity.OEMProductActivity">
         </activity>
         <activity android:name=".activity.OEMAddActivity"/>
-        <activity android:name=".fragment.PlateDetailsActivity"></activity>
+        <activity android:name=".activity.PlateDetailsActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity android:name=".activity.PublishBBSActivity"></activity>
     </application>
 

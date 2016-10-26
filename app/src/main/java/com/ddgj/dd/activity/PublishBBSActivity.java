@@ -17,17 +17,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 
+import com.ddgj.dd.bean.PostContentBean;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.RichTextEditor;
+import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import com.ddgj.dd.view.RichTextEditor.EditData;
 
+
+import org.json.JSONArray;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +58,9 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
     private File file;
     private ArrayList<String> picList;
     private SweetAlertDialog dialog;
+    private PostContentBean postContentBean;
+    private PostContentBean postContentBean1;
+    private ArrayList<PostContentBean> postContentList;
 
     @Override
     public void initView() {
@@ -103,20 +110,24 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         String title = titleName.getText().toString().trim();
         builder = new StringBuilder();
         picList = new ArrayList<>();
+        postContentList = new ArrayList<>();
         for (int i = 0; i < editList.size(); i++) {
             if ( editList.get(i).inputStr != null) {
-                Log.e("fabubbs", "commit inputStr=" +"字符顺序是"+i+","+editList.get(i).inputStr);
+                postContentBean = new PostContentBean(i, editList.get(i).inputStr);
 
-                 builder.append(i);
-                 builder.append(",");
-                 builder.append(editList.get(i).inputStr);
+                builder.append(editList.get(i).inputStr);
             } else if ( editList.get(i).imagePath!= null) {
-                Log.e("fabubbs", "commit imgePath=" + "图片顺序是"+i+","+editList.get(i).imagePath);
                 picList.add(editList.get(i).imagePath);
+                postContentBean = new PostContentBean(i,editList.get(i).imagePath);
             }
+            postContentList.add(postContentBean);
         }
+
         Log.e("editList", "editListeditListeditList" + editList.size());
 
+        //Java集合转换成Json集合
+        String toJson = new Gson().toJson(postContentList);
+        Log.e("toJson",toJson);
 
         if (title.isEmpty()){
             showToastShort("请输入标题");
