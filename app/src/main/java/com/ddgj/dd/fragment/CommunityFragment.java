@@ -46,11 +46,11 @@ public class CommunityFragment extends BaseFragment {
         PlateFragment plateFragment = new PlateFragment();
         //裝入fragment
         fragments = new ArrayList<>();
-        fragments.add(hotFragment);
         fragments.add(plateFragment);
+        fragments.add(hotFragment);
         //初始化標題
         strings = new ArrayList<>();
-        strings.add("所有");
+        strings.add("全部");
         strings.add("热门");
         //tab模式
         tabLayout.setTabMode(TabLayout.MODE_FIXED);

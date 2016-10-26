@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/view1"
+        style="@style/ActionBarLightTheme"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/backup"
+            style="@style/TitleBarImageTheme"
+            android:src="@mipmap/ic_blue_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="发布帖子"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bbs_commit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:text="发送"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/view1"
+        android:background="@color/grey_light"></View>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:drawablePadding="5dp"
+                    android:text="帖子标题" />
+
+                <EditText
+                    android:id="@+id/title_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/edit_intro"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip"
+                    android:singleLine="true"></EditText>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/shape_rectangle"
+                    android:drawablePadding="5dp"
+                    android:text="帖子内容" />
+
+                <RelativeLayout
+                    android:id="@+id/patent_intro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/selector_edittext"
+                    android:gravity="left|top"
+                    android:inputType="textMultiLine"
+                    android:minLines="15"
+                    android:layout_marginBottom="48dp"
+                    android:paddingLeft="4dip"
+                    android:paddingRight="4dip">
+                    <com.ddgj.dd.view.RichTextEditor
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:id="@+id/richEditor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_above="@+id/title"
+                        android:background="#fff" />
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/view4"
+        android:background="@color/grey_light"></View>
+    <RelativeLayout
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:fillViewport="true">
+
+        <ImageView
+            android:id="@+id/hide_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@mipmap/ic_hide_keyboard"
+
+            />
+
+        <ImageView
+            android:id="@+id/select_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@mipmap/ic_select_pic" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
