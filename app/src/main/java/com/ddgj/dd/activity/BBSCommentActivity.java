@@ -1,9 +1,9 @@
 package com.ddgj.dd.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,22 +13,19 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.BBSCommentBean;
-import com.ddgj.dd.bean.PostBean;
-import com.ddgj.dd.fragment.HotFragment;
 import com.ddgj.dd.util.StringUtils;
-import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.easeui.EaseConstant;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -212,7 +209,7 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
                 holder=new ViewHolder();
@@ -222,6 +219,7 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
                 holder.commentContent = (TextView)convertView.findViewById(R.id.comment_content);
                 holder.time = (TextView)convertView.findViewById(R.id.time);
                 holder.headPic = (CircleImageView) convertView.findViewById(R.id.head_pic);
+                holder.send = (ImageView) convertView.findViewById(R.id.send_message);
                 convertView.setTag(holder);
             }else {
                 holder = (ViewHolder) convertView.getTag();
@@ -236,7 +234,17 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
                     .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
                     .thumbnail(0.1f)
                     .into(holder.headPic);
-
+            if(UserHelper.getInstance().getUser()!=null)
+            {
+                if(UserHelper.getInstance().getUser().getAccount().equals(bbsCommentBeanList.get(position).getAccount()))
+                    holder.send.setVisibility(View.INVISIBLE);
+            }
+            holder.send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(parent.getContext(), ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, bbsCommentBeanList.get(position).getAccount()));
+                }
+            });
             return convertView;
         }
     }
@@ -246,7 +254,7 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
         public TextView commentContent;
         public TextView time;
         public CircleImageView  headPic;
-
+        public ImageView send;
 
     }
 }

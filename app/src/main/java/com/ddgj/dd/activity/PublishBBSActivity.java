@@ -1,37 +1,27 @@
 package com.ddgj.dd.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
-
 import com.ddgj.dd.bean.PostContentBean;
-import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.RichTextEditor;
+import com.ddgj.dd.view.RichTextEditor.EditData;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import com.ddgj.dd.view.RichTextEditor.EditData;
-
-
-import org.json.JSONArray;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -208,5 +198,9 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         editor.insertImage(imagePath);
     }
 
+    public void backClick(View v)
+    {
+        finish();
+    }
 
 }

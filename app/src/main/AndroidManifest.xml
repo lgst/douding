@@ -33,6 +33,108 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.ddgj.dd.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <!-- ============================== 友盟 =========================== -->
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.UMDefault"/>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57ccdc1567e58e974a0037c7">
+        </meta-data>
+        <!-- 微信 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- 新浪微博 -->
+        <activity
+            android:name=".WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
+        <service
+            android:name="com.sina.weibo.sdk.net.DownloadService"
+            android:exported="false">
+        </service>
+        <!-- QQ QZone -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tencent1105437477"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- ================================友盟配置结束=================================== -->
+
+
+        <!-- =============================环信配置========================================= -->
+        <!-- 设置环信应用的AppKey -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1128161017178618#ddgj"/>
+        <!-- 声明SDK所需的service SDK核心功能 -->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true"/>
+        <!-- 声明SDK所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
+        <!-- ======================环信配置结束====================== -->
+
+
+        <!-- ===================百度地图配置======================== -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="nyYKdKcWjHpsTcI9CGOGaV8TMja6UE3k"/>
+        <!-- ===================百度地图配置结束=================== -->
         <activity
             android:name=".activity.SplashScreenActivity"
             android:screenOrientation="portrait">
@@ -82,47 +184,59 @@
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.SearchActivity">
+        <activity
+            android:name=".activity.SearchActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name=".activity.OriginalityActivity">
+        <activity
+            android:name=".activity.OriginalityActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name=".activity.PatentActivity">
+        <activity
+            android:name=".activity.PatentActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name=".activity.WebActivity">
+        <activity
+            android:name=".activity.WebActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
-        <activity android:name=".activity.PublishPatentActivity"></activity>
-        <activity android:name=".activity.PublishCreativeActivity"></activity>
-        <activity android:name=".activity.OrderActivity">
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
+        <activity
+            android:name=".activity.PublishPatentActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.PublishCreativeActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.OrderActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name=".activity.OrderAddActivity">
+        <activity
+            android:name=".activity.OrderAddActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name=".activity.OrderListActivity">
+        <activity
+            android:name=".activity.OrderListActivity"
+            android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.CitySelectorActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
-        <activity android:name=".activity.OrderFactoryActivity">
-        </activity>
-        <activity android:name=".activity.OEMActivity">
-        </activity>
-        <activity android:name=".activity.OEMProductActivity">
-        </activity>
-        <activity android:name=".activity.OEMAddActivity"/>
-        <activity android:name=".activity.PlateDetailsActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
-        <activity android:name=".activity.PublishBBSActivity"></activity>
-        <activity android:name=".activity.BBSCommentActivity"></activity>
         <activity
-            android:name="com.ddgj.dd.activity.PlateDetailsActivity"
+            android:name=".activity.OEMFactoryActivity"
+            android:theme="@style/AppThemeLightStatuBar">
+        </activity>
+        <activity
+            android:name=".activity.OEMActivity"
+            android:theme="@style/AppThemeLightStatuBar">
+        </activity>
+        <activity
+            android:name=".activity.OEMProductActivity"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.OEMAddActivity"
-            android:theme="@style/AppThemeLightStatuBar"/>
-        <activity
-            android:name="com.ddgj.dd.activity.PublishBBSActivity"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity android:name=".activity.SettingsActivity">
         </activity>
@@ -146,6 +260,15 @@
         <activity android:name=".activity.CommentListActivity"
                   android:theme="@style/AppThemeLightStatuBar">
         </activity>
+
+
+
+
+
+        <activity android:name=".activity.PlateDetailsActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
+        <activity android:name=".activity.PublishBBSActivity"></activity>
+        <activity android:name=".activity.BBSCommentActivity"></activity>
     </application>
 
 </manifest>
