@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.BaseActivity;
 import com.ddgj.dd.activity.PlateDetailsActivity;
 import com.ddgj.dd.activity.PublishBBSActivity;
 import com.ddgj.dd.bean.PostBean;
@@ -58,6 +59,7 @@ public class PlateFragment extends BaseFragment {
     private List<PostBean> postBeanList=new ArrayList<PostBean>();
     private PullToRefreshListView pullToRefreshView;
     private FloatingActionButton fab;
+    private PlateAdapter plateAdapter;
 
     @Nullable
     @Override
@@ -90,6 +92,7 @@ public class PlateFragment extends BaseFragment {
 
             @Override
             public void onResponse(String response, int id) {
+
                 Log.e("shuju",response);
                 JSONObject jo = null;
                 try {
@@ -97,6 +100,7 @@ public class PlateFragment extends BaseFragment {
                     int status = jo.getInt("status");
                     if (status==STATUS_SUCCESS){
                         JSONArray ja = jo.getJSONArray("data");
+
                         for (int i = 0; i < ja.length(); i++) {
                             String string = ja.getJSONObject(i).toString();
                             PostBean postBean = new Gson().fromJson(string, PostBean.class);
@@ -108,7 +112,7 @@ public class PlateFragment extends BaseFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                plateAdapter.notifyDataSetChanged();
                 pullToRefreshView.onRefreshComplete();
             }
         });
@@ -121,7 +125,7 @@ public class PlateFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PublishBBSActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
         pullToRefreshView = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_listview);
@@ -142,7 +146,7 @@ public class PlateFragment extends BaseFragment {
             }
         });
 
-        PlateAdapter plateAdapter = new PlateAdapter(getActivity());
+        plateAdapter = new PlateAdapter(getActivity());
         pullToRefreshView.setAdapter(plateAdapter);
         pullToRefreshView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -212,5 +216,16 @@ public class PlateFragment extends BaseFragment {
         public TextView browseNumber;
         public TextView commentNumber;
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==((BaseActivity)getActivity()).SUCCESS){
+            postBeanList.clear();
+            initdatas(LOAD);
+
+
+        }
     }
 }

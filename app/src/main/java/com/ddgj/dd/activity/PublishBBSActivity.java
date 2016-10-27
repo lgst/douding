@@ -61,6 +61,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
     private PostContentBean postContentBean;
     private PostContentBean postContentBean1;
     private ArrayList<PostContentBean> postContentList;
+    private String toJson;
 
     @Override
     public void initView() {
@@ -118,7 +119,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 builder.append(editList.get(i).inputStr);
             } else if ( editList.get(i).imagePath!= null) {
                 picList.add(editList.get(i).imagePath);
-                postContentBean = new PostContentBean(i,editList.get(i).imagePath);
+                postContentBean = new PostContentBean(i,"这里是图片");
             }
             postContentList.add(postContentBean);
         }
@@ -126,8 +127,8 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         Log.e("editList", "editListeditListeditList" + editList.size());
 
         //Java集合转换成Json集合
-        String toJson = new Gson().toJson(postContentList);
-        Log.e("toJson",toJson);
+        toJson = new Gson().toJson(postContentList);
+        Log.e("toJson", toJson);
 
         if (title.isEmpty()){
             showToastShort("请输入标题");
@@ -143,12 +144,9 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         dialog = showLoadingDialog("", "正在发送");
         Map<String, String> params = new HashMap<String, String>();
         params.put("title",title);
-        params.put("cordcontent", builder.toString());
+        params.put("cordcontent", toJson);
         params.put("bbs_type", String.valueOf("1"));
         params.put("user_id", UserHelper.getInstance().getUser().getAccount_id());
-
-
-
 
         PostFormBuilder post = OkHttpUtils.post();
 
@@ -175,8 +173,11 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                     public void onResponse(String response, int id) {
                         Log.e("fabubbs", " 成功id:" + id);
                         showToastLong("成功");
+                        setResult(SUCCESS);
                         PublishBBSActivity.this.finish();
                         dialog.dismiss();
+
+
                     }
                 });
 
