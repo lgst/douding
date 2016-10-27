@@ -113,6 +113,7 @@
         <activity android:name=".activity.PlateDetailsActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity android:name=".activity.PublishBBSActivity"></activity>
+        <activity android:name=".activity.BBSCommentActivity"></activity>
     </application>
 
 </manifest>

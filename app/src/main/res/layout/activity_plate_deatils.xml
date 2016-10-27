@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout style="@style/ActionBarLightTheme">
 
         <ImageView
@@ -21,83 +23,132 @@
             android:textStyle="bold" />
 
     </RelativeLayout>
+
     <ScrollView
         android:id="@+id/sv_root"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="48dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        >
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center">
+
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
+
             <LinearLayout
 
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/post_sub_title"
-                    android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
-                    android:text="标题"/>
+                    android:layout_gravity="center_horizontal"
+                    android:text="标题"
+                    android:textSize="22sp" />
+
                 <TextView
                     android:id="@+id/post_publish_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="时间"/>
+                    android:text="时间" />
             </LinearLayout>
-            <View
-                style="@style/LineGrey1px"/>
+
+            <View style="@style/LineGrey1px" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <com.ddgj.dd.view.CircleImageView
                     android:id="@+id/head_pic"
-                    android:layout_margin="5dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_launcher"/>
+                    android:layout_margin="5dp"
+                    android:src="@drawable/ic_launcher" />
+
                 <TextView
                     android:id="@+id/user_amount"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="用户名"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:text="用户名" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/post_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-<TextView
-    android:id="@+id/post_content_tv"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/post_content_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-            <View
-                style="@style/LineGrey1px"/>
+
+            <View style="@style/LineGrey1px" />
         </LinearLayout>
 
     </ScrollView>
+    <View
+        android:layout_above="@+id/bottom"
+        android:layout_height="1.5dp"
+        style="@style/LineGrey1px" />
     <LinearLayout
-       android:layout_alignParentBottom="true"
+        android:id="@+id/bottom"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
 
-        <Button
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="评论"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+
+            android:text="" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/ic_comment"
+            android:gravity="center"
+            android:textSize="10dp"
+            android:text="评论" />
+
     </LinearLayout>
 </RelativeLayout>

@@ -43,23 +43,32 @@ public class StringUtils {
             long time1 = date.getTime();
             long time2 = System.currentTimeMillis();
             long time3 = time2 - time1;
-            if(time3<m)
-            {
+            if (time3 < m) {
                 return "刚刚";
-            }else if(time3<h){
-                return (time3/m)+"分钟前";
-            }else if(time3<d){
-                return (time3/h)+"小时前";
-            }else if(time3<m){
-                return (time3/d)+"天前";
-            }else if(time3<y){
-                return (time3/M)+"个月前";
-            }else{
+            } else if (time3 < h) {
+                return (time3 / m) + "分钟前";
+            } else if (time3 < d) {
+                return (time3 / h) + "小时前";
+//            } else if (time3 < M) {
+//                return (time3 / d) + "天前";
+//            } else if (time3 < y) {
+//                return (time3 / M + 1) + "个月前";
+            } else {
                 return dateFormat2.format(date);
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return dateStr;
+    }
+
+
+    public static String getSize(long size) {
+        if (size < 1024)
+            return size + "B";
+        else if (size < 1024 * 1024)
+            return size / 1024 + "KB";
+        else
+            return size / 1024 / 1024 + "MB";
     }
 }

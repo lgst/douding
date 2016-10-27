@@ -150,6 +150,16 @@ public interface NetWorkInterface {
      *OriginalityDetails.do
      */
     public static final String GET__PRODUCT_DETAILS= HOST + "/OriginalityDetails.do";
+  /***
+     * 添加评论
+     *OriginalityDetails.do
+     */
+    public static final String ADD_COMMENT_BBS= HOST + "/addFollowCard.do";
+/***
+     * 获取所有评论
+     *OriginalityDetails.do
+     */
+    public static final String GET_ALL_COMMENT_BBS= HOST + "/findFollowCard.do";
 
 
 }
