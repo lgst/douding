@@ -71,7 +71,7 @@ public class PlateFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews();
+        initView();
 
     }
 
@@ -115,7 +115,7 @@ public class PlateFragment extends BaseFragment {
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +132,6 @@ public class PlateFragment extends BaseFragment {
                 postBeanList.clear();
                 mPageNumber=1;
                 initdatas(LOAD);
-
             }
 
             @Override

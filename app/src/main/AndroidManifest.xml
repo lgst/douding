@@ -233,12 +233,15 @@
             android:name=".activity.OEMProductActivity"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
-        <activity android:name=".activity.OEMAddActivity"/>
-        <activity android:name=".activity.PlateDetailsActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
-        <activity android:name=".activity.PublishBBSActivity"></activity>
+        <activity
+            android:name="com.ddgj.dd.activity.PlateDetailsActivity"
+            android:theme="@style/AppThemeLightStatuBar">
+        </activity>
         <activity
             android:name=".activity.OEMAddActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name="com.ddgj.dd.activity.PublishBBSActivity"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity android:name=".activity.SettingsActivity">
         </activity>

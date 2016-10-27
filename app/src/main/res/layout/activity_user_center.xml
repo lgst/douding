@@ -16,6 +16,7 @@
             style="@style/TitleBarTextTheme"
             android:text="@string/user_center"/>
         <TextView
+            android:id="@+id/edit"
             style="@style/TitleBarRightTextTheme"
             android:onClick="editClick"
             android:text="@string/edit"/>

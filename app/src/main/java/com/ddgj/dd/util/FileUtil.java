@@ -126,10 +126,6 @@ public class FileUtil {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-	}
-
-
-
 		File image = null;
 		try {
 			image = File.createTempFile(

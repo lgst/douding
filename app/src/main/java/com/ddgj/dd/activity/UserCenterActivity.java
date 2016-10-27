@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.EnterpriseUser;
@@ -24,6 +25,7 @@ public class UserCenterActivity extends BaseActivity {
     private static final int ENTERPRISE_REQUEST_CODE = 3;
     private Object user = UserHelper.getInstance().getUser();
     private static final int REQUEST_CODE = 1;
+    private TextView edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,11 @@ public class UserCenterActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        edit = (TextView) findViewById(R.id.edit);
         if (UserHelper.getInstance().getUser() instanceof PersonalUser) {//个人用户信息
             getSupportFragmentManager().beginTransaction().add(R.id.content_container, new PersonalFragment()).commit();
         } else if (UserHelper.getInstance().getUser() instanceof EnterpriseUser) {//企业用信息
+            edit.setVisibility(View.INVISIBLE);
             getSupportFragmentManager().beginTransaction().add(R.id.content_container, new EnterpriseFragment()).commit();
         }
     }

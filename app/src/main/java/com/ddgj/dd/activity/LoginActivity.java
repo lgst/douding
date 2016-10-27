@@ -15,7 +15,8 @@ import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.JsonUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
-
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -28,6 +29,7 @@ import org.json.JSONException;
 import java.io.IOException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+
 
 /**
  * 用户登录界面
@@ -117,8 +119,8 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
                     Message msg = new Message();
                     msg.what = FAILDE;
                     msg.obj = "网络异常！";
-                    handler.sendMessage(msg);
                     dialog.dismiss();
+                    handler.sendMessage(msg);
                 }
 
                 @Override
@@ -129,6 +131,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
                     try {
                         responseInfo = JsonUtils.getResponse(responseContent);
                     } catch (JSONException e) {
+                        dialog.dismiss();
                         e.printStackTrace();
                     }
                     final Message msg = new Message();
@@ -145,7 +148,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
                         }
                         //登录环信
                         final ResponseInfo finalResponseInfo = responseInfo;
-                      /*  EMClient.getInstance().login(usernameContent, pwdContent, new EMCallBack() {//回调
+                        EMClient.getInstance().login(usernameContent, pwdContent, new EMCallBack() {//回调
                             @Override
                             public void onSuccess() {
                                 EMClient.getInstance().groupManager().loadAllGroups();
@@ -167,7 +170,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
                                 msg.obj = "登录失败";
                                 handler.sendMessage(msg);
                             }
-                        });*/
+                        });
                     } else {
                         msg.what = FAILDE;
                         msg.obj = responseInfo.getMsg();

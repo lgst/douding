@@ -91,7 +91,7 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                mWebView.loadUrl("file:///android_asset/error.html");
+                view.loadUrl("file:///android_asset/error.html");
             }
         });
         WebSettings webSettings = mWebView.getSettings();

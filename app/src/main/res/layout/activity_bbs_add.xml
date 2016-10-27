@@ -12,6 +12,7 @@
 
         <ImageView
             android:id="@+id/backup"
+            android:onClick="backClick"
             style="@style/TitleBarImageTheme"
             android:src="@mipmap/ic_blue_back" />
 

@@ -36,7 +36,7 @@ public class CommunityFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews();
+        initView();
         initDatas();
     }
 
@@ -64,7 +64,7 @@ public class CommunityFragment extends BaseFragment {
     }
 
     @Override
-    protected void initViews() {
+    protected void initView() {
         tabLayout = (TabLayout) findViewById(R.id.tab);
         viewPager = (ViewPager) findViewById(R.id.vp_pager);
     }
