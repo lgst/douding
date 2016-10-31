@@ -108,8 +108,12 @@
 
     </ScrollView>
     <View
-        style="@style/LineGrey1px"
-        android:layout_above="@+id/bottom"/>
+
+        android:layout_above="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/up_shadow"></View>
+
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
