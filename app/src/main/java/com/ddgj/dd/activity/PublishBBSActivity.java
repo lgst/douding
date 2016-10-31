@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -74,9 +75,10 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         initView();
 
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.bbs_commit:
                 List<EditData> editList = editor.buildEditData();
                 // 下面的代码可以上传、或者保存，请自行实现
@@ -95,6 +97,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 break;
         }
     }
+
     /**
      * 负责处理编辑数据提交等事宜，请自行实现
      */
@@ -104,13 +107,13 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         picList = new ArrayList<>();
         postContentList = new ArrayList<>();
         for (int i = 0; i < editList.size(); i++) {
-            if ( editList.get(i).inputStr != null) {
+            if (editList.get(i).inputStr != null) {
                 postContentBean = new PostContentBean(i, editList.get(i).inputStr);
 
                 builder.append(editList.get(i).inputStr);
-            } else if ( editList.get(i).imagePath!= null) {
+            } else if (editList.get(i).imagePath != null) {
                 picList.add(editList.get(i).imagePath);
-                postContentBean = new PostContentBean(i,"**\n\n这里是图片");
+                postContentBean = new PostContentBean(i, "**\n\n这里是图片");
             }
             postContentList.add(postContentBean);
         }
@@ -121,32 +124,33 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         toJson = new Gson().toJson(postContentList);
         Log.e("toJson", toJson);
 
-        if (title.isEmpty()){
+        if (title.isEmpty()) {
             showToastShort("请输入标题");
-        }else if (editList.size()==1&&editList.get(0).inputStr.equals("")){
+        } else if (editList.size() == 1 && editList.get(0).inputStr.equals("")) {
             showToastShort("请输入内容");
-        }else {
-                toCommitBBS(title);
+        } else {
+            toCommitBBS(title);
         }
 
 
     }
+
     private void toCommitBBS(String title) {
         dialog = showLoadingDialog("", "正在发送");
         Map<String, String> params = new HashMap<String, String>();
-        params.put("title",title);
+        params.put("title", title);
         params.put("cordcontent", toJson);
         params.put("bbs_type", String.valueOf("1"));
         params.put("user_id", UserHelper.getInstance().getUser().getAccount_id());
 
         PostFormBuilder post = OkHttpUtils.post();
 
-        if (picList!=null) {
+        if (picList != null) {
             for (int i = 0; i < picList.size(); i++) {
                 file = FileUtil.scal(Uri.parse(picList.get(i)), getCacheDir());
                 String s = "picture";
                 post.addFile(s + i, file.getName(), file);
-                Log.e("fabubbs",picList.get(i));
+                Log.e("fabubbs", picList.get(i));
             }
         }
         post.url(NetWorkInterface.PUBLISH_BBS)
@@ -170,11 +174,12 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                     }
                 });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
                 // 获取返回的图片列表
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
@@ -195,9 +200,8 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         editor.insertImage(imagePath);
     }
 
-    public void backClick(View v)
-    {
-        finish();
+    public void backClick(View v) {
+        showDailog();
     }
 
     static final String[] PERMISSION = new String[]{
@@ -224,5 +228,34 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
     @Override
     public String[] getPermissions() {
         return PERMISSION;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showDailog();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showDailog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setContentText("")
+                .setTitleText("是否放弃已编辑内容？")
+                .setConfirmText("放弃")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                })
+                .setCancelText("继续")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
+                .show();
     }
 }
