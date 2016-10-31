@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +195,9 @@ public class RichTextEditor extends ScrollView {
      */
     public void insertImage(String imagePath) {
         Bitmap bmp = getScaledBitmap(imagePath, getWidth());
-        insertImage(bmp, imagePath);
+
+        Bitmap bitmap = FileUtil.rotateBitmapByDegree(bmp, FileUtil.getBitmapDegree(imagePath));
+        insertImage(bitmap, imagePath);
     }
 
     /**
