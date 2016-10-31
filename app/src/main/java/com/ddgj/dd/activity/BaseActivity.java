@@ -1,7 +1,6 @@
 package com.ddgj.dd.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.ddgj.dd.R;
@@ -34,15 +32,19 @@ public abstract class BaseActivity extends FragmentActivity {
     public void showToastLong(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
     public void showToastNotNetWork() {
         Toast.makeText(this, getResources().getString(R.string.network_is_not_connection), Toast.LENGTH_LONG).show();
     }
 
-    /**初始化控件*/
+    /**
+     * 初始化控件
+     */
     protected abstract void initView();
 
     /**
      * 网络检查
+     *
      * @return: true:有网  false:没网
      */
     public boolean checkNetWork() {
@@ -55,8 +57,8 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-    public SweetAlertDialog showLoadingDialog(String title,String content){
-        SweetAlertDialog dialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
+    public SweetAlertDialog showLoadingDialog(String title, String content) {
+        SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         dialog.setContentText(content)
                 .setTitleText(title)
                 .show();
@@ -83,28 +85,32 @@ public abstract class BaseActivity extends FragmentActivity {
     //显示对话框提示用户缺少权限
     public void showMissingPermissionDialog() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("提示");//提示帮助
-        builder.setMessage("缺少权限！");
+        SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        alertDialog.setTitleText("提示");//提示帮助
+        alertDialog.setContentText("缺少权限！");
 
         //如果是拒绝授权，则退出应用
         //退出
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        alertDialog.setCancelText("取消").setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                showToastShort("权限请求被拒绝！");
-//                finish();
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+                showToastShort("获取权限请求被拒绝，请前往系统设置开启权限！");
             }
         });
         //打开设置，让用户选择打开权限
-        builder.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startAppSettings();//打开设置
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
+        alertDialog.setConfirmText("设置")
+                .setConfirmClickListener(
+                        new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                startAppSettings();//打开设置
+                                sweetAlertDialog.dismiss();
+                            }
+                        }
+                );
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
     //获取全部权限
@@ -117,7 +123,6 @@ public abstract class BaseActivity extends FragmentActivity {
         return true;
     }
 
-
     //打开系统应用设置(ACTION_APPLICATION_DETAILS_SETTINGS:系统设置权限)
     public void startAppSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -128,7 +133,6 @@ public abstract class BaseActivity extends FragmentActivity {
     //请求权限去兼容版本
     public void requestPermissions(String... permission) {
         ActivityCompat.requestPermissions(this, permission, PERMISSION_REQUEST_CODE);
-
     }
 
     /**

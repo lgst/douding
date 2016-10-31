@@ -183,7 +183,6 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                 textView.setLayoutParams(layoutParams);
                 textView.setText(content);
                 postContentAll.addView(textView);
-
             }
 
         }

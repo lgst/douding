@@ -361,6 +361,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     static final String[] PERMISSION = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
             Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
+            Manifest.permission.CAMERA
 //            Manifest.permission.READ_PHONE_STATE,        //读取设备信息
 //            Manifest.permission.ACCESS_COARSE_LOCATION, //百度定位
 //            Manifest.permission.ACCESS_FINE_LOCATION,

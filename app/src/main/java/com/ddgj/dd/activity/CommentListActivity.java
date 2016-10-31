@@ -3,12 +3,15 @@ package com.ddgj.dd.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.CommentAdapter;
 import com.ddgj.dd.bean.Comment;
+import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -35,6 +38,7 @@ public class CommentListActivity extends BaseActivity {
     private static final int LOAD = 2;
     private List<Comment> comments = new ArrayList<Comment>();
     private CommentAdapter mAdapter;
+    private EditText commentEt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +90,46 @@ public class CommentListActivity extends BaseActivity {
         });
     }
 
+    public void sendCommentClick(View v) {
+        if (!checkNetWork()) {
+            showToastNotNetWork();
+            return;
+        }
+        final String comment = commentEt.getText().toString();
+        if (comment.isEmpty()) {
+            showToastShort("请输入评论内容！");
+            return;
+        }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("topic_id", getIntent().getStringExtra("topic_id"));
+        params.put("topic_type", String.valueOf(getIntent().getIntExtra("classes", -1)));
+        params.put("c_content", comment);
+        params.put("from_u_id", UserHelper.getInstance().getUser().getAccount_id());
+        OkHttpUtils.post().url(NetWorkInterface.ADD_COMMENT).params(params).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "onError: 评论出错！" + e.getMessage());
+                showToastShort("网络连接失败，请稍后重试！");
+            }
 
+            @Override
+            public void onResponse(String response, int id) {
+                ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+                if (responseInfo.getStatus() == 0) {
+                    Log.i(TAG, "onResponse: 评论成功！");
+                    commentEt.setText(null);
+                    showToastShort("评论成功！");
+                } else {
+                    showToastShort("评论失败，请稍后重试！");
+                }
+            }
+        });
+    }
     @Override
     public void initView() {
         mList = (PullToRefreshListView) findViewById(R.id.list);
         mList.setMode(PullToRefreshBase.Mode.BOTH);
+        commentEt = (EditText) findViewById(R.id.et_comment);
         mList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

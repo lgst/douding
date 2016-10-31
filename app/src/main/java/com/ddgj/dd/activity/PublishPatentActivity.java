@@ -1,5 +1,6 @@
 package com.ddgj.dd.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -335,5 +336,26 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 })
                 .show();
     }
+    static final String[] PERMISSION = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
+            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
+            Manifest.permission.CAMERA
+    };
 
+    @Override
+    protected void process(Bundle savedInstanceState) {
+        super.process(savedInstanceState);
+        //如果有什么需要初始化的，在这里写就好～
+    }
+
+    @Override
+    public void getAllGrantedPermission() {
+        //当获取到所需权限后，进行相关业务操作
+        super.getAllGrantedPermission();
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return PERMISSION;
+    }
 }
