@@ -39,7 +39,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     /**初始化控件*/
-    public abstract void initView();
+    protected abstract void initView();
 
     /**
      * 网络检查

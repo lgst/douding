@@ -78,9 +78,11 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             int type = bdLocation.getLocType();
             Log.i(TAG, "type: " + type);
             mAddr = bdLocation.getCity();
+            mAddr = mAddr.substring(0, mAddr.length() - 1);
             if (mTvCity != null) {
                 mTvCity.setText(mAddr);
             }
+            getSharedPreferences("city", MODE_PRIVATE).edit().putString("city", mAddr).commit();
 //            Log.i(TAG, "ci=ty: "+bdLocation.getCity());
 //            Log.i(TAG, "addr: "+bdLocation.getAddrStr());
 //            Log.i(TAG, "cityCode: "+bdLocation.getCityCode());
@@ -131,6 +133,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             params.put("made_price", price);
             Log.i("lgst", price);
         }
+        //
+        params.put("city", mAddr);
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
         params.put("made_type_id", String.valueOf(classes));
@@ -191,9 +195,10 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         mTvPrice = (TextView) findViewById(R.id.tv_price);
         mplv = (PullToRefreshListView) findViewById(R.id.list);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
-        if (mAddr != null) {
-            mTvCity.setText(mAddr);
+        if (mAddr == null) {//设置位置
+            mAddr = getSharedPreferences("city", MODE_PRIVATE).getString("city", "");
         }
+        mTvCity.setText(mAddr);
         mBack.setOnClickListener(this);
         mTvCity.setOnClickListener(this);
         mTvPrice.setOnClickListener(this);
@@ -252,8 +257,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.tv_city:
-                startActivityForResult(new Intent(this, CitySelectorActivity.class), 1);
-                overridePendingTransition(R.anim.slide_in_from_bottom, 0);
+                startActivityForResult(new Intent(this, CitySelecterActivity.class), 1);
+                overridePendingTransition(R.anim.slide_in_from_right, R.anim.fade_out);
                 break;
             case R.id.tv_price:
                 showPopwin();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +13,13 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.PlateDetailsActivity;
-import com.ddgj.dd.activity.PublishBBSActivity;
 import com.ddgj.dd.bean.PostBean;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.view.CircleImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -53,9 +53,10 @@ public class HotFragment extends BaseFragment {
      */
     private static final int UPDATE = 2;
     private int mPageNumber = 1;
-    private List<PostBean> postBeanList=new ArrayList<PostBean>();
-    private FloatingActionButton fab;
+    private List<PostBean> postBeanList = new ArrayList<PostBean>();
     private PullToRefreshListView pullToRefreshView;
+    private PlateAdapter plateAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +70,8 @@ public class HotFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
     }
-    private void initdatas(int flag) {
+
+    private void initdatas(final int flag) {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));//第几页
@@ -83,46 +85,43 @@ public class HotFragment extends BaseFragment {
 
             @Override
             public void onResponse(String response, int id) {
-                Log.e("shuju",response);
+                Log.e("shuju", response);
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
                     int status = jo.getInt("status");
-                    if (status==STATUS_SUCCESS){
+                    if (status == STATUS_SUCCESS) {
                         JSONArray ja = jo.getJSONArray("data");
+                        if (LOAD == flag) {
+                            postBeanList.clear();
+                        }
                         for (int i = 0; i < ja.length(); i++) {
                             String string = ja.getJSONObject(i).toString();
                             PostBean postBean = new Gson().fromJson(string, PostBean.class);
                             postBeanList.add(postBean);
                         }
-
+                        plateAdapter.notifyDataSetChanged();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    pullToRefreshView.onRefreshComplete();
                 }
-
-                pullToRefreshView.onRefreshComplete();
             }
         });
     }
+
     @Override
     protected void initView() {
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PublishBBSActivity.class);
-                startActivity(intent);
-            }
-        });
         pullToRefreshView = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_listview);
         pullToRefreshView.setMode(PullToRefreshBase.Mode.BOTH);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 postBeanList.clear();
-                mPageNumber=1;
+                plateAdapter.notifyDataSetChanged();
+                mPageNumber = 1;
                 initdatas(LOAD);
             }
 
@@ -133,12 +132,12 @@ public class HotFragment extends BaseFragment {
             }
         });
 
-        PlateAdapter plateAdapter = new PlateAdapter(getActivity());
+        plateAdapter = new PlateAdapter(getActivity());
         pullToRefreshView.setAdapter(plateAdapter);
         pullToRefreshView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), PlateDetailsActivity.class).putExtra("post_id",postBeanList.get(i-1).getId());
+                Intent intent = new Intent(getActivity(), PlateDetailsActivity.class).putExtra("post_id", postBeanList.get(i - 1).getId());
                 startActivity(intent);
             }
         });
@@ -151,6 +150,7 @@ public class HotFragment extends BaseFragment {
         public PlateAdapter(Context context) {
             this.mInflater = LayoutInflater.from(context);
         }
+
         @Override
         public int getCount() {
             return postBeanList.size();
@@ -170,28 +170,31 @@ public class HotFragment extends BaseFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
-                holder=new ViewHolder();
+                holder = new ViewHolder();
                 //可以理解为从vlist获取view  之后把view返回给ListView
                 convertView = mInflater.inflate(R.layout.plate_all_list, null);
-                holder.username = (TextView)convertView.findViewById(R.id.username);
-                holder.info = (TextView)convertView.findViewById(R.id.info);
-                holder.time = (TextView)convertView.findViewById(R.id.time);
-                holder.browseNumber = (TextView)convertView.findViewById(R.id.browse_number);
-                holder.commentNumber = (TextView)convertView.findViewById(R.id.comment_number);
+                holder.username = (TextView) convertView.findViewById(R.id.username);
+                holder.info = (TextView) convertView.findViewById(R.id.info);
+                holder.time = (TextView) convertView.findViewById(R.id.time);
+                holder.browseNumber = (TextView) convertView.findViewById(R.id.browse_number);
+                holder.commentNumber = (TextView) convertView.findViewById(R.id.comment_number);
+                holder.icon = (CircleImageView) convertView.findViewById(R.id.icon);
                 convertView.setTag(holder);
-            }else {
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-
             holder.username.setText(postBeanList.get(position).getAccount());
             holder.info.setText(postBeanList.get(position).getTitle());
             holder.time.setText(StringUtils.getDate(postBeanList.get(position).getSend_date()));
             holder.browseNumber.setText(String.valueOf(postBeanList.get(position).getViews()));
             holder.commentNumber.setText(String.valueOf(postBeanList.get(position).getComment_amount()));
-
+            Glide.with(getContext())
+                    .load(NetWorkInterface.HOST+"/"+postBeanList.get(position).getHead_picture())
+                    .into(holder.icon);
             return convertView;
         }
     }
+
     //提取出来方便点
     public final class ViewHolder {
         public TextView username;
@@ -199,10 +202,6 @@ public class HotFragment extends BaseFragment {
         public TextView time;
         public TextView browseNumber;
         public TextView commentNumber;
-
+        public CircleImageView icon;
     }
-
-
-
-
 }

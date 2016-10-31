@@ -36,6 +36,7 @@ public class PersonalFragment extends BaseFragment implements NetWorkInterface{
     private TextView phoneNumber;
     private TextView email;
     private TextView address;
+    private TextView account;
     private LinearLayout setIcon;
     private CircleImageView mIcon;
     private String mIconPath;
@@ -60,6 +61,7 @@ public class PersonalFragment extends BaseFragment implements NetWorkInterface{
     @Override
     protected void initView() {
         name = (TextView) findViewById(R.id.name);
+        account = (TextView) findViewById(R.id.account);
         gender = (TextView) findViewById(R.id.gender);
         age = (TextView) findViewById(R.id.age);
         nickName = (TextView) findViewById(R.id.nick_name);
@@ -118,5 +120,6 @@ public class PersonalFragment extends BaseFragment implements NetWorkInterface{
             email.setText(user.getUser_email());
         if (!user.getUser_address().isEmpty())
             address.setText(user.getUser_address());
+        account.setText(user.getAccount());
     }
 }

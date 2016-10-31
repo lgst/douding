@@ -211,9 +211,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE};
         new ShareAction(getActivity())
                 .setDisplayList(displaylist)
-                .withText("分享测试")
+                .withText("让智慧照进现实、让创意成为产品。汇众智，共创造，让世界爱上中国制造！")
                 .withTitle("豆丁工匠")
-//                .withTargetUrl("")
+                .withTargetUrl("http://www.51douding.com/NewVersion/douding.apk")
                 .withMedia(
                         new UMImage(getActivity(), R.drawable.sina_web_default))
                 .setListenerList(new UMShareListener() {

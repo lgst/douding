@@ -53,6 +53,17 @@
                 style="@style/UserInfoLinerLayout">
                 <TextView
                     style="@style/UserInfoNames"
+                    android:text="@string/user_name"/>
+                <TextView
+                    android:id="@+id/account"
+                    style="@style/UserInfoValues"/>
+            </LinearLayout>
+            <View style="@style/LineGrey1px"
+                  android:layout_marginLeft="16dp"/>
+            <LinearLayout
+                style="@style/UserInfoLinerLayout">
+                <TextView
+                    style="@style/UserInfoNames"
                     android:text="@string/name"/>
                 <TextView
                     android:id="@+id/name"

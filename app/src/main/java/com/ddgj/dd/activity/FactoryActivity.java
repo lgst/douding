@@ -18,6 +18,7 @@ import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -251,8 +252,8 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
                         }
                     });
                 } else {
-                    String id = facProOriginality.get(i-1).getOriginality_id();
-                    final  String title = facProOriginality.get(i-1).getOriginality_name();
+                    String id = facProOriginality.get(i - 1).getOriginality_id();
+                    final String title = facProOriginality.get(i - 1).getOriginality_name();
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("client_side", "app");
                     params.put("originality_id", id);
@@ -266,7 +267,7 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
                         public void onResponse(String response, int id) {
                             ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                             String url = responseInfo.getData();
-                            startActivity(new Intent(FactoryActivity.this, WebActivity.class )
+                            startActivity(new Intent(FactoryActivity.this, WebActivity.class)
                                     .putExtra("url", HOST + "/" + url)
                                     .putExtra("title", title));
 
@@ -333,4 +334,12 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
         initDatas(LOAD, classes);
     }
 
+    public void addClick(View v) {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(this, PublishProductActivity.class));
+        else{
+            showToastShort("请先登录！");
+            startActivity(new Intent(this,LoginActivity.class).putExtra("flag",LoginActivity.BACK));
+        }
+    }
 }

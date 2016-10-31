@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/view"
@@ -10,9 +10,11 @@
         <ImageView
             android:id="@+id/backup"
             style="@style/TitleBarImageTheme"
-            android:src="@mipmap/ic_blue_back" />
-
-     />
+            android:src="@mipmap/ic_blue_back"/>
+        />
+        <TextView style="@style/TitleBarTextTheme"
+                  android:textColor="@color/colorPrimary"
+                  android:text="@string/comment"/>
 
     </RelativeLayout>
 
@@ -20,29 +22,35 @@
         android:id="@+id/pull_to_refresh_listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/view"
         android:layout_marginBottom="48dp"
-        android:layout_below="@+id/view">
+        android:background="@color/white">
 
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/grey_lightE"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <EditText
             android:id="@+id/et_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5" />
+            android:layout_weight="1"
+            android:hint="@string/comment"
+            android:textSize="14dp"/>
 
         <ImageView
             android:id="@+id/send_comment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:src="@mipmap/ic_send_grey600_24dp" />
+            android:padding="8dp"
+            android:src="@mipmap/ic_send_grey600_24dp"/>
     </LinearLayout>
 </RelativeLayout>

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +14,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
 import com.ddgj.dd.activity.PlateDetailsActivity;
-import com.ddgj.dd.activity.PublishBBSActivity;
 import com.ddgj.dd.bean.PostBean;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.view.CircleImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -56,9 +56,8 @@ public class PlateFragment extends BaseFragment {
      */
     private static final int UPDATE = 2;
     private int mPageNumber = 1;
-    private List<PostBean> postBeanList=new ArrayList<PostBean>();
+    private List<PostBean> postBeanList = new ArrayList<PostBean>();
     private PullToRefreshListView pullToRefreshView;
-    private FloatingActionButton fab;
     private PlateAdapter plateAdapter;
 
     @Nullable
@@ -77,7 +76,7 @@ public class PlateFragment extends BaseFragment {
 
     }
 
-    private void initdatas(int flag) {
+    private void initdatas(final int flag) {
 
         Map<String, String> params = new HashMap<String, String>();
 
@@ -88,53 +87,52 @@ public class PlateFragment extends BaseFragment {
             @Override
             public void onError(Call call, Exception e, int id) {
                 pullToRefreshView.onRefreshComplete();
+                Log.e("lgst", "onError: " + e.getMessage());
             }
 
             @Override
             public void onResponse(String response, int id) {
 
-                Log.e("shuju",response);
+                Log.e("shuju", response);
                 JSONObject jo = null;
                 try {
                     jo = new JSONObject(response);
                     int status = jo.getInt("status");
-                    if (status==STATUS_SUCCESS){
+                    if (status == STATUS_SUCCESS) {
+                        if (LOAD == flag) {
+                            postBeanList.clear();
+                        }
                         JSONArray ja = jo.getJSONArray("data");
-
                         for (int i = 0; i < ja.length(); i++) {
                             String string = ja.getJSONObject(i).toString();
                             PostBean postBean = new Gson().fromJson(string, PostBean.class);
                             postBeanList.add(postBean);
                         }
-
+                        if (LOAD == flag) {
+                            plateAdapter = new PlateAdapter(getActivity());
+                            pullToRefreshView.setAdapter(plateAdapter);
+                        }
+                        if (plateAdapter != null)
+                            plateAdapter.notifyDataSetChanged();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    pullToRefreshView.onRefreshComplete();
                 }
-                plateAdapter.notifyDataSetChanged();
-                pullToRefreshView.onRefreshComplete();
             }
         });
     }
 
     @Override
     protected void initView() {
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PublishBBSActivity.class);
-                startActivityForResult(intent,1);
-            }
-        });
         pullToRefreshView = (PullToRefreshListView) findViewById(R.id.pull_to_refresh_listview);
         pullToRefreshView.setMode(PullToRefreshBase.Mode.BOTH);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                postBeanList.clear();
-                mPageNumber=1;
+//                postBeanList.clear();
+                mPageNumber = 1;
                 initdatas(LOAD);
             }
 
@@ -151,7 +149,7 @@ public class PlateFragment extends BaseFragment {
         pullToRefreshView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), PlateDetailsActivity.class).putExtra("post_id",postBeanList.get(i-1).getId());
+                Intent intent = new Intent(getActivity(), PlateDetailsActivity.class).putExtra("post_id", postBeanList.get(i - 1).getId());
                 startActivity(intent);
             }
         });
@@ -159,14 +157,13 @@ public class PlateFragment extends BaseFragment {
     }
 
 
-
-
-    private class PlateAdapter extends BaseAdapter{
+    private class PlateAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
 
         public PlateAdapter(Context context) {
             this.mInflater = LayoutInflater.from(context);
         }
+
         @Override
         public int getCount() {
             return postBeanList.size();
@@ -186,17 +183,18 @@ public class PlateFragment extends BaseFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
-                holder=new ViewHolder();
+                holder = new ViewHolder();
                 convertView = mInflater.inflate(R.layout.plate_all_list, null);
-                holder.username = (TextView)convertView.findViewById(R.id.username);
-                holder.info = (TextView)convertView.findViewById(R.id.info);
-                holder.time = (TextView)convertView.findViewById(R.id.time);
-                holder.browseNumber = (TextView)convertView.findViewById(R.id.browse_number);
-                holder.commentNumber = (TextView)convertView.findViewById(R.id.comment_number);
+                holder.username = (TextView) convertView.findViewById(R.id.username);
+                holder.info = (TextView) convertView.findViewById(R.id.info);
+                holder.time = (TextView) convertView.findViewById(R.id.time);
+                holder.browseNumber = (TextView) convertView.findViewById(R.id.browse_number);
+                holder.commentNumber = (TextView) convertView.findViewById(R.id.comment_number);
+                holder.icon = (CircleImageView) convertView.findViewById(R.id.icon);
 
                 convertView.setTag(holder);
-            }else {
-                holder = (ViewHolder)convertView.getTag();
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
 
             holder.username.setText(postBeanList.get(position).getAccount());
@@ -204,10 +202,13 @@ public class PlateFragment extends BaseFragment {
             holder.time.setText(StringUtils.getDate(postBeanList.get(position).getSend_date()));
             holder.browseNumber.setText(String.valueOf(postBeanList.get(position).getViews()));
             holder.commentNumber.setText(String.valueOf(postBeanList.get(position).getComment_amount()));
-
+            Glide.with(getContext())
+                    .load(NetWorkInterface.HOST + "/" + postBeanList.get(position).getHead_picture())
+                    .into(holder.icon);
             return convertView;
         }
     }
+
     //提取出来方便点
     public final class ViewHolder {
         public TextView username;
@@ -215,17 +216,16 @@ public class PlateFragment extends BaseFragment {
         public TextView time;
         public TextView browseNumber;
         public TextView commentNumber;
+        public CircleImageView icon;
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==((BaseActivity)getActivity()).SUCCESS){
+        if (resultCode == ((BaseActivity) getActivity()).SUCCESS) {
             postBeanList.clear();
             initdatas(LOAD);
-
-
         }
     }
 }

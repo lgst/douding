@@ -100,7 +100,7 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
                 // set item background
                 deleteItem.setBackground(new ColorDrawable(getResources().getColor(R.color.grey_lightE)));
                 // set item width
-                deleteItem.setWidth(DensityUtil.dp2px(getContext(), 90));
+                deleteItem.setWidth(DensityUtil.dip2px(getContext(), 90));
                 // set a icon
                 deleteItem.setIcon(R.mipmap.ic_delete_grey600_48dp);
                 // add to menu

@@ -109,7 +109,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 builder.append(editList.get(i).inputStr);
             } else if ( editList.get(i).imagePath!= null) {
                 picList.add(editList.get(i).imagePath);
-                postContentBean = new PostContentBean(i,"这里是图片");
+                postContentBean = new PostContentBean(i,"**\n\n这里是图片");
             }
             postContentList.add(postContentBean);
         }

@@ -1,11 +1,13 @@
 package com.ddgj.dd.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
@@ -13,8 +15,15 @@ import com.ddgj.dd.bean.Patent;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/13.
@@ -46,7 +55,7 @@ public class PatentPLVAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         ViewHolder vh = null;
         if (convertView == null) {
             convertView = act.getLayoutInflater().inflate(R.layout.item_patent, null);
@@ -66,7 +75,7 @@ public class PatentPLVAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        Patent patent = patents.get(position);
+        final Patent patent = patents.get(position);
 
         String userIcon = patent.getHead_picture();
         if(patent.getHead_picture().equals("head_picture"))
@@ -80,10 +89,42 @@ public class PatentPLVAdapter extends BaseAdapter {
         vh.type.setText(types[Integer.parseInt(patent.getPatent_type())]);
         vh.content.setText(patent.getPatent_details());
         setImages(patent, vh);
-        vh.approve.setText(String.valueOf((int) (Math.random() * 100)));
+        vh.approve.setText(patent.getP_praise_amount());
+        vh.approve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = patent.getPatent_id();
+                supportClick(v, id);
+            }
+        });
         vh.browse.setText(patent.getP_browse_amount());
         vh.date.setText(StringUtils.getDate(patent.getP_creation_time()));
         return convertView;
+    }
+    public void supportClick(final View v, String id) {
+        OkHttpUtils.get().url(NetWorkInterface.PATENT_SUPPORT + "?patent_id=" + id)
+                .build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e("lgst", "onError: 专利点赞失败" + e.getMessage());
+                Toast.makeText(v.getContext(), v.getContext().getResources().getString(R.string.network_is_not_connection), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+//                Log.i("lgst", "专利点赞结果：onResponse: " + response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    if (jo.getInt("status") == 0) {
+                        Toast.makeText(v.getContext(), "点赞成功！", Toast.LENGTH_SHORT).show();
+                        TextView tv = (TextView) v;
+                        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString())+1));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**折*/

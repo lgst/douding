@@ -1,11 +1,13 @@
 package com.ddgj.dd.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
@@ -13,8 +15,15 @@ import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/13.
@@ -64,7 +73,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        Originality originality = originalitys.get(position);
+        final Originality originality = originalitys.get(position);
         //用户图像
         String userIcon = originality.getHead_picture();
         if (userIcon == null)
@@ -84,10 +93,43 @@ public class OriginalityPLVAdapter extends BaseAdapter {
         vh.content.setText(originality.getOriginality_details());
         //tu
         showImages(act, originality, vh);
-        vh.approve.setText(String.valueOf((int) (Math.random() * 100)));
+        vh.approve.setText(originality.getO_praise_amount());
+        vh.approve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String id = originality.getOriginality_id();
+                supportClick(v, id);
+            }
+        });
         vh.browse.setText(originality.getO_browse_amount());
         vh.date.setText(StringUtils.getDate(originality.getO_creation_time()));
         return convertView;
+    }
+
+    public void supportClick(final View v, String id) {
+        OkHttpUtils.get().url(NetWorkInterface.ORIGINALITY_SUPPORT + "?originality_id=" + id)
+                .build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e("lgst", "onError: 创意点赞失败" + e.getMessage());
+                Toast.makeText(v.getContext(), v.getContext().getResources().getString(R.string.network_is_not_connection), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i("lgst", "创意点赞结果：onResponse: " + response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    if (jo.getInt("status") == 0) {
+                        Toast.makeText(v.getContext(), "点赞成功！", Toast.LENGTH_SHORT).show();
+                        TextView tv = (TextView) v;
+                        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString())+1));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void showImages(Activity act, Originality originality, ViewHolder vh) {

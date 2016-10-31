@@ -1,12 +1,13 @@
 package com.ddgj.dd.activity;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -174,7 +175,8 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.backup:
-                PublishCreativeActivity.this.finish();
+//                PublishCreativeActivity.this.finish();
+                showDailog();
                 break;
             case R.id.pick_pic:
                 //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
@@ -207,16 +209,16 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             params.put("o_user_contact", String.valueOf(sEditUserPhone));
             params.put("o_user_email", String.valueOf(sEditUserEmail));
             params.put("o_secrecy_type", String.valueOf(sModeSpinner));
-            params.put("o_originality_address", "o_originality_address");
+//            params.put("o_originality_address", "o_originality_address");
             params.put("o_account_id", account_id);
-            params.put("o_nickname", "o_nickname");
-            params.put("head_picture", "head_picture");
+//            params.put("o_nickname", "o_nickname");
+//            params.put("head_picture", "head_picture");
             params.put("originality_differentiate", "0");
 
 
             //file = new File(path.get(0));
-             //file = FileUtil.scal(Uri.parse(path.get(0)));
-             //file1 = FileUtil.scal(Uri.parse(path.get(1)));
+            //file = FileUtil.scal(Uri.parse(path.get(0)));
+            //file1 = FileUtil.scal(Uri.parse(path.get(1)));
             File cacheDir = getCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
@@ -231,21 +233,21 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             post.url(NetWorkInterface.ADD_IDEA)
                     .params(params).build()
                     .execute(new StringCallback() {
-                @Override
-                public void onError(okhttp3.Call call, Exception e, int id) {
-                    Log.e("fabu", e.getMessage() + " 失败id:" + id);
-                    showToastLong("失败");
-                    dialog.dismiss();
-                }
+                        @Override
+                        public void onError(okhttp3.Call call, Exception e, int id) {
+                            Log.e("fabu", e.getMessage() + " 失败id:" + id);
+                            showToastLong("失败");
+                            dialog.dismiss();
+                        }
 
-                @Override
-                public void onResponse(String response, int id) {
-                    Log.e("fabu", " 成功id:" + id);
-                    showToastLong("成功");
-                    PublishCreativeActivity.this.finish();
-                    dialog.dismiss();
-                }
-            });
+                        @Override
+                        public void onResponse(String response, int id) {
+                            Log.e("fabu", " 成功id:" + id);
+                            showToastLong("成功");
+                            PublishCreativeActivity.this.finish();
+                            dialog.dismiss();
+                        }
+                    });
 
         }
     }
@@ -314,7 +316,7 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
                 for (String p : path) {
-                    int px = DensityUtil.dp2px(this, 60);
+                    int px = DensityUtil.dip2px(this, 60);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
                     ImageView imageView = new ImageView(this);
                     imageView.setLayoutParams(layoutParams);
@@ -354,5 +356,62 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
             default:
                 break;
         }
+    }
+
+    static final String[] PERMISSION = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
+            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
+//            Manifest.permission.READ_PHONE_STATE,        //读取设备信息
+//            Manifest.permission.ACCESS_COARSE_LOCATION, //百度定位
+//            Manifest.permission.ACCESS_FINE_LOCATION,
+    };
+
+    @Override
+    protected void process(Bundle savedInstanceState) {
+        super.process(savedInstanceState);
+
+        //如果有什么需要初始化的，在这里写就好～
+
+    }
+
+    @Override
+    public void getAllGrantedPermission() {
+        //当获取到所需权限后，进行相关业务操作
+
+        super.getAllGrantedPermission();
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return PERMISSION;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showDailog();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showDailog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setContentText("")
+                .setTitleText("是否放弃已编辑内容？")
+                .setConfirmText("放弃")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                })
+                .setCancelText("继续")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

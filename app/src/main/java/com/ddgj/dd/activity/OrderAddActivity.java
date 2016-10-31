@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
@@ -65,18 +67,21 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
     private String sOrderUserName;
     private String sOrderUserPhone;
     private String sOrderUserEmail;
+    private String addr;
     private String sMadeType;
     private File file;
     private RadioButton personalMade;
     private RadioButton entrustMade;
     private boolean personalMadeChecked;
     private boolean entrustMadeChecked;
-    private EditText orderUserAddress;
+    private TextView orderUserCity;
     private Spinner madeState;
     private String sMadeStateSpinner;
     private String sOrderUserAddress;
     private LinearLayout addImageGroup;
     private SweetAlertDialog dialog;
+    private EditText orderUserAddress;
+    private String city;
 
 
     @Override
@@ -127,7 +132,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         orderUserPhone.setOnFocusChangeListener(this);
         orderUserEmail = (EditText) findViewById(R.id.order_user_email);
         orderUserEmail.setOnFocusChangeListener(this);
-        orderUserAddress = (EditText) findViewById(R.id.order_user_address);
+        orderUserCity = (TextView) findViewById(R.id.order_user_city);
         madeType = (Spinner) findViewById(R.id.made_type_spinner);
         madeState = (Spinner) findViewById(R.id.made_state);
         pickPic = (Button) findViewById(R.id.pick_pic);
@@ -135,6 +140,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         commitOrder = (Button) findViewById(R.id.commit_order);
         commitOrder.setOnClickListener(this);
         selectPic = (ImageView) findViewById(R.id.select_pic);
+        orderUserAddress = (EditText) findViewById(R.id.order_user_address);
 
 
         //添加图片
@@ -145,7 +151,8 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backup:
-                finish();
+//                finish();
+                showDailog();
                 break;
             case R.id.pick_pic:
                 //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
@@ -160,6 +167,11 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
+
+    public void addrClick(View v) {
+        startActivityForResult(new Intent(this, CitySelecterActivity.class), 100);
+    }
+
 
     /**
      * 提交定制信息
@@ -177,7 +189,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 sOrderUserPhone,
                 sOrderUserEmail,
                 sOrderUserAddress,
-                sMadeType)) {
+                sMadeType,
+                addr,
+                city)) {
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
             params.put("made_name", String.valueOf(sProductName));
@@ -192,10 +206,11 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             params.put("made_u_name", sOrderUserName);
             params.put("made_u_contact", String.valueOf(sOrderUserPhone));
             params.put("made_u_email", String.valueOf(sOrderUserEmail));
-            params.put("made_u_address", String.valueOf(sOrderUserAddress));
-            params.put("made_state", sMadeStateSpinner);
+            params.put("made_u_address", addr);
+            params.put("made_state", "0");
             params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
-            params.put("head_picture", "head_picture");
+            params.put("head_picture", "");
+            params.put("city",city);
             params.put("made_differentiate", "0");
 
 
@@ -206,7 +221,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             File cacheDir = getCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
-            if (path!=null){
+            if (path != null) {
                 for (int i = 0; i < path.size(); i++) {
                     file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
                     String s = "made_picture";
@@ -251,31 +266,27 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         sOrderUserName = orderUserName.getText().toString().trim();
         sOrderUserPhone = orderUserPhone.getText().toString().trim();
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
-        sOrderUserAddress = orderUserAddress.getText().toString().trim();
+        sOrderUserAddress = orderUserCity.getText().toString().trim();
+        addr = orderUserAddress.getText().toString().trim();
+        city = orderUserCity.getText().toString().trim();
         switch ((String) this.madeType.getSelectedItem()) {
             case "家具订制":
-                sMadeType = "0";
-                break;
-            case "服装订制":
                 sMadeType = "1";
                 break;
-            case "礼品订制":
+            case "服装订制":
                 sMadeType = "2";
                 break;
-            case "机械产品":
+            case "礼品订制":
                 sMadeType = "3";
                 break;
-            case "电子产品":
+            case "机械产品":
                 sMadeType = "4";
                 break;
-            case "其他":
+            case "电子产品":
                 sMadeType = "5";
                 break;
-            case "订制工厂":
+            case "其他":
                 sMadeType = "6";
-                break;
-            case "发布订制":
-                sMadeType = "7";
                 break;
         }
     }
@@ -306,7 +317,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                           String userphone6,
                           String userphone9,
                           String userphone7,
-                          String userphone8) {
+                          String userphone8,
+                          String addr,
+                          String city) {
         if (ideaname.isEmpty() || ideaintro.isEmpty()
                 || idrainfor.isEmpty()
                 || username.isEmpty()
@@ -318,7 +331,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 || userphone6.isEmpty()
                 || userphone7.isEmpty()
                 || userphone9.isEmpty()
-                || userphone8.isEmpty()) {
+                || userphone8.isEmpty()
+                || addr.isEmpty()
+                || city.isEmpty()) {
             showToastShort("请输入完成信息");
             return false;
         }
@@ -334,7 +349,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
                 for (String p : path) {
-                    int px = DensityUtil.dp2px(this, 60);
+                    int px = DensityUtil.dip2px(this, 60);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
                     ImageView imageView = new ImageView(this);
                     imageView.setLayoutParams(layoutParams);
@@ -344,6 +359,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 }
 
             }
+        }
+        if (requestCode == 100 && resultCode == SUCCESS) {
+            orderUserCity.setText(data.getStringExtra("city"));
         }
     }
 
@@ -357,7 +375,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 } else {
                     // 此处为失去焦点时的处理内容
                     sOrderUserEmail = orderUserEmail.getText().toString().trim();
-                    if (!TextCheck.checkEmail(sOrderUserEmail)){
+                    if (!TextCheck.checkEmail(sOrderUserEmail)) {
                         showToastShort("邮箱格式不正确");
                     }
                 }
@@ -366,12 +384,41 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 if (b) {
                 } else {
                     sOrderUserPhone = orderUserPhone.getText().toString().trim();
-                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)){
+                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
                         showToastShort("手机号码格式不正确");
                     }
                 }
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showDailog();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showDailog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setContentText("")
+                .setTitleText("是否放弃对用户信息的修改？")
+                .setConfirmText("放弃")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                })
+                .setCancelText("继续")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

@@ -13,10 +13,7 @@
 
         <TextView
             android:id="@+id/post_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            style="@style/TitleBarTextTheme"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -34,30 +31,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/post_sub_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="22sp"/>
+                    android:layout_marginTop="8dp"
+                    android:textSize="16dp"/>
 
-                <TextView
-                    android:id="@+id/post_publish_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <View style="@style/LineGrey1px"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,9 +60,9 @@
                 <com.ddgj.dd.view.CircleImageView
                     android:id="@+id/head_pic"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@mipmap/ic_account_circle_grey600_24dp"
                     app:border_color="@color/white"
                     app:border_width="1dp"/>
 
@@ -91,69 +83,44 @@
                     android:src="@mipmap/ic_textsms_grey600_24dp"
                     android:visibility="gone"/>
             </LinearLayout>
+            <TextView
+                android:id="@+id/post_publish_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@color/black"/>
 
             <LinearLayout
                 android:id="@+id/post_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/post_content_tv"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View style="@style/LineGrey1px"/>
         </LinearLayout>
 
     </ScrollView>
     <View
         style="@style/LineGrey1px"
-        android:layout_height="1.5dp"
         android:layout_above="@+id/bottom"/>
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:text=""/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:text=""/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:text=""/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:text=""/>
-
+        android:layout_alignParentBottom="true"
+        android:gravity="right">
         <TextView
             android:id="@+id/tv_comment"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:drawableTop="@mipmap/ic_comment"
             android:gravity="center"
             android:text="评论"

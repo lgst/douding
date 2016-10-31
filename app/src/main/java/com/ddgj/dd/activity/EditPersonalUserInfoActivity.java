@@ -100,8 +100,8 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
         address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(EditPersonalUserInfoActivity.this, CitySelectorActivity.class), 1);
-                overridePendingTransition(R.anim.slide_in_from_bottom,0);
+                startActivityForResult(new Intent(EditPersonalUserInfoActivity.this, CitySelecterActivity.class), 1);
+                overridePendingTransition(R.anim.slide_in_from_bottom, 0);
             }
         });
         //设置年龄
@@ -164,6 +164,10 @@ public class EditPersonalUserInfoActivity extends BaseActivity implements TextWa
         final String addressStr = address.getText().toString().trim();
         final String ageStr = (String) age.getTag();
 
+        if (nickNameStr.length() >= 12) {
+            showToastShort("昵称最长不超过12个字符！");
+            return;
+        }
         OkHttpClient client = new OkHttpClient();
         FormEncodingBuilder builder = new FormEncodingBuilder()
                 .add("account_type", user.getAccount_type())

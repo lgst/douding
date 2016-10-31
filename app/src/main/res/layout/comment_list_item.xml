@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:padding="8dp"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:padding="8dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,6 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_margin="5dp"
             app:border_color="@color/white"
         />
         <TextView
@@ -21,8 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:padding="5dp"
             android:text="发布者"/>
         <ImageView android:id="@+id/send_message"
                    android:layout_width="40dp"
@@ -37,16 +36,11 @@
         android:id="@+id/comment_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/sItemIcon"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dip"
-        android:layout_toRightOf="@+id/sItemIcon"
+        android:layout_marginLeft="48dip"
         android:gravity="center_vertical"
-        android:singleLine="true"
         android:text="最新自动送飞机"
-        android:textColor="@color/all_bg_color"
-        android:textSize="20.0sp"
-        android:textStyle="bold"/>
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -58,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="28sp"
             android:gravity="center"
-            android:paddingLeft="5dp"
+            android:paddingLeft="48dp"
             android:text="2016-3-6"/>
 
     </RelativeLayout>

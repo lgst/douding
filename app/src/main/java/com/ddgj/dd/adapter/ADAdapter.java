@@ -44,8 +44,8 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
         final ADBean ad = ads.get(position);
         Glide.with(act)
                 .load(HOST + "/" + ad.getPicture())
-                .placeholder(R.mipmap.ic_image_white_48dp)
-                .error(R.mipmap.ic_image_white_48dp)
+                .placeholder(R.mipmap.ic_ad_loading_bg)
+                .error(R.mipmap.ic_ad_loading_bg)
                 .thumbnail(0.1f)
                 .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {

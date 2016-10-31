@@ -62,7 +62,6 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_plate_deatils);
         chat = (ImageView) findViewById(R.id.chat);
         tvComment = (TextView) findViewById(R.id.tv_comment);
-        tvComment.setOnClickListener(this);
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         postTitle = (TextView) findViewById(R.id.post_title);
@@ -92,8 +91,6 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                     public void onResponse(String response, int id) {
                         Log.e("fabubbs", " 成功id:" + id);
 //                        showToastLong("成功");
-                        Log.e("detail", response);
-                        Log.e("detail", response);
                         Log.e("detail", response);
                         JSONObject jo = null;
                         try {
@@ -125,19 +122,17 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
             postTitle.setText(postBean.getTitle());
             postSubTitle.setText(postBean.getTitle());
             userAmount.setText(postBean.getAccount());
-            Glide.with(this)
-                    .load(NetWorkInterface.HOST + "/" + postBean.getHead_picture())
-                    .error(R.mipmap.ic_crop_original_grey600_48dp)
-                    .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
-                    .thumbnail(0.1f)
-                    .into(headPic);
             postContent = (LinearLayout) findViewById(R.id.post_content);
             postContentTv = (TextView) findViewById(R.id.post_content_tv);
-
-
+            tvComment.setOnClickListener(this);
+            Log.e(TAG, "initView: " + NetWorkInterface.HOST + "/" + postBean.getHead_picture());
+            Glide.with(PlateDetailsActivity.this)
+                    .load(NetWorkInterface.HOST + "/" + postBean.getHead_picture())
+                    .into(headPic);
             Log.e("toJson", postBean.getCordcontent());
 
-            ArrayList<PostContentBean> beanArrayList = new Gson().fromJson(postBean.getCordcontent(), new TypeToken<ArrayList<PostContentBean>>() {
+            ArrayList<PostContentBean> beanArrayList = new Gson()
+                    .fromJson(postBean.getCordcontent(), new TypeToken<ArrayList<PostContentBean>>() {
             }.getType());
             for (int i = 0; i < beanArrayList.size(); i++) {
                 PostContentBean postContentBean = beanArrayList.get(i);
@@ -167,10 +162,10 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
         for (int i = 0; i < beanArrayList.size(); i++) {
             PostContentBean postContentBean = beanArrayList.get(i);
             String content = postContentBean.getContent();
-            if (content.equals("这里是图片")) {
+            if (content.startsWith("**\n\n这里是图片")) {
 
                 Log.e("toJson", "这里是图片" + imgs[j]);
-                //int px = DensityUtil.dp2px(this, 60);
+                //int px = DensityUtil.dip2px(this, 60);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 ImageView imageView = new ImageView(this);
                 imageView.setLayoutParams(layoutParams);
@@ -182,7 +177,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                         .into(imageView);
                 j++;
             } else {
-                int px = DensityUtil.dp2px(this, 60);
+                int px = DensityUtil.dip2px(this, 60);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 TextView textView = new TextView(this);
                 textView.setLayoutParams(layoutParams);
@@ -204,7 +199,12 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.tv_comment:
-                startActivity(new Intent(this, BBSCommentActivity.class).putExtra("PostID", postBean.getId()));
+                if (UserHelper.getInstance().isLogined()) {
+                    startActivity(new Intent(this, BBSCommentActivity.class).putExtra("PostID", postBean.getId()));
+                } else {
+                    showToastShort("请先登录！");
+                    startActivity(new Intent(this, LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+                }
                 break;
             default:
                 break;

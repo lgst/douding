@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -30,6 +29,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.bean.User;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.PinchImageView;
@@ -42,6 +42,9 @@ import com.umeng.socialize.media.UMImage;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,14 +54,14 @@ import okhttp3.Call;
 public class WebActivity extends BaseActivity implements Animation.AnimationListener {
     private RelativeLayout mContainer;
     private WebView mWebView;
-    private android.widget.TextView mTitle;
+    private TextView mTitle;
     private String mAccount;
     private String mUrl;
     private String mContentText;
     private PinchImageView mPiv;
     private EditText commentEt;
     private LinearLayout commentContainerLL;
-    private FloatingActionButton fab;
+    //    private FloatingActionButton fab;
     private InputMethodManager imm;
     private boolean isShow = false;
 
@@ -91,7 +94,7 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                view.loadUrl("file:///android_asset/error.html");
+                mWebView.loadUrl("file:///android_asset/error.html");
             }
         });
         WebSettings webSettings = mWebView.getSettings();
@@ -119,55 +122,55 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         mTitle.setText(getIntent().getStringExtra("title"));
         commentEt = (EditText) findViewById(R.id.comment_content);
         commentContainerLL = (LinearLayout) findViewById(R.id.comment_container);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab = (FloatingActionButton) findViewById(fab);
 //        fab.setOnTouchListener(this);
         if (getIntent().getIntExtra("classes", -1) != -1) {
             if (getIntent().getIntExtra("classes", -1) == 0)
-                fab.setVisibility(View.VISIBLE);
+                commentContainerLL.setVisibility(View.VISIBLE);
         }
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!UserHelper.getInstance().isLogined()) {
-                    showToastShort("请您登录后进行评论！");
-                    startActivity(new Intent(WebActivity.this, LoginActivity.class).putExtra("flag", LoginActivity.BACK));
-                    return;
-                }
-                if (!isShow) {
-                    imm.showSoftInput(commentEt, InputMethodManager.SHOW_FORCED);
-                    isShow = !isShow;
-                } else {
-                    imm.hideSoftInputFromWindow(commentEt.getWindowToken(), 0); //强制隐藏键盘
-                    isShow = !isShow;
-                }
-                if (commentContainerLL.getVisibility() == View.VISIBLE) {//隐藏
-                    commentContainerLL.clearAnimation();
-                    Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_out_to_bottom);
-                    animation.setAnimationListener(WebActivity.this);
-                    commentContainerLL.setAnimation(animation);
-                } else {//显示
-                    commentContainerLL.clearAnimation();
-                    Animation anim = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_in_from_bottom);
-                    commentContainerLL.setAnimation(anim);
-                    anim.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            commentContainerLL.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                }
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!UserHelper.getInstance().isLogined()) {
+//                    showToastShort("请您登录后进行评论！");
+//                    startActivity(new Intent(WebActivity.this, LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+//                    return;
+//                }
+//                if (!isShow) {
+//                    imm.showSoftInput(commentEt, InputMethodManager.SHOW_FORCED);
+//                    isShow = !isShow;
+//                } else {
+//                    imm.hideSoftInputFromWindow(commentEt.getWindowToken(), 0); //强制隐藏键盘
+//                    isShow = !isShow;
+//                }
+//                if (commentContainerLL.getVisibility() == View.VISIBLE) {//隐藏
+//                    commentContainerLL.clearAnimation();
+//                    Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_out_to_bottom);
+//                    animation.setAnimationListener(WebActivity.this);
+//                    commentContainerLL.setAnimation(animation);
+//                } else {//显示
+//                    commentContainerLL.clearAnimation();
+//                    Animation anim = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_in_from_bottom);
+//                    commentContainerLL.setAnimation(anim);
+//                    anim.setAnimationListener(new Animation.AnimationListener() {
+//                        @Override
+//                        public void onAnimationStart(Animation animation) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onAnimationEnd(Animation animation) {
+//                            commentContainerLL.setVisibility(View.VISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void onAnimationRepeat(Animation animation) {
+//
+//                        }
+//                    });
+//                }
+//            }
+//        });
 //
         mContainer = (RelativeLayout) findViewById(R.id.content_container);
         mWebView = new WebView(getApplicationContext());
@@ -191,7 +194,7 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
                         mPiv.setImageResource(R.drawable.shape_alpha_img);
                         v.setVisibility(View.GONE);
                         if (getIntent().getIntExtra("classes", -1) == 0)
-                            fab.setVisibility(View.VISIBLE);
+                            commentContainerLL.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -314,8 +317,44 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
 //        commentContainerLL.setAnimation(animation);
 //        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public void commentClick(View v) {
+        User user = UserHelper.getInstance().getUser();
+        if (user == null) {
+            showToastShort("请登录后，再评论！");
+            startActivity(new Intent(this, LoginActivity.class)
+                    .putExtra("flag", LoginActivity.BACK));
+            return;
+        }
         startActivity(new Intent(this, CommentListActivity.class)
-                .putExtra("topic_id", getIntent().getStringExtra("id")));
+                .putExtra("topic_id", getIntent().getStringExtra("id"))
+                .putExtra("classes", getIntent().getIntExtra("classes",-1)));
+    }
+
+    public void supportClick(View v) {
+        OkHttpUtils.get().url(NetWorkInterface.ORIGINALITY_SUPPORT + "?originality_id=" + getIntent().getStringExtra("id"))
+                .build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "onError: 创意点赞失败" + e.getMessage());
+                showToastNotNetWork();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i(TAG, "创意点赞结果：onResponse: " + response);
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(response);
+                    if (jo.getInt("status") == 0) {
+                        showToastShort("点赞成功！");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void sendCommentClick(View v) {
@@ -347,12 +386,6 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
                     Log.i(TAG, "onResponse: 评论成功！");
                     commentEt.setText(null);
                     showToastShort("评论成功！");
-//                    commentContainerLL.clearAnimation();
-//                    Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.slide_out_to_bottom);
-//                    animation.setAnimationListener(WebActivity.this);
-//                    commentContainerLL.setAnimation(animation);
-//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
                     showToastShort("评论失败，请稍后重试！");
                 }
@@ -391,7 +424,7 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
             super.handleMessage(msg);
             final String img = (String) msg.obj;
             mPiv.setVisibility(View.VISIBLE);
-            fab.setVisibility(View.INVISIBLE);
+//            fab.setVisibility(View.INVISIBLE);
             Animation animation = AnimationUtils.loadAnimation(WebActivity.this, R.anim.alpha);
             Glide.with(WebActivity.this).load(img).animate(R.anim.alpha).into(mPiv);
             mPiv.setAnimation(animation);

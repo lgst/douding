@@ -122,8 +122,6 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
                             bbsCommentBean = new Gson().fromJson(string, BBSCommentBean.class);
                             bbsCommentBeanList.add(bbsCommentBean);
                         }
-
-
                     }
 
                 } catch (JSONException e) {
@@ -169,7 +167,7 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
             OkHttpUtils.post().url(NetWorkInterface.ADD_COMMENT_BBS).params(params).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
-
+                    showToastShort("网络请求失败，请稍后重试！");
                 }
 
                 @Override
@@ -230,9 +228,6 @@ public class BBSCommentActivity extends BaseActivity implements View.OnClickList
             holder.time.setText(StringUtils.getDate(bbsCommentBeanList.get(position).getFollowcard_date()));
             Glide.with(BBSCommentActivity.this)
                     .load(NetWorkInterface.HOST + "/" + bbsCommentBeanList.get(position).getHead_picture())
-                    .error(R.mipmap.ic_crop_original_grey600_48dp)
-                    .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
-                    .thumbnail(0.1f)
                     .into(holder.headPic);
             if(UserHelper.getInstance().getUser()!=null)
             {

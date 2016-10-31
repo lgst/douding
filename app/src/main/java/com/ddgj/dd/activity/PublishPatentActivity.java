@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,7 +44,6 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
 
     private Spinner spinnerPatentType;
     private String sPatentTyoeSpinner;
-    private Spinner spinnerPatentCategory;
     private EditText patentName;
     private EditText patentIntro;
     private EditText patentInfor;
@@ -97,7 +97,6 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         commitPatent = (Button) findViewById(R.id.commit_patent);
         commitPatent.setOnClickListener(this);
         spinnerPatentType = (Spinner) findViewById(R.id.patent_type);
-        spinnerPatentCategory = (Spinner) findViewById(R.id.category_spinner);
         selectPic1 = (ImageView) findViewById(R.id.select_pic);
         allPic = (LinearLayout) findViewById(R.id.all_pic);
     }
@@ -114,20 +113,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     private void initTypeSpinner() {
         String[] mItems1 = getResources().getStringArray(R.array.originalityTypes);
         ArrayAdapter spinnerAdapter1 = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems1);
-        spinnerPatentCategory.setAdapter(spinnerAdapter1);
-        spinnerPatentCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sPatentCategory = String.valueOf(position);
-
-                //Toast.makeText(PublishCreativeActivity.this, "你点击的是:"+position, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        sPatentCategory = "0";
         String[] mItems = getResources().getStringArray(R.array.patent_type);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems);
         spinnerPatentType.setAdapter(spinnerAdapter);
@@ -151,7 +137,8 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backup:
-                PublishPatentActivity.this.finish();
+//                PublishPatentActivity.this.finish();
+                showDailog();
                 break;
             case R.id.pick_pic:
                 //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
@@ -174,7 +161,6 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
 
         if (check(sPatentName, sPatentIntro, sPatentInfor, sPatentUserName, sPatentUserEmail, sPatentUserPhone, sPatentNumber, sPatentEmpower, sPatentAssignmentPrice)) {
             dialog = showLoadingDialog("", "正在发送您的专利");
-
             Map<String, String> params = new HashMap<String, String>();
             params.put("patent_name", String.valueOf(sPatentName));
             params.put("patent_introduce", String.valueOf(sPatentIntro));
@@ -189,9 +175,10 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
             params.put("p_authorization_price", String.valueOf(sPatentEmpower));
             params.put("p_transfer_price", String.valueOf(sPatentAssignmentPrice));
             params.put("p_authorization_state", String.valueOf(checked));
-            params.put("p_account_id",UserHelper.getInstance().getUser().getAccount_id());
-            params.put("p_nickname", "o_nickname");
-            params.put("head_picture", "head_picture");
+            params.put("p_account_id", UserHelper.getInstance().getUser().getAccount_id());
+            params.put("p_nickname", "");
+            params.put("head_picture", "");
+//            params.put("");
 
 
             //file = new File(path.get(0));
@@ -279,7 +266,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 // 处理你自己的逻辑 ....
                 for (String p : path) {
                     System.out.println(p + "");
-                    int px = DensityUtil.dp2px(this, 60);
+                    int px = DensityUtil.dip2px(this, 60);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
                     ImageView imageView = new ImageView(this);
                     imageView.setLayoutParams(layoutParams);
@@ -302,7 +289,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 } else {
                     // 此处为失去焦点时的处理内容
                     sPatentUserEmail = patentUserEmail.getText().toString().trim();
-                    if (!TextCheck.checkEmail(sPatentUserEmail)){
+                    if (!TextCheck.checkEmail(sPatentUserEmail)) {
                         showToastShort("邮箱格式不正确");
                     }
                 }
@@ -311,7 +298,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 if (b) {
                 } else {
                     sPatentUserPhone = patentUserPhone.getText().toString().trim();
-                    if (!TextCheck.checkPhoneNumber(sPatentUserPhone)){
+                    if (!TextCheck.checkPhoneNumber(sPatentUserPhone)) {
                         showToastShort("手机号码格式不正确");
                     }
                 }
@@ -320,5 +307,33 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showDailog();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showDailog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setContentText("")
+                .setTitleText("是否放弃已编辑内容？")
+                .setConfirmText("放弃")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                })
+                .setCancelText("继续")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
+                .show();
+    }
 
 }

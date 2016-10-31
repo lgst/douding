@@ -3,11 +3,9 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
@@ -68,18 +67,17 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
     private String sOrderUserPhone;
     private String sOrderUserEmail;
     private String sMadeType;
+    private String sCity;
     private File file;
     private RadioButton personalMade;
     private RadioButton entrustMade;
     private boolean personalMadeChecked;
     private boolean entrustMadeChecked;
     private EditText orderUserAddress;
-    private Spinner madeState;
-    private String sMadeStateSpinner;
     private String sOrderUserAddress;
     private LinearLayout addImageGroup;
     private SweetAlertDialog dialog;
-
+    private TextView city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,29 +87,15 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         initMadeStateSpinner();
 
     }
+
     private void initMadeStateSpinner() {
         String[] mItems = getResources().getStringArray(R.array.made_state);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems);
-
-        madeState.setAdapter(spinnerAdapter);
-        madeState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sMadeStateSpinner = String.valueOf(position);
-
-                //Toast.makeText(PublishCreativeActivity.this, "你点击的是:"+position, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override
     public void initView() {
+        city = (TextView) findViewById(R.id.city);
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         productName = (EditText) findViewById(R.id.product_name);
@@ -129,15 +113,11 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         orderUserEmail.setOnFocusChangeListener(this);
         orderUserAddress = (EditText) findViewById(R.id.order_user_address);
         madeType = (Spinner) findViewById(R.id.made_type_spinner);
-        madeState = (Spinner) findViewById(R.id.made_state);
         pickPic = (Button) findViewById(R.id.pick_pic);
         pickPic.setOnClickListener(this);
         commitOrder = (Button) findViewById(R.id.commit_order);
         commitOrder.setOnClickListener(this);
         selectPic = (ImageView) findViewById(R.id.select_pic);
-
-
-
         //添加图片
         addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
     }
@@ -146,7 +126,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backup:
-                finish();
+                showDailog();
                 break;
             case R.id.pick_pic:
                 //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
@@ -162,23 +142,30 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    public void cityClick(View v) {
+        startActivityForResult(new Intent(this,CitySelecterActivity.class),100);
+    }
+
+
+
     /**
      * 提交定制信息
      */
     private void toCommitIdea() {
-        if (check( sProductName,
-                sOrderTitle ,
-                sOrderPrice ,
-                sOrderNumber ,
-                sOrderDate ,
+        if (check(sProductName,
+                sOrderTitle,
+                sOrderPrice,
+                sOrderNumber,
+                sOrderDate,
                 sOrderSpecifications,
-                sProductIntro ,
-                sProductInfor ,
-                sOrderUserName ,
+                sProductIntro,
+                sProductInfor,
+                sOrderUserName,
                 sOrderUserPhone,
-                sOrderUserEmail ,
-                sOrderUserAddress ,
-                sMadeType )) {
+                sOrderUserEmail,
+                sOrderUserAddress,
+                sMadeType,
+                sCity)) {
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
             params.put("made_name", String.valueOf(sProductName));
@@ -194,7 +181,8 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
             params.put("made_u_contact", String.valueOf(sOrderUserPhone));
             params.put("made_u_email", String.valueOf(sOrderUserEmail));
             params.put("made_u_address", String.valueOf(sOrderUserAddress));
-            params.put("made_state", sMadeStateSpinner);
+//            params.put("made_u_address", String.valueOf(sOrderUserAddress));
+            params.put("made_state", "0");
             params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
             params.put("head_picture", "head_picture");
             params.put("made_differentiate", "1");
@@ -207,7 +195,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
 
             File cacheDir = getCacheDir();
             PostFormBuilder post = OkHttpUtils.post();
-            if (path!=null) {
+            if (path != null) {
                 for (int i = 0; i < path.size(); i++) {
                     file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
                     String s = "made_picture";
@@ -253,6 +241,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         sOrderUserPhone = orderUserPhone.getText().toString().trim();
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
         sOrderUserAddress = orderUserAddress.getText().toString().trim();
+        sCity = city.getText().toString();
         switch ((String) this.madeType.getSelectedItem()) {
             case "家具订制":
                 sMadeType = "0";
@@ -286,6 +275,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * 檢查數據完成
+     *
      * @param ideaname
      * @param ideaintro
      * @param idrainfor
@@ -309,7 +299,8 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                           String userphone6,
                           String userphone9,
                           String userphone7,
-                          String userphone8) {
+                          String userphone8,
+                          String city) {
         if (ideaname.isEmpty() || ideaintro.isEmpty()
                 || idrainfor.isEmpty()
                 || username.isEmpty()
@@ -321,12 +312,14 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 || userphone6.isEmpty()
                 || userphone7.isEmpty()
                 || userphone9.isEmpty()
-                || userphone8.isEmpty()) {
+                || userphone8.isEmpty()
+                || city.isEmpty()) {
             showToastShort("请输入完成信息");
             return false;
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -336,7 +329,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
                 for (String p : path) {
-                    int px = DensityUtil.dp2px(this, 60);
+                    int px = DensityUtil.dip2px(this, 60);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
                     ImageView imageView = new ImageView(this);
                     imageView.setLayoutParams(layoutParams);
@@ -346,6 +339,11 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 }
 
             }
+        }
+        if(requestCode == 100 && resultCode == SUCCESS)
+        {
+            String city = data.getStringExtra("city");
+            this.city.setText(city);
         }
     }
 
@@ -359,7 +357,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     // 此处为失去焦点时的处理内容
                     sOrderUserEmail = orderUserEmail.getText().toString().trim();
-                    if (!TextCheck.checkEmail(sOrderUserEmail)){
+                    if (!TextCheck.checkEmail(sOrderUserEmail)) {
                         showToastShort("邮箱格式不正确");
                     }
                 }
@@ -368,12 +366,40 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 if (b) {
                 } else {
                     sOrderUserPhone = orderUserPhone.getText().toString().trim();
-                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)){
+                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
                         showToastShort("手机号码格式不正确");
                     }
                 }
             default:
                 break;
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showDailog();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showDailog() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setContentText("")
+                .setTitleText("是否放弃已编辑内容？")
+                .setConfirmText("放弃")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        finish();
+                    }
+                })
+                .setCancelText("继续")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

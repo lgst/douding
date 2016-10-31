@@ -3,6 +3,7 @@ package com.ddgj.dd;
 import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.ddgj.dd.db.DBManager;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.user.UserHelper;
 import com.hyphenate.chat.EMOptions;
@@ -20,6 +21,9 @@ import okhttp3.OkHttpClient;
  * Created by Administrator on 2016/9/28.
  */
 public class DDGJApplication extends Application {
+
+    private DBManager dbHelper;
+
     /**
      * 友盟分享集成
      */
@@ -37,6 +41,9 @@ public class DDGJApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //导入数据库
+        dbHelper = new DBManager(this);
+        dbHelper.openDatabase();
         UserHelper.getInstance().initUserInfo(this);//用户初始化
         FileUtil.getInstance().init(getApplicationContext());//目录初始化
         SDKInitializer.initialize(getApplicationContext());//百度地图初始化

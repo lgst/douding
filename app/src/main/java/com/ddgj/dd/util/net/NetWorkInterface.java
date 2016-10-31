@@ -134,6 +134,33 @@ public interface NetWorkInterface {
      * 获取代工产品
      */
     public static final String GET_ORDER_PRODUCT_DETAILS = HOST + "/foundryDetails.do";
+  /***
+     * 添加评论
+     *OriginalityDetails.do
+     */
+    public static final String ADD_COMMENT_BBS= HOST + "/addFollowCard.do";
+/***
+     * 获取所有评论
+     *OriginalityDetails.do
+     */
+    public static final String GET_ALL_COMMENT_BBS= HOST + "/findFollowCard.do";
+
+    /**
+     * 获取自己的订制接口
+     */
+    /**
+     * 添加评论接口<br>
+     * topic_id 主题id<br>
+     * topic_type 主题类型 0为个人创意评论 1为个人创意产品评论 2为私人订制产品评论 3为代工产品评论<br>
+     * c_content 评论内容<br>
+     * from_u_id 评论用户id
+     */
+    public static final String ADD_COMMENT = HOST + "/addComments.do";
+    /**
+     * 查看评论
+     */
+    public static final String GET_COMMENT = HOST + "/findComments.do";
+
     /**
      * 发表帖子
      */
@@ -150,37 +177,30 @@ public interface NetWorkInterface {
      * 获取全部帖子
      */
     public static final String GET_POST_DETAIL = HOST + "/findPostDetail.do";
-
-
+    /**
+     * 个人创意点赞
+     * originality_id
+     */
+    public static final String ORIGINALITY_SUPPORT = HOST + "/modifyOriginalityPraise.do";
+    /**创意点赞*/
+    public static final String PATENT_SUPPORT = HOST + "/modifyPantentPraise.do";
     /**
      * 获取工厂接口
      */
-    public static final String GET_FACILITATORMADE= HOST + "/findFacilitatorMade.do";
+    public static final String GET_FACILITATORMADE = HOST + "/findFacilitatorMade.do";
     /**
      * 获取产品接口
-     *
      */
-    public static final String GET_PRODUCTMADE= HOST + "/findAllOriginalityTwo.do";
+    public static final String GET_PRODUCTMADE = HOST + "/findAllOriginalityTwo.do";
     /***
      * 获取工厂详情接口
-     *
      */
-    public static final String GET_FAC_DETAILS= HOST + "/factorydetails.do";
+    public static final String GET_FAC_DETAILS = HOST + "/factorydetails.do";
     /***
      * 获取创意产品详情接口
-     *OriginalityDetails.do
+     * OriginalityDetails.do
      */
-    public static final String GET__PRODUCT_DETAILS= HOST + "/OriginalityDetails.do";
-  /***
-     * 添加评论
-     *OriginalityDetails.do
-     */
-    public static final String ADD_COMMENT_BBS= HOST + "/addFollowCard.do";
-/***
-     * 获取所有评论
-     *OriginalityDetails.do
-     */
-    public static final String GET_ALL_COMMENT_BBS= HOST + "/findFollowCard.do";
+    public static final String GET__PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
 
     /**
      * 版本更新检查
@@ -191,16 +211,4 @@ public interface NetWorkInterface {
      * 获取自己的订制接口
      */
     public static final String GET_MINE_ORDER = HOST + "/findMyCustom_made.do";
-    /**
-     * 添加评论接口<br>
-     * topic_id 主题id<br>
-     * topic_type 主题类型 0为个人创意评论 1为个人创意产品评论 2为私人订制产品评论 3为代工产品评论<br>
-     * c_content 评论内容<br>
-     * from_u_id 评论用户id
-     */
-    public static final String ADD_COMMENT = HOST + "/addComments.do";
-    /**
-     * 查看评论
-     */
-    public static final String GET_COMMENT = HOST + "/findComments.do";
 }

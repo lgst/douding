@@ -133,7 +133,7 @@
         <!-- ===================百度地图配置======================== -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="nyYKdKcWjHpsTcI9CGOGaV8TMja6UE3k"/>
+            android:value="Gl5sLaH4k4ZxXQ6ShhuCKO2AE7cKGcdl"/>
         <!-- ===================百度地图配置结束=================== -->
         <activity
             android:name=".activity.SplashScreenActivity"
@@ -220,10 +220,6 @@
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
-            android:name=".activity.CitySelectorActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
-        <activity
             android:name=".activity.OEMFactoryActivity"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
@@ -243,6 +239,9 @@
         <activity
             android:name=".activity.MineProjectActivity"
             android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.PublishProductActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
         <activity android:name=".activity.ChatActivity"/>
         <activity
             android:name=".activity.FactoryActivity"
@@ -258,17 +257,17 @@
         <activity android:name=".activity.SMSCodeActivity">
         </activity>
         <activity android:name=".activity.CommentListActivity"
-                  android:theme="@style/AppThemeLightStatuBar">
-        </activity>
-
-
-
-
+                  android:theme="@style/AppThemeLightStatuBar"/>
+        <activity android:name=".activity.CitySelecterActivity"
+                  android:theme="@style/AppThemeLightStatuBar"/>
 
         <activity android:name=".activity.PlateDetailsActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
-        <activity android:name=".activity.PublishBBSActivity"></activity>
-        <activity android:name=".activity.BBSCommentActivity"></activity>
+                  android:theme="@style/AppThemeLightStatuBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+        <activity android:name=".activity.PublishBBSActivity"
+                  android:theme="@style/AppThemeLightStatuBar"/>
+        <activity android:name=".activity.BBSCommentActivity"
+                  android:theme="@style/AppThemeLightStatuBar"/>
     </application>
 
 </manifest>

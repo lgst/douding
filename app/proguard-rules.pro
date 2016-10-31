@@ -106,8 +106,8 @@ public static final ** CREATOR;
 -keepattributes Signature
 
 #去除Log打印代码
-#-assumenosideeffects class android.util.Log {
-#    public static *** d(...);
-#    public static *** v(...);
-#    public static *** i(...);
-#}
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}

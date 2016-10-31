@@ -41,8 +41,8 @@
                 android:text="企业"
                 android:textColor="@drawable/selector_rb_text_blue"/>
             <View android:layout_width="1dp"
-                android:layout_height="16dp"
-                android:background="@color/grey"/>
+                  android:layout_height="16dp"
+                  android:background="@color/grey"/>
             <RadioButton
                 android:id="@+id/rb_factory_product"
                 android:layout_width="0dp"
@@ -61,31 +61,41 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/lv_factory"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/lv_factory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
         >
 
-    </com.handmark.pulltorefresh.library.PullToRefreshListView>
-
-    <LinearLayout
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="vertical">
-        <ProgressBar
-            style="@style/Base.Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="16dp"
+            android:onClick="addClick"
+            android:src="@mipmap/ic_add_white_24dp"
+            app:backgroundTint="@color/colorPrimary"/>
+        <LinearLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
             android:gravity="center"
-            android:text="@string/loading_data"/>
-    </LinearLayout>
+            android:orientation="vertical">
+            <ProgressBar
+                style="@style/Base.Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/loading_data"/>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
