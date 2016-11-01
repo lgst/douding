@@ -50,7 +50,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
     /**
      * 数量
      */
-    private int mPageSingle = 4;
+    private int mPageSingle = 15;
     /**
      * 重新加载数据
      */

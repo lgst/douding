@@ -61,8 +61,8 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/selector_edittext"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/edit_intro"
                     android:padding="4dip"/>
 
@@ -125,8 +125,8 @@
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -150,8 +150,8 @@
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="textEmailAddress"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_phone"
                     android:paddingLeft="4dip"/>
             </LinearLayout>
@@ -175,8 +175,8 @@
                     android:layout_height="30dp"
                     android:background="@drawable/selector_edittext"
                     android:imeOptions="actionDone"
-                    android:maxLines="1"
                     android:inputType="phone"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/pick_pic"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -266,7 +266,8 @@
                     android:id="@+id/mode_spinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/commit_idea"

@@ -52,7 +52,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     /**
      * 数量
      */
-    private int mPageSingle = 4;
+    private int mPageSingle = 15;
     /**
      * 重新加载数据
      */
