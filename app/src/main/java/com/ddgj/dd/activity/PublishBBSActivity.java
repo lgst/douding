@@ -246,6 +246,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
                         finish();
                     }
                 })
