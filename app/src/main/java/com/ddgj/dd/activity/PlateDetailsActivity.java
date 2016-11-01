@@ -84,7 +84,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onError(okhttp3.Call call, Exception e, int id) {
                         Log.e("fabubbs", e.getMessage() + " 失败id:" + id);
-                        showToastLong("失败");
+                        showToastLong("请求失败，请稍后重试");
                     }
 
                     @Override
