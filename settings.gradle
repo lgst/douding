@@ -1,1 +1,1 @@
-include ':app', ':pull-to-refresh-library' ,':easeui',':umeng_library'
+include ':app', ':pull-to-refresh-library', ':umeng_library', ':easeui'
