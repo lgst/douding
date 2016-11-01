@@ -14,12 +14,12 @@
         <TextView
             android:id="@+id/post_title"
             style="@style/TitleBarTextTheme"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:paddingLeft="40dp"
-            android:paddingRight="32dp"
             android:textStyle="bold"/>
 
     </RelativeLayout>
@@ -28,7 +28,7 @@
         android:id="@+id/sv_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginTop="40dp"
         android:gravity="center">
 
@@ -37,22 +37,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/post_sub_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:textSize="16dp"/>
-
-            </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,6 +76,20 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:textColor="@color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/post_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/post_content"
@@ -134,7 +132,9 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:background="@drawable/shape_login_edit_text_bg"
+            android:clickable="true"
             android:gravity="center_vertical"
+            android:onClick="commentClick"
             android:paddingLeft="16dp"
             android:text="@string/comment"
             android:textColor="@color/black"/>

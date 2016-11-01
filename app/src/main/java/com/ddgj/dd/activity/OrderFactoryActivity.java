@@ -46,7 +46,7 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
     /**
      * 数量
      */
-    private int mPageSingle = 10;
+    private int mPageSingle = 15;
     /**
      * 重新加载数据
      */

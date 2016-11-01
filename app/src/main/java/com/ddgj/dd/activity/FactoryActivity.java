@@ -2,6 +2,7 @@ package com.ddgj.dd.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -85,7 +86,7 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
     /**
      * 数量
      */
-    private int fPageSingle = 4;
+    private int fPageSingle = 10;
     /**
      * 重新加载数据
      */
@@ -109,6 +110,8 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
      */
     private static final int PRODUCT = 11;
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +120,6 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
         facilitator = new ArrayList<EnterpriseUser>();
         facProOriginality = new ArrayList<Originality>();
         initDatas(LOAD, classes);
-
     }
 
     private void initDatas(final int flag, final int classes) {
@@ -298,6 +300,10 @@ public class FactoryActivity extends BaseActivity implements RadioGroup.OnChecke
         });
 
         fRG.setOnCheckedChangeListener(this);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        if(UserHelper.getInstance().getUser()!=null&&UserHelper.getInstance().getUser().getAccount_type().equals("1")){
+            fab.setVisibility(View.VISIBLE);
+        }
     }
 
     public void backClick(View v) {

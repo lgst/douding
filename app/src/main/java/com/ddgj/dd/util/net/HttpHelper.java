@@ -26,16 +26,16 @@ import okhttp3.Response;
  */
 public class HttpHelper implements NetWorkInterface {
     public static void uploadUserIcon(final Context context, final String path) {
-        final Handler handler = new Handler(){
+        final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE);
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
                 sweetAlertDialog.setConfirmText("重试")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                uploadUserIcon(context,path);
+                                uploadUserIcon(context, path);
                                 sweetAlertDialog.dismiss();
                             }
                         })
@@ -48,8 +48,9 @@ public class HttpHelper implements NetWorkInterface {
                                 sweetAlertDialog.dismiss();
                             }
                         });
-                sweetAlertDialog.show();
-                Toast.makeText(context,"图像上传失败！",Toast.LENGTH_SHORT).show();
+                if (context != null)
+                    sweetAlertDialog.show();
+                Toast.makeText(context, "图像上传失败！", Toast.LENGTH_SHORT).show();
             }
         };
         File iconFile = new File(path);
@@ -69,14 +70,14 @@ public class HttpHelper implements NetWorkInterface {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("lgst","用户头像上传失败："+call.request().body().toString()+"\n-------"+e.getMessage());
+                Log.e("lgst", "用户头像上传失败：" + call.request().body().toString() + "\n-------" + e.getMessage());
                 handler.sendEmptyMessage(1);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                Log.i("lgst","上传成功"+response.body().string());
+                Log.i("lgst", "上传成功" + response.body().string());
             }
         });
     }
