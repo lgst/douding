@@ -25,6 +25,7 @@ import com.ddgj.dd.view.CircleImageView;
 import static com.ddgj.dd.util.net.HttpHelper.uploadUserIcon;
 
 /**
+ * 个人中心界面，企业信息fragment
  * Created by Administrator on 2016/10/11.
  */
 public class EnterpriseFragment extends BaseFragment {
@@ -64,8 +65,17 @@ public class EnterpriseFragment extends BaseFragment {
      * 联系方式
      */
     private TextView enterpriseContact;
+    /**
+     * 企业logo
+     */
     private CircleImageView mIcon;
+    /**
+     * 企业logo链接
+     */
     private String mIconPath;
+    /**
+     * logo父容器，点击设置logo
+     */
     private LinearLayout setIcon;
     private static final int REQUEST_CODE = 1;
 
@@ -83,6 +93,9 @@ public class EnterpriseFragment extends BaseFragment {
         initDatas();
     }
 
+    /**
+     * 初始化企业信息
+     */
     private void initDatas() {
         EnterpriseUser user = (EnterpriseUser) UserHelper.getInstance().getUser();
         if (user == null)
@@ -119,20 +132,21 @@ public class EnterpriseFragment extends BaseFragment {
         enterpriseContact = (TextView) findViewById(R.id.enterprise_contact);
         mIcon = (CircleImageView) findViewById(R.id.icon);
         setIcon = (LinearLayout) findViewById(R.id.ll_icon);
+        /*点击设置logo*/
         setIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(getActivity(),
-                        CameraActivity.class)
-                        .putExtra("scaleType", true)
-                        .putExtra("path", mIconPath)
-                        ,REQUEST_CODE);
+                                CameraActivity.class)
+                                .putExtra("scaleType", true)
+                                .putExtra("path", mIconPath)
+                        , REQUEST_CODE);
             }
         });
         Bitmap bitmap = BitmapFactory.decodeFile(mIconPath);
         if (bitmap != null) {
             mIcon.setImageBitmap(bitmap);
-        }else{
+        } else {
             Glide.with(this).load(NetWorkInterface.HOST + "/" + UserHelper.getInstance().getUser().getHead_picture())
                     .into(mIcon);
         }

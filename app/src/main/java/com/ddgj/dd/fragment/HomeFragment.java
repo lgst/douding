@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,7 @@ import com.ddgj.dd.bean.Patent;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
 import com.google.gson.Gson;
@@ -108,7 +110,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
+//                        Log.i("lgst", response);
                         analysisAndLoadOriginality(response);
                         FileUtil.saveJsonToCacha(response, "originality");
                     }
@@ -125,6 +127,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
+                        Toast.makeText(getActivity(),"请求失败，请稍后重试！",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -132,7 +135,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                         ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
-                            Log.e("lgst", url);
+//                            Log.e("lgst", url);
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getOriginality_name())
                                     .putExtra("url", HOST + url)
@@ -184,11 +187,12 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Log.i("lgst", "首页专利加载出错：" + e.getMessage());
+                        Toast.makeText(getActivity(),"请求失败，请稍后重试！",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
+//                        Log.i("lgst", response);
                         analysisAndLoadPatent(response);
 //                写入json缓存
                         FileUtil.saveJsonToCacha(response, "patent");
@@ -207,6 +211,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Log.e("lgst", "获取专利详情页失败：" + e.getMessage());
+                        Toast.makeText(getActivity(),"请求失败，请稍后重试！",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -214,7 +219,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                         ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
-                            Log.e("lgst", url);
+//                            Log.e("lgst", url);
                             startActivity(new Intent(getActivity(), WebActivity.class)
                                     .putExtra("title", originality.getPatent_name())
                                     .putExtra("url", HOST + url)
@@ -240,7 +245,9 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
      * 初始化轮播图
      */
     private void initAD() {
-        OkHttpUtils.post().url(NetWorkInterface.GET_AD).id(100).build().execute(new StringCallback() {
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("login", UserHelper.getInstance().isLogined()?"0":"1");
+        OkHttpUtils.post().url(NetWorkInterface.GET_AD).params(params).id(100).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 Log.i("lgst", "获取轮播图失败：" + e.getMessage());

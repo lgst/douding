@@ -80,6 +80,9 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if(url.startsWith("tel:")||url.startsWith("mailto:")){
+                    return true;
+                }
                 view.loadUrl(url);
                 return true;
             }
