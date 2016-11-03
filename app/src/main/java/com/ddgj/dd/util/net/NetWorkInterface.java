@@ -10,7 +10,6 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://192.168.2.180:8080/newdouding";
     public static final String HOST = "http://www.51douding.com";
     /**
      * 注册接口

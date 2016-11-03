@@ -299,7 +299,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:src="@mipmap/ic_settings_grey600_24dp"/>
+                        android:src="@drawable/ic_settings_blue_24dp"/>
 
                     <TextView
                         style="@style/MineFragmentListTextStyle"
@@ -331,7 +331,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:src="@mipmap/ic_share_grey600_24dp"/>
+                        android:src="@drawable/ic_share_blue_24dp"/>
 
                     <TextView
                         style="@style/MineFragmentListTextStyle"
@@ -361,7 +361,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:src="@mipmap/ic_info_grey600_24dp"/>
+                        android:src="@drawable/ic_info_blue_24dp"/>
 
                     <TextView
                         style="@style/MineFragmentListTextStyle"
