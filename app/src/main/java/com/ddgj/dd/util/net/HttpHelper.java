@@ -6,10 +6,21 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.user.UserHelper;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
@@ -22,9 +33,21 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by Administrator on 2016/10/12.
+ * Created by lgst on 2016/11/03.<br>
+ * 网络请求封装，根据请求地址获得对应的数据并封装成对应的集合，在回调方法中回传
  */
-public class HttpHelper implements NetWorkInterface {
+public class HttpHelper<T> implements NetWorkInterface {
+    private Class<T> tClass;
+    private Context mContext;
+    private static final String TAG = "lgst";
+    /**
+     * 是否保存对应的JSON数据
+     */
+    private boolean save = false;
+
+    /**
+     * 上传用户头像
+     */
     public static void uploadUserIcon(final Context context, final String path) {
         final Handler handler = new Handler() {
             @Override
@@ -80,5 +103,98 @@ public class HttpHelper implements NetWorkInterface {
                 Log.i("lgst", "上传成功" + response.body().string());
             }
         });
+    }
+
+    /**
+     * 创建一个HttpHelper实例<br>
+     *
+     * @param context :上下文环境<br>
+     * @param tClass  :请求数据的实体类Class对象<br>
+     * @param save    :是否保存JSON数据，缓存防止下次启动应用出现大片留白
+     */
+    public HttpHelper(Context context, Class<T> tClass, boolean save) {
+        this.tClass = tClass;
+        this.mContext = context;
+        this.save = save;
+    }
+    /**
+     * 创建一个HttpHelper实例<br>
+     *
+     * @param context :上下文环境<br>
+     * @param tClass  :请求数据的实体类Class对象<br>
+     */
+    public HttpHelper(Context context, Class<T> tClass) {
+        this.tClass = tClass;
+        this.mContext = context;
+    }
+
+    /**
+     * 获取数据， POST 请求<br>
+     *
+     * @param url      :接口链接<br>
+     * @param params   :接口参数<br>
+     * @param callback :回调<br>
+     */
+    public void getDatasPost(String url, Map<String, String> params, final DataCallback<T> callback) {
+        OkHttpUtils.post().url(GET_HOT_ORIGINALITY).params(params).build().execute(
+                new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        showNetworkNotConnectToast();
+                        Log.e(TAG, "onError: " + e.getMessage());
+                        callback.Failed(e);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.i("lgst", response);
+                        callback.Success(analysisAndLoadOriginality(response));
+                        if (save)
+                            FileUtil.saveJsonToCacha(response, "originality");
+                    }
+                }
+        );
+    }
+
+    /**
+     * 获取数据，GET请求<br>
+     *
+     * @param url      :接口链接<br>
+     * @param callback :回调<br>
+     */
+    public void getDatasGet(String url, DataCallback<T> callback) {
+
+    }
+
+    /**
+     * 解析json数据<br>
+     *
+     * @param response :JSON数据
+     */
+    private List<T> analysisAndLoadOriginality(String response) {
+        if (response == null) {
+            return new ArrayList<>();
+        }
+        List<T> datas = new ArrayList<T>();
+        try {
+            JSONObject jo = new JSONObject(response);
+            int status = jo.getInt("status");
+            if (status == STATUS_SUCCESS) {
+                JSONArray ja = jo.getJSONArray("data");
+                for (int i = 0; i < ja.length(); i++) {
+                    String patentStr = ja.getJSONObject(i).toString();
+                    T data = (T) new Gson().fromJson(patentStr, tClass);
+                    datas.add(data);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            return datas;
+        }
+    }
+
+    private void showNetworkNotConnectToast() {
+        Toast.makeText(mContext, "请求失败，请稍后重试！", Toast.LENGTH_SHORT).show();
     }
 }

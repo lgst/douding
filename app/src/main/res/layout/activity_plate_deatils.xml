@@ -132,9 +132,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:background="@drawable/shape_login_edit_text_bg"
-            android:clickable="true"
             android:gravity="center_vertical"
-            android:onClick="commentClick"
             android:paddingLeft="16dp"
             android:text="@string/comment"
             android:textColor="@color/black"/>

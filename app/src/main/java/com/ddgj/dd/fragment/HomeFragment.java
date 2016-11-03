@@ -23,7 +23,10 @@ import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.Patent;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
+import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
 import com.google.gson.Gson;
@@ -42,6 +45,8 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
+
+import static com.hyphenate.chat.EMGCMListenerService.TAG;
 
 
 /**
@@ -99,21 +104,34 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         params.put("pageNumber", "1");
         params.put("pageSingle", "3");
         params.put("originality_differentiate", "0");
-        OkHttpUtils.post().url(GET_HOT_ORIGINALITY).params(params).build().execute(
-                new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        act.showToastNotNetWork();
-                    }
+        new HttpHelper<Originality>(getActivity(),Originality.class,true)
+        .getDatasPost(GET_HOT_ORIGINALITY, params, new DataCallback<Originality>() {
+            @Override
+            public void Failed(Exception e) {
+                Log.e(TAG, "Failed: "+e.getMessage() );
+            }
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
-                        analysisAndLoadOriginality(response);
-                        FileUtil.saveJsonToCacha(response, "originality");
-                    }
-                }
-        );
+            @Override
+            public void Success(List<Originality> datas) {
+                mOriginalitys=datas;
+                originalityListView.setAdapter(new OriginalityPLVAdapter(act, datas));
+            }
+        });
+//        OkHttpUtils.post().url(GET_HOT_ORIGINALITY).params(params).build().execute(
+//                new StringCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e, int id) {
+//                        act.showToastNotNetWork();
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response, int id) {
+//                        Log.i("lgst", response);
+//                        analysisAndLoadOriginality(response);
+//                        FileUtil.saveJsonToCacha(response, "originality");
+//                    }
+//                }
+//        );
         originalityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -240,7 +258,9 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
      * 初始化轮播图
      */
     private void initAD() {
-        OkHttpUtils.post().url(NetWorkInterface.GET_AD).id(100).build().execute(new StringCallback() {
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("login", UserHelper.getInstance().isLogined()?"0":"1");
+        OkHttpUtils.post().url(NetWorkInterface.GET_AD).params(params).id(100).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 Log.i("lgst", "获取轮播图失败：" + e.getMessage());
