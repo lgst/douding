@@ -73,6 +73,10 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
+        if (!checkNetWork()) {
+            showToastNotNetWork();
+            return;
+        }
         Intent intent = getIntent();
         String postId = intent.getStringExtra("post_id");
         Map<String, String> params = new HashMap<String, String>();
@@ -133,7 +137,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
 
             ArrayList<PostContentBean> beanArrayList = new Gson()
                     .fromJson(postBean.getCordcontent(), new TypeToken<ArrayList<PostContentBean>>() {
-            }.getType());
+                    }.getType());
             for (int i = 0; i < beanArrayList.size(); i++) {
                 PostContentBean postContentBean = beanArrayList.get(i);
                 String content = postContentBean.getContent();
