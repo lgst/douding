@@ -33,7 +33,7 @@
     <string name="forget_password">找回密码</string>
     <string name="update_password">修改密码</string>
     <string name="forget_password_success">找回密码成功！</string>
-    <string name="network_is_not_connection">无法访问网络！</string>
+    <string name="network_is_not_connection">网络请求失败，请稍后重试！</string>
     <string name="update_password_success">修改密码成功！请重新登录！</string>
     <string name="update_password_faild">修改密码失败！</string>
     <string name="custom_hall">订制大厅</string>

@@ -1,11 +1,18 @@
 package com.ddgj.dd.util.net;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ddgj.dd.activity.WebActivity;
+import com.ddgj.dd.bean.Order;
+import com.ddgj.dd.bean.Originality;
+import com.ddgj.dd.bean.Patent;
+import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
@@ -71,7 +78,7 @@ public class HttpHelper<T> implements NetWorkInterface {
                                 sweetAlertDialog.dismiss();
                             }
                         });
-                if (context != null)
+                if (((Activity)context).isFinishing())
                     sweetAlertDialog.show();
                 Toast.makeText(context, "图像上传失败！", Toast.LENGTH_SHORT).show();
             }
@@ -85,7 +92,7 @@ public class HttpHelper<T> implements NetWorkInterface {
                 .addFormDataPart("head_picture", "img.jpg", fileBody)
                 .addFormDataPart("account_id", UserHelper.getInstance().getUser().getAccount_id())
                 .build();
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url(UPDATE_USER_ICON)
                 .post(requestBody)
                 .build();
@@ -99,8 +106,14 @@ public class HttpHelper<T> implements NetWorkInterface {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
-                Log.i("lgst", "上传成功" + response.body().string());
+                try {
+                    JSONObject jo = new JSONObject(response.body().string());
+                    UserHelper.getInstance().getUser().setHead_picture(jo.getString("data"));
+                    UserHelper.getInstance().getUser().saveToSharedPreferences(context);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                Log.i("lgst", "上传成功" + response.body().string());
             }
         });
     }
@@ -117,6 +130,7 @@ public class HttpHelper<T> implements NetWorkInterface {
         this.mContext = context;
         this.save = save;
     }
+
     /**
      * 创建一个HttpHelper实例<br>
      *
@@ -136,7 +150,34 @@ public class HttpHelper<T> implements NetWorkInterface {
      * @param callback :回调<br>
      */
     public void getDatasPost(String url, Map<String, String> params, final DataCallback<T> callback) {
-        OkHttpUtils.post().url(GET_HOT_ORIGINALITY).params(params).build().execute(
+        OkHttpUtils.post().url(url).params(params).build().execute(
+                new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        showNetworkNotConnectToast();
+//                        Log.e(TAG, "onError: " + e.getMessage());
+                        callback.Failed(e);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+//                        Log.i("lgst", response);
+                        callback.Success(analysisAndLoadOriginality(response));
+                        if (save)
+                            FileUtil.saveJsonToCacha(response, tClass.getName());
+                    }
+                }
+        );
+    }
+
+    /**
+     * 获取数据，GET请求<br>
+     *
+     * @param url      :接口链接<br>
+     * @param callback :回调<br>
+     */
+    public void getDatasGet(String url, final DataCallback<T> callback) {
+        OkHttpUtils.get().url(url).build().execute(
                 new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -149,21 +190,9 @@ public class HttpHelper<T> implements NetWorkInterface {
                     public void onResponse(String response, int id) {
                         Log.i("lgst", response);
                         callback.Success(analysisAndLoadOriginality(response));
-                        if (save)
-                            FileUtil.saveJsonToCacha(response, "originality");
                     }
                 }
         );
-    }
-
-    /**
-     * 获取数据，GET请求<br>
-     *
-     * @param url      :接口链接<br>
-     * @param callback :回调<br>
-     */
-    public void getDatasGet(String url, DataCallback<T> callback) {
-
     }
 
     /**
@@ -171,9 +200,9 @@ public class HttpHelper<T> implements NetWorkInterface {
      *
      * @param response :JSON数据
      */
-    private List<T> analysisAndLoadOriginality(String response) {
+    public List<T> analysisAndLoadOriginality(String response) {
         if (response == null) {
-            return new ArrayList<>();
+            return new ArrayList<T>();
         }
         List<T> datas = new ArrayList<T>();
         try {
@@ -194,7 +223,88 @@ public class HttpHelper<T> implements NetWorkInterface {
         }
     }
 
+    /**
+     * 跳转到详情页<br>
+     *
+     * @param url    :详情页链接地址获取接口
+     * @param params :参数
+     * @param data   :实体对象
+     */
+    public void startDetailsPage(String url, Map<String, String> params, final Object data) {
+        OkHttpUtils.post().url(url).params(params).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e("lgst", data.getClass().getName() + "获取详情页失败：" + e.getMessage());
+                showNetworkNotConnectToast();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+                if (responseInfo.getStatus() == STATUS_SUCCESS) {
+                    String url = responseInfo.getData();
+                    Log.e("lgst", url);
+                    startActivity(url, data);
+                }
+            }
+        });
+    }
+
+    private void startActivity(String url, Object obj) {
+        Intent intent = new Intent(mContext, WebActivity.class);
+        if (obj instanceof Originality) {//创意详情
+            Originality originality = (Originality) obj;
+            intent.putExtra("title", originality.getOriginality_name())
+                    .putExtra("url", HOST + url)
+                    .putExtra("account", originality.getAccount())
+                    .putExtra("content", originality.getOriginality_details())
+                    .putExtra("id", originality.getOriginality_id())
+                    .putExtra("classes", 0);
+        } else if (obj instanceof Patent) {//专利详情
+            Patent patent = (Patent) obj;
+            intent.putExtra("title", patent.getPatent_name())
+                    .putExtra("url", HOST + url)
+                    .putExtra("account", patent.getAccount())
+                    .putExtra("content", patent.getPatent_details());
+        } else if (obj instanceof Order) {//订制详情
+            Order order = (Order) obj;
+            intent.putExtra("title", order.getMade_name())
+                    .putExtra("url", HOST + url)
+                    .putExtra("content", order.getMade_describe());
+        }
+        mContext.startActivity(intent);
+    }
+
     private void showNetworkNotConnectToast() {
-        Toast.makeText(mContext, "请求失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "网络请求失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public Context getmContext() {
+        return mContext;
+    }
+
+    public void setmContext(Context mContext) {
+        if (mContext == null)
+            throw new NullPointerException("参数不能为null！");
+        this.mContext = mContext;
+    }
+
+    public boolean isSave() {
+        return save;
+    }
+
+    public void setSave(boolean save) {
+        this.save = save;
+    }
+
+    public Class<T> gettClass() {
+        return tClass;
+    }
+
+    public void settClass(Class<T> tClass) {
+        if (tClass == null)
+            throw new NullPointerException("参数不能为null！");
+        this.tClass = tClass;
     }
 }

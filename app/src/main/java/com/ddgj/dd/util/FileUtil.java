@@ -404,7 +404,7 @@ public class FileUtil {
 
 
     /**
-     * 写入缓存，json数据
+     * 写入缓存，json数据，文件名是实体类名
      */
     public static void saveJsonToCacha(String json, String fileName) {
         OutputStream os = null;

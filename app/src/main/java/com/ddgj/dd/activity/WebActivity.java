@@ -114,10 +114,10 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         mTitle = (TextView) findViewById(R.id.title);
         mTitle.setText(getIntent().getStringExtra("title"));
         commentContainerLL = (LinearLayout) findViewById(R.id.comment_container);
-        if (getIntent().getIntExtra("classes", -1) != -1) {
+//        if (getIntent().getIntExtra("classes", -1) != -1) {
             if (getIntent().getIntExtra("classes", -1) == 0)
                 commentContainerLL.setVisibility(View.VISIBLE);
-        }
+//        }
         mContainer = (RelativeLayout) findViewById(R.id.content_container);
         mWebView = new WebView(getApplicationContext());
         ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

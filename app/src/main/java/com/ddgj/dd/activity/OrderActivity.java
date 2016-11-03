@@ -10,27 +10,21 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.adapter.OrderClassesAdapter;
 import com.ddgj.dd.bean.Order;
-import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
-import com.google.gson.Gson;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-
+/**
+ * 订制页面
+ */
 public class OrderActivity extends BaseActivity implements NetWorkInterface {
     /**
      * 分类
@@ -42,18 +36,21 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
     private CustomListView mSuccess;
     private String[] names;
     private List<Order> mOrders;
+    private HttpHelper<Order> mOrderHttpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+        mOrderHttpHelper = new HttpHelper<Order>(this,Order.class);
         initView();
         initCache();
         initDatas();
     }
 
     private void initCache() {
-        analysisOrderJson(FileUtil.readJsonFromCacha("order"));
+        mOrders = mOrderHttpHelper.analysisAndLoadOriginality(FileUtil.readJsonFromCacha("order"));
+        mSuccess.setAdapter(new OrderAdapter(mOrders));
     }
 
     @Override
@@ -106,25 +103,23 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
 
     private void initDatas() {
         //获取订制
-        OkHttpUtils.post().url(GET_ORDER).addParams("made_state", "2")
-                .addParams("made_differentiate", "0")
-                .addParams("pageNumber", "1")
-                .addParams("pageSingle", "5")
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取订制成功案例失败：" + e.getMessage());
-                        showToastShort("请求失败，请稍后重试！");
-                    }
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("made_state", "2");
+        params.put("made_differentiate", "0");
+        params.put("pageNumber", "1");
+        params.put("pageSingle", "5");
+        mOrderHttpHelper.getDatasPost(GET_ORDER, params, new DataCallback<Order>() {
+            @Override
+            public void Failed(Exception e) {
+                Log.e(TAG, "获取成功定制出错："+e.getMessage());
+            }
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
-                        analysisOrderJson(response);
-                        FileUtil.saveJsonToCacha(response, "order");
-                    }
-                });
+            @Override
+            public void Success(List<Order> datas) {
+                mOrders=datas;
+                mSuccess.setAdapter(new OrderAdapter(mOrders));
+            }
+        });
         mSuccess.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -132,47 +127,8 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("made_id", order.getMade_id());
-                OkHttpUtils.post().url(GET_ORDER_DETAILS).params(params).build().execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取订制 详情页失败：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
-                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
-                            String url = responseInfo.getData();
-                            Log.e("lgst", url);
-                            startActivity(new Intent(OrderActivity.this, WebActivity.class)
-                                    .putExtra("title", order.getMade_name())
-                                    .putExtra("url", HOST + url)
-                                    .putExtra("content", order.getMade_describe()));
-                        }
-                    }
-                });
+                mOrderHttpHelper.startDetailsPage(GET_ORDER_DETAILS,params,order);
             }
         });
-    }
-
-    private void analysisOrderJson(String json) {
-        if (json == null)
-            return;
-        try {
-            JSONObject jo = new JSONObject(json);
-            int status = jo.getInt("status");
-            if (status == STATUS_SUCCESS) {
-                mOrders = new ArrayList<Order>();
-                JSONArray ja = jo.getJSONArray("data");
-                for (int i = 0; i < ja.length(); i++) {
-                    String orderStr = ja.getJSONObject(i).toString();
-                    Order order = new Gson().fromJson(orderStr, Order.class);
-                    mOrders.add(order);
-                }
-                mSuccess.setAdapter(new OrderAdapter(mOrders));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }
