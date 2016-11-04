@@ -268,6 +268,8 @@
                   android:theme="@style/AppThemeLightStatuBar"/>
         <activity android:name=".activity.BBSCommentActivity"
                   android:theme="@style/AppThemeLightStatuBar"/>
+        <activity android:name=".activity.PhotoViewer"></activity>
+        <activity android:name=".activity.PhotoScale"></activity>
     </application>
 
 </manifest>

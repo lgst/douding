@@ -77,7 +77,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private void initCacha() {
         /*加载缓存广告*/
         adHttphelper = new HttpHelper<ADBean>(getActivity(), ADBean.class, true);
-        String adData = FileUtil.readJsonFromCacha(ADBean.class.getName());
+        String adData = FileUtil.readJsonFromCache(ADBean.class.getName());
         if (adData != null) {
             List<ADBean> adBeens = adHttphelper.analysisAndLoadOriginality(adData);
             viewpager.setAdapter(new ADAdapter(act, adBeens));
@@ -89,7 +89,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         */
         oriHttpHelper = new HttpHelper<Originality>(getActivity(), Originality.class, true);
         //获取缓存的JSON数据
-        String oriData = FileUtil.readJsonFromCacha(Originality.class.getName());
+        String oriData = FileUtil.readJsonFromCache(Originality.class.getName());
         //根据JSON数据获取数据集合
         mOriginalitys = oriHttpHelper.analysisAndLoadOriginality(oriData);
         originalityListView.setAdapter(new OriginalityPLVAdapter(act, mOriginalitys));
@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         /*加载缓存专利*/
         patentHttpHelper = new HttpHelper<Patent>(getActivity(), Patent.class, true);
         //JSON数据
-        String patentData = FileUtil.readJsonFromCacha(Patent.class.getName());
+        String patentData = FileUtil.readJsonFromCache(Patent.class.getName());
         //解析JSON数据，返回集合
         mPatents = patentHttpHelper.analysisAndLoadOriginality(patentData);
         patentListView.setAdapter(new PatentPLVAdapter(getActivity(), mPatents));

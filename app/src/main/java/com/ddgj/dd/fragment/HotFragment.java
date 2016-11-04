@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.PlateDetailsActivity;
 import com.ddgj.dd.bean.PostBean;
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.view.CircleImageView;
@@ -61,7 +62,7 @@ public class HotFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_hot, null);
-        initdatas(LOAD);
+
         return view;
     }
 
@@ -69,8 +70,12 @@ public class HotFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        initCache();
+        initdatas(LOAD);
     }
-
+    private void initCache() {
+        JsonToDatas(FileUtil.readJsonFromCache("allhotpost"),LOAD);
+    }
     private void initdatas(final int flag) {
 
         Map<String, String> params = new HashMap<String, String>();
@@ -85,31 +90,36 @@ public class HotFragment extends BaseFragment {
 
             @Override
             public void onResponse(String response, int id) {
-                Log.e("shuju", response);
-                JSONObject jo = null;
-                try {
-                    jo = new JSONObject(response);
-                    int status = jo.getInt("status");
-                    if (status == STATUS_SUCCESS) {
-                        JSONArray ja = jo.getJSONArray("data");
-                        if (LOAD == flag) {
-                            postBeanList.clear();
-                        }
-                        for (int i = 0; i < ja.length(); i++) {
-                            String string = ja.getJSONObject(i).toString();
-                            PostBean postBean = new Gson().fromJson(string, PostBean.class);
-                            postBeanList.add(postBean);
-                        }
-                        plateAdapter.notifyDataSetChanged();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } finally {
-                    pullToRefreshView.onRefreshComplete();
-                }
+                FileUtil.saveJsonToCacha(response, "allhotpost");
+               JsonToDatas(response,flag);
             }
         });
+    }
+
+    private void JsonToDatas(String response, int flag) {
+        Log.e("shuju", response);
+        JSONObject jo = null;
+        try {
+            jo = new JSONObject(response);
+            int status = jo.getInt("status");
+            if (status == STATUS_SUCCESS) {
+                JSONArray ja = jo.getJSONArray("data");
+                if (LOAD == flag) {
+                    postBeanList.clear();
+                }
+                for (int i = 0; i < ja.length(); i++) {
+                    String string = ja.getJSONObject(i).toString();
+                    PostBean postBean = new Gson().fromJson(string, PostBean.class);
+                    postBeanList.add(postBean);
+                }
+                plateAdapter.notifyDataSetChanged();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            pullToRefreshView.onRefreshComplete();
+        }
     }
 
     @Override
@@ -119,7 +129,7 @@ public class HotFragment extends BaseFragment {
         pullToRefreshView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                postBeanList.clear();
+               // postBeanList.clear();
                 plateAdapter.notifyDataSetChanged();
                 mPageNumber = 1;
                 initdatas(LOAD);

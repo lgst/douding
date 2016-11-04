@@ -19,6 +19,7 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
 import com.ddgj.dd.activity.PlateDetailsActivity;
 import com.ddgj.dd.bean.PostBean;
+import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.view.CircleImageView;
@@ -56,7 +57,7 @@ public class PlateFragment extends BaseFragment {
      */
     private static final int UPDATE = 2;
     private int mPageNumber = 1;
-    private List<PostBean> postBeanList = new ArrayList<PostBean>();
+    public  List<PostBean> postBeanList = new ArrayList<PostBean>();
     private PullToRefreshListView pullToRefreshView;
     private PlateAdapter plateAdapter;
 
@@ -64,7 +65,6 @@ public class PlateFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_plate, null);
-        initdatas(LOAD);
         return view;
 
     }
@@ -73,13 +73,16 @@ public class PlateFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-
+        initCache();
+        initdatas(LOAD);
+    }
+    private void initCache() {
+        JsonToDatas(FileUtil.readJsonFromCache("allplatepost"),LOAD);
     }
 
-    private void initdatas(final int flag) {
+    public void initdatas(final int flag) {
 
         Map<String, String> params = new HashMap<String, String>();
-
         params.put("pageNumber", String.valueOf(mPageNumber));//第几页
         params.put("pageSingle", String.valueOf(10));//每页分的数据条数10条
         params.put("bbs_type", "1");//这留个坑
@@ -87,41 +90,48 @@ public class PlateFragment extends BaseFragment {
             @Override
             public void onError(Call call, Exception e, int id) {
                 pullToRefreshView.onRefreshComplete();
-                Log.e("lgst", "onError: " + e.getMessage());
             }
 
             @Override
             public void onResponse(String response, int id) {
+                //保存帖子信息
+                FileUtil.saveJsonToCacha(response, "allplatepost");
+                JsonToDatas(response,flag);
 
-                Log.e("shuju", response);
-                JSONObject jo = null;
-                try {
-                    jo = new JSONObject(response);
-                    int status = jo.getInt("status");
-                    if (status == STATUS_SUCCESS) {
-                        if (LOAD == flag) {
-                            postBeanList.clear();
-                        }
-                        JSONArray ja = jo.getJSONArray("data");
-                        for (int i = 0; i < ja.length(); i++) {
-                            String string = ja.getJSONObject(i).toString();
-                            PostBean postBean = new Gson().fromJson(string, PostBean.class);
-                            postBeanList.add(postBean);
-                        }
-                        if (LOAD == flag) {
-                            plateAdapter = new PlateAdapter(getActivity());
-                            pullToRefreshView.setAdapter(plateAdapter);
-                        }
-                        if (plateAdapter != null)
-                            plateAdapter.notifyDataSetChanged();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } finally {
-                    pullToRefreshView.onRefreshComplete();
-                }
             }
         });
+    }
+
+    private void JsonToDatas(String response,int flag) {
+        Log.e("weiwei",response+"");
+        if (response==null)
+            return;
+        JSONObject jo = null;
+        try {
+            jo = new JSONObject(response);
+            int status = jo.getInt("status");
+            if (status == STATUS_SUCCESS) {
+                if (LOAD == flag) {
+                    postBeanList.clear();
+                }
+                JSONArray ja = jo.getJSONArray("data");
+                for (int i = 0; i < ja.length(); i++) {
+                    String string = ja.getJSONObject(i).toString();
+                    PostBean postBean = new Gson().fromJson(string, PostBean.class);
+                    postBeanList.add(postBean);
+                }
+                if (LOAD == flag) {
+                    plateAdapter = new PlateAdapter(getActivity());
+                    pullToRefreshView.setAdapter(plateAdapter);
+                }
+                if (plateAdapter != null)
+                    plateAdapter.notifyDataSetChanged();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            pullToRefreshView.onRefreshComplete();
+        }
     }
 
     @Override

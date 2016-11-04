@@ -79,7 +79,7 @@ public class CommunityFragment extends BaseFragment {
             public void onClick(View v) {
                 if (UserHelper.getInstance().isLogined()) {
                     Intent intent = new Intent(getActivity(), PublishBBSActivity.class);
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, 3);
                 } else {
                     ((BaseActivity)getActivity()).showToastShort("请先登录！");
                     startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
@@ -113,6 +113,15 @@ public class CommunityFragment extends BaseFragment {
         public CharSequence getPageTitle(int position) {
 
             return strings.get(position % strings.size());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==100){
+            ((PlateFragment)fragments.get(0)).postBeanList.clear();
+            ((PlateFragment)fragments.get(0)).initdatas(1);
         }
     }
 }
