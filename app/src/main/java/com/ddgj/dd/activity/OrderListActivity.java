@@ -40,6 +40,9 @@ import java.util.Map;
 
 import okhttp3.Call;
 
+/**
+ * 订制二级页面
+ */
 public class OrderListActivity extends BaseActivity implements View.OnClickListener, NetWorkInterface {
 
     private ImageView mBack;
@@ -72,6 +75,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private OrderAdapter mAdapter;
     private LinearLayout mLoading;
     public LocationClient mLocationClient = null;
+    /**定位回调*/
     public BDLocationListener myListener = new BDLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
@@ -83,9 +87,6 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 mTvCity.setText(mAddr);
             }
             getSharedPreferences("city", MODE_PRIVATE).edit().putString("city", mAddr).commit();
-//            Log.i(TAG, "ci=ty: "+bdLocation.getCity());
-//            Log.i(TAG, "addr: "+bdLocation.getAddrStr());
-//            Log.i(TAG, "cityCode: "+bdLocation.getCityCode());
         }
     };
     private String mAddr;
@@ -133,7 +134,6 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             params.put("made_price", price);
             Log.i("lgst", price);
         }
-        //
         params.put("city", mAddr);
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));

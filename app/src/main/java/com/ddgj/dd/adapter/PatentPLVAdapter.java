@@ -78,7 +78,7 @@ public class PatentPLVAdapter extends BaseAdapter {
         final Patent patent = patents.get(position);
 
         String userIcon = patent.getHead_picture();
-        if(patent.getHead_picture().equals("head_picture"))
+        if(userIcon==null)
             userIcon = UserHelper.getInstance().getUser().getHead_picture();
         Glide.with(act)
                 .load(NetWorkInterface.HOST + "/" + userIcon)

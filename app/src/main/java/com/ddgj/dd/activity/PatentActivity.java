@@ -15,25 +15,17 @@ import android.widget.TextView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.PatentPLVAdapter;
 import com.ddgj.dd.bean.Patent;
-import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Call;
 
 public class PatentActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, NetWorkInterface {
 
@@ -83,12 +75,16 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
      */
     private static final int MINE = 13;
 
+    private HttpHelper<Patent> mPatentHttpHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patent);
-        initView();
         mPatents = new ArrayList<Patent>();
+        mPatentHttpHelper = new HttpHelper<Patent>(this, Patent.class);
+        mAdapter = new PatentPLVAdapter(this,mPatents);
+        initView();
         initDatas(LOAD, classes);
     }
 
@@ -106,48 +102,24 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         params.put("pageSingle", String.valueOf(mPageSingle));
         if (classes == MINE)
             params.put("p_account_id", UserHelper.getInstance().getUser().getAccount_id());
-
-        OkHttpUtils.post().url(getUrl(classes)).params(params).build().execute(new StringCallback() {
+        mPatentHttpHelper.getDatasPost(getUrl(classes), params, new DataCallback<Patent>() {
             @Override
-            public void onError(Call call, Exception e, int id) {
+            public void Failed(Exception e) {
                 mPageNumber--;//网络访问失败，页码下次不能加1 所以先减一
                 mplv.onRefreshComplete();
+                Log.e(TAG, "专利获取失败：" + e.getMessage());
             }
 
             @Override
-            public void onResponse(String response, int id) {
-                Log.i(TAG, "onResponse: " + response);
-                try {
-                    JSONObject jo = new JSONObject(response);
-                    int status = jo.getInt("status");
-                    if (status == STATUS_SUCCESS) {
-                        JSONArray ja = jo.getJSONArray("data");
-                        if (flag == LOAD) {
-                            mPatents.clear();
-                        }
-                        for (int i = 0; i < ja.length(); i++) {
-                            String patentStr = ja.getJSONObject(i).toString();
-                            Patent patent = new Gson().fromJson(patentStr, Patent.class);
-                            if (classes == MINE)
-                                patent.setHead_picture(UserHelper.getInstance().getUser().getHead_picture());
-                            mPatents.add(patent);
-                        }
-                        if (flag == LOAD) {
-                            mAdapter = new PatentPLVAdapter(PatentActivity.this, mPatents);
-                            mplv.setAdapter(mAdapter);
-                        } else {
-                            if (mAdapter != null)
-                                mAdapter.notifyDataSetChanged();
-                        }
-                        if (mplv.isRefreshing())//关闭刷新
-                            mplv.onRefreshComplete();
-                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-                            mLoading.setVisibility(View.GONE);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            public void Success(List<Patent> datas) {
+                if (flag == LOAD)
+                    mPatents.clear();
+                mPatents.addAll(datas);
+                mAdapter.notifyDataSetChanged();
+                if (mplv.isRefreshing())//关闭刷新
+                    mplv.onRefreshComplete();
+                if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+                    mLoading.setVisibility(View.GONE);
             }
         });
     }
@@ -188,32 +160,14 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Patent originality = mPatents.get(position - 1);
+                final Patent patent = mPatents.get(position - 1);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
-                params.put("patent_id", originality.getPatent_id());
-                OkHttpUtils.post().url(GET_PATENT_DETAILS).params(params).build().execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取专利详情页失败：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
-                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
-                            String url = responseInfo.getData();
-                            Log.e("lgst", url);
-                            startActivity(new Intent(PatentActivity.this, WebActivity.class)
-                                    .putExtra("title", originality.getPatent_name())
-                                    .putExtra("url", HOST + url)
-                                    .putExtra("account", originality.getAccount())
-                                    .putExtra("content", originality.getPatent_details()));
-                        }
-                    }
-                });
+                params.put("patent_id", patent.getPatent_id());
+                mPatentHttpHelper.startDetailsPage(GET_PATENT_DETAILS,params,patent);
             }
         });
+        mplv.setAdapter(mAdapter);
         mRg.setOnCheckedChangeListener(this);
         content = (TextView) findViewById(R.id.search_edit_text);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);

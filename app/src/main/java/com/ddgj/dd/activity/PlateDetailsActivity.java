@@ -114,14 +114,13 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 });
     }
 
     @Override
     public void initView() {
-        if (postBean != null) {
+        if (postBean != null && !this.isFinishing()) {
             postPublishData.setText(StringUtils.getDate(postBean.getSend_date()));
             postTitle.setText(postBean.getTitle());
             postSubTitle.setText(postBean.getTitle());
