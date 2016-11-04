@@ -138,7 +138,6 @@ public class FileUtil {
 					dir      /* directory */
 			);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -154,7 +153,6 @@ public class FileUtil {
 				outputChannel = new FileOutputStream(dest).getChannel();
 				outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} finally {
@@ -162,7 +160,6 @@ public class FileUtil {
 				inputChannel.close();
 				outputChannel.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -335,7 +332,6 @@ public class FileUtil {
                 }
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //return size/1048576;
@@ -406,7 +402,7 @@ public class FileUtil {
     /**
      * 写入缓存，json数据，文件名是实体类名
      */
-    public static void saveJsonToCacha(String json, String fileName) {
+    public static void saveJsonToCache(String json, String fileName) {
         OutputStream os = null;
         try {//缓存
             os = new FileOutputStream(FileUtil.getInstance().getmTempCache() + fileName);
@@ -428,7 +424,7 @@ public class FileUtil {
     /**
      * 读取缓存，json数据
      */
-    public static String readJsonFromCacha(String fileName) {
+    public static String readJsonFromCache(String fileName) {
         FileReader reader = null;
         try {
             reader = new FileReader(FileUtil.getInstance().getmTempCache() + fileName);
