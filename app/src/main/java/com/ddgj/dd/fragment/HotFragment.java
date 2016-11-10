@@ -74,7 +74,9 @@ public class HotFragment extends BaseFragment {
         initdatas(LOAD);
     }
     private void initCache() {
+        if (FileUtil.readJsonFromCache("allhotpost")!=null){
         JsonToDatas(FileUtil.readJsonFromCache("allhotpost"),LOAD);
+        }
     }
     private void initdatas(final int flag) {
 
@@ -91,13 +93,14 @@ public class HotFragment extends BaseFragment {
             @Override
             public void onResponse(String response, int id) {
                 FileUtil.saveJsonToCacha(response, "allhotpost");
+                if (response!=null)
                JsonToDatas(response,flag);
             }
         });
     }
 
     private void JsonToDatas(String response, int flag) {
-        Log.e("shuju", response);
+
         JSONObject jo = null;
         try {
             jo = new JSONObject(response);

@@ -79,6 +79,8 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout addImageGroup;
     private SweetAlertDialog dialog;
     private TextView city;
+    private Boolean emailError;
+    private Boolean phoneError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +169,15 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 sOrderUserAddress,
                 sMadeType,
                 sCity)) {
+            if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
+                showToastShort("手机号码格式不正确");
+                return;
+            }
+
+            if (!TextCheck.checkEmail(sOrderUserEmail)) {
+                showToastShort("邮箱格式不正确");
+                return;
+            }
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
             params.put("made_name", String.valueOf(sProductName));
@@ -360,6 +371,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                     sOrderUserEmail = orderUserEmail.getText().toString().trim();
                     if (!TextCheck.checkEmail(sOrderUserEmail)) {
                         showToastShort("邮箱格式不正确");
+                        emailError = true;
                     }
                 }
                 break;
@@ -369,6 +381,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                     sOrderUserPhone = orderUserPhone.getText().toString().trim();
                     if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
                         showToastShort("手机号码格式不正确");
+                        phoneError = true;
                     }
                 }
             default:

@@ -193,6 +193,15 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 sMadeType,
                 addr,
                 city)) {
+            if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
+                showToastShort("手机号码格式不正确");
+                return;
+            }
+
+            if (!TextCheck.checkEmail(sOrderUserEmail)) {
+                showToastShort("邮箱格式不正确");
+                return;
+            }
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
             params.put("made_name", String.valueOf(sProductName));

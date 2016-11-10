@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.ddgj.dd.R;
@@ -24,6 +25,7 @@ public abstract class BaseActivity extends FragmentActivity {
     protected static final String TAG = "lgst";
     public static final int SUCCESS = 100;
     public static final int FAILDE = 101;
+
 
     public void showToastShort(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
