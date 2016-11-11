@@ -4,7 +4,9 @@ import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.ddgj.dd.db.DBManager;
+import com.ddgj.dd.util.CrashHandler;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.user.UserHelper;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
@@ -49,6 +51,11 @@ public class DDGJApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());//百度地图初始化
         initEM();//环信easeui初始化
         initOkhttp();//OKhttp初始化
+//        bug追踪初始化
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(this);
+
+        HttpHelper.uploadError();
     }
 
     /**

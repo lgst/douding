@@ -8,7 +8,6 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.bean.User;
-import com.ddgj.dd.util.FileUtil;
 
 /**
  * 用户操作类，使用前必须初始化调用init()
@@ -71,7 +70,6 @@ public class UserHelper {
         setLogined(false);
         //清除用户对象
         user = null;
-        FileUtil.getInstance().deleteUserIcon();
         Toast.makeText(context,context.getResources().getString(R.string.logout_success),Toast.LENGTH_SHORT).show();
     }
 

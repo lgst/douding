@@ -54,6 +54,7 @@ public class OrderFactoryAdapter extends BaseAdapter {
         EnterpriseUser user = mFactorys.get(position);
         Glide.with(parent.getContext())
                 .load(NetWorkInterface.HOST+"/"+user.getFacilitator_head())
+                .error(R.drawable.ic_user_header_default)
                 .into(viewHolder.icon);
         viewHolder.name.setText(user.getFacilitator_name());
         viewHolder.field.setText(user.getFacilitator_field());

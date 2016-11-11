@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,15 +24,13 @@ import com.ddgj.dd.adapter.OriginalityPLVAdapter;
 import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Call;
 
-import static com.ddgj.dd.R.id.listView;
+import static com.ddgj.dd.R.id.list_view;
 
 /**
  * Created by Administrator on 2016/10/20.
@@ -54,6 +53,9 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
     private BaseActivity activity;
     private SwipeMenuListView mListView;
     private SweetAlertDialog mDialog;
+    private int pageNumber = 1;
+    private boolean refresh;
+    private View mView;
 
     @Nullable
     @Override
@@ -65,7 +67,7 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
     @Override
     protected void initView() {
         mLoading = (LinearLayout) findViewById(R.id.loading);
-        mListView = (SwipeMenuListView) findViewById(listView);
+        mListView = (SwipeMenuListView) findViewById(list_view);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -119,7 +121,7 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
                 switch (index) {
                     case 0:
                         // 删除
-                        Log.i("lgst", "onMenuItemClick: " + "delete");
+//                        Log.i("lgst", "onMenuItemClick: " + "delete");
                         showDeleteDialog(position);
                         break;
                 }
@@ -127,11 +129,36 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
                 return false;
             }
         });
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                Log.i("lgst", "onScrollStateChanged: " + scrollState);
+                if (scrollState == SCROLL_STATE_IDLE)
+                    refresh = true;
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                Log.i("lgst", "onScroll: " + firstVisibleItem + " visib:" + visibleItemCount + " total:" + totalItemCount);
+                if (firstVisibleItem + visibleItemCount >= totalItemCount && refresh) {
+                    //加载数据
+                    pageNumber++;
+                    initData();
+                    refresh = false;
+                }
+            }
+        });
+        mAdapter = new OriginalityPLVAdapter(activity, mOriginalitys);
+        mListView.setAdapter(mAdapter);
+        mView = getActivity().getLayoutInflater().inflate(R.layout.item_listview_footer, null);
+        mListView.addFooterView(mView);
     }
 
-    /**删除提示*/
+    /**
+     * 删除提示
+     */
     private void showDeleteDialog(final int position) {
-        mDialog = new SweetAlertDialog(getContext(),SweetAlertDialog.WARNING_TYPE);
+        mDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
         mDialog.setTitleText("警告")
                 .setContentText("删除后不可恢复，您真的要删除吗？")
                 .setConfirmText("删除")
@@ -151,14 +178,16 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
                 .show();
     }
 
-    /**删除数据*/
+    /**
+     * 删除数据
+     */
     private void deleteData(final int position) {
         Originality ori = mOriginalitys.get(position);
         String id = ori.getOriginality_id();
-        OkHttpUtils.get().url(DELETE_ORIGINALITY+"?"+"originality_id="+id).build().execute(new StringCallback() {
+        OkHttpUtils.get().url(DELETE_ORIGINALITY + "?" + "originality_id=" + id).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Toast.makeText(getActivity(),"删除失败，请稍后重试！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "删除失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                 mDialog.dismiss();
             }
 
@@ -166,7 +195,7 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
             public void onResponse(String response, int id) {
                 mOriginalitys.remove(position);
                 mAdapter.notifyDataSetInvalidated();
-                Toast.makeText(getActivity(),"删除成功！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "删除成功！", Toast.LENGTH_SHORT).show();
                 mDialog.dismiss();
             }
         });
@@ -188,44 +217,58 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
             activity.showToastNotNetWork();
             return;
         }
-        if (mOriginalitys.size() > 0) {
-            return;
-        }
+//        if (mOriginalitys.size() > 0) {
+//            return;
+//        }
         Map<String, String> params = new HashMap<String, String>();
-        params.put("pageNumber", "1");
-        params.put("pageSingle", "1000");
+        params.put("pageNumber", String.valueOf(pageNumber));
+        params.put("pageSingle", "10");
         params.put("o_account_id", UserHelper.getInstance().getUser().getAccount_id());
 //        params.put("originality_differentiate",String.valueOf(0));
+        new HttpHelper<Originality>(getActivity(), Originality.class)
+                .getDatasPost(GET_MINE_ORIGINALITY, params, new DataCallback<Originality>() {
+                    @Override
+                    public void Failed(Exception e) {
 
-        OkHttpUtils.post().url(GET_MINE_ORIGINALITY).params(params).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                activity.showToastNotNetWork();
-            }
+                    }
 
-            @Override
-            public void onResponse(String response, int id) {
-                Log.i("lgst", response);
-                try {
-                    JSONObject jo = new JSONObject(response);
-                    int status = jo.getInt("status");
-                    if (status == STATUS_SUCCESS) {
-                        JSONArray ja = jo.getJSONArray("data");
-                        for (int i = 0; i < ja.length(); i++) {
-                            String patentStr = ja.getJSONObject(i).toString();
-                            Originality originality = new Gson().fromJson(patentStr, Originality.class);
-                            mOriginalitys.add(originality);
-                        }
-                        mAdapter = new OriginalityPLVAdapter(activity, mOriginalitys);
-                        mListView.setAdapter(mAdapter);
+                    @Override
+                    public void Success(List<Originality> datas) {
+                        if (datas.isEmpty() || datas.size() < 10)
+                            mListView.removeFooterView(mView);
+                        mOriginalitys.addAll(datas);
+                        mAdapter.notifyDataSetChanged();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
                             mLoading.setVisibility(View.GONE);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+                });
+//        OkHttpUtils.post().url(GET_MINE_ORIGINALITY).params(params).build().execute(new StringCallback() {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//                activity.showToastNotNetWork();
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                Log.i("lgst", response);
+//                try {
+//                    JSONObject jo = new JSONObject(response);
+//                    int status = jo.getInt("status");
+//                    if (status == STATUS_SUCCESS) {
+//                        JSONArray ja = jo.getJSONArray("data");
+//                        for (int i = 0; i < ja.length(); i++) {
+//                            String patentStr = ja.getJSONObject(i).toString();
+//                            Originality originality = new Gson().fromJson(patentStr, Originality.class);
+//                            mOriginalitys.add(originality);
+//                        }
+//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+//                            mLoading.setVisibility(View.GONE);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        });
     }
 }

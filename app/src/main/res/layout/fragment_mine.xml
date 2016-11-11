@@ -252,7 +252,8 @@
                 </LinearLayout>
 
                 <View
-                    style="@style/LineGrey1px"/>
+                    style="@style/LineGrey1px"
+                    android:layout_marginLeft="16dp"/>
 
                 <LinearLayout
                     android:id="@+id/mine_favorite"
@@ -261,7 +262,7 @@
                     android:background="@drawable/ripple_bg_white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -282,8 +283,7 @@
                         android:layout_marginRight="16dp"
                         android:src="@mipmap/ic_chevron_right_black_24dp"/>
                 </LinearLayout>
-                <View style="@style/LineGrey1px"
-                      android:visibility="gone"/>
+                <View style="@style/LineGrey1px"/>
                 <View style="@style/LineGrey1px"
                       android:layout_marginTop="16dp"/>
                 <LinearLayout
@@ -303,7 +303,7 @@
 
                     <TextView
                         style="@style/MineFragmentListTextStyle"
-                        android:text="@string/app_settings"/>
+                        android:text="@string/app_settings" android:id="@+id/textView2"/>
 
                     <ImageView
                         android:layout_width="24dp"

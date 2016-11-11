@@ -1,6 +1,7 @@
 package com.ddgj.dd.adapter;
 
-import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -22,10 +23,8 @@ import java.util.List;
 public class FactoryAdapter extends BaseAdapter {
 
     private List<EnterpriseUser> facilitators;
-    private Activity act;
 
-    public FactoryAdapter(Activity act, List<EnterpriseUser> facilitators) {
-        this.act = act;
+    public FactoryAdapter(List<EnterpriseUser> facilitators) {
         this.facilitators = facilitators;
 
     }
@@ -50,7 +49,7 @@ public class FactoryAdapter extends BaseAdapter {
 
         ViewHolder vr = null;
         if (view == null) {
-            view = act.getLayoutInflater().inflate(R.layout.item_factory_list_factory, null);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_factory_list_factory, null);
             vr = new ViewHolder();
             vr.title = (TextView) view.findViewById(R.id.tv_factory_title);
             vr.field = (TextView) view.findViewById(R.id.tv_factory_field);
@@ -63,7 +62,7 @@ public class FactoryAdapter extends BaseAdapter {
 
         }
         EnterpriseUser facilitator = facilitators.get(position);
-        showImage(act,facilitator,vr);
+        showImage(viewGroup.getContext(),facilitator,vr);
         vr.title.setText(facilitator.getFacilitator_name());
         vr.field.setText(facilitator.getFacilitator_field());
         vr.scale.setText(facilitator.getFacilitator_scale());
@@ -71,13 +70,13 @@ public class FactoryAdapter extends BaseAdapter {
         return view;
     }
 
-    private void showImage(Activity act, EnterpriseUser facilitator, ViewHolder vr) {
+    private void showImage(Context context, EnterpriseUser facilitator, ViewHolder vr) {
         if (facilitator.getFacilitator_picture() != null) {
             String[] imgs = facilitator.getFacilitator_picture().split(",");
-
-            Glide.with(act)
+            Glide.with(context)
                     .load(NetWorkInterface.HOST + "/" + imgs[0])
                     .thumbnail(0.1f)
+                    .error(R.drawable.ic_image_default)
                     .into(vr.factoryPic);
         }
     }

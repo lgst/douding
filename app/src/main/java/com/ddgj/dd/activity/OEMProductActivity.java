@@ -62,6 +62,7 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
         mAdapter = new OrderAdapter(mOrders);
         initView();
         initData(LOAD);
+        mplv.setAdapter(mAdapter);
     }
 
     private void initData(final int flag) {
@@ -71,7 +72,7 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
             return;
         }
         Map<String, String> params = new HashMap<String, String>();
-        params.put("made_state", "2");
+        params.put("made_state", "0");
         params.put("made_differentiate", "1");
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
@@ -88,11 +89,11 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                 if (LOAD == flag)
                     mOrders.clear();
                 mOrders.addAll(datas);
-                mAdapter.notifyDataSetChanged();
                 if (mplv.isRefreshing())//关闭刷新
                     mplv.onRefreshComplete();
                 if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
                     mLoading.setVisibility(View.GONE);
+                mAdapter.notifyDataSetChanged();
             }
         });
 

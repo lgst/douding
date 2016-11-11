@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ddgj.dd.activity.FactoryActivity">
     <RelativeLayout
-        style="@style/ActionBarFactoryTheme">
+        style="@style/ActionBarFactoryTheme"
+        android:elevation="4dp">
         <ImageView
             style="@style/TitleBarImageTheme"
             android:onClick="backClick"
@@ -18,85 +19,18 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
     </RelativeLayout>
-
-    <LinearLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RadioGroup
-            android:id="@+id/rg_factory"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/rb_factory_enterprise"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:checked="true"
-                android:drawableBottom="@drawable/shape_radio_btn_line"
-                android:gravity="center"
-                android:text="企业"
-                android:textColor="@drawable/selector_rb_text_blue"/>
-            <View android:layout_width="1dp"
-                  android:layout_height="16dp"
-                  android:background="@color/grey"/>
-            <RadioButton
-                android:id="@+id/rb_factory_product"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:drawableBottom="@drawable/shape_radio_btn_line"
-                android:gravity="center"
-                android:text="产品"
-                android:textColor="@drawable/selector_rb_text_blue"/>
-
-        </RadioGroup>
-    </LinearLayout>
-    <View
-        style="@style/LineGrey1px"/>
-    <RelativeLayout
+        android:layout_height="40dp"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/grey_light"/>
+    <View style="@style/LineBlue1dp"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/lv_factory"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-        >
-
-        </com.handmark.pulltorefresh.library.PullToRefreshListView>
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="16dp"
-            android:onClick="addClick"
-            android:visibility="invisible"
-            android:src="@mipmap/ic_add_white_24dp"
-            app:backgroundTint="@color/colorPrimary"/>
-        <LinearLayout
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ProgressBar
-                style="@style/Base.Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/loading_data"/>
-        </LinearLayout>
-    </RelativeLayout>
+    </android.support.v4.view.ViewPager>
 </LinearLayout>

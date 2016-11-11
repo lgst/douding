@@ -256,18 +256,24 @@
 
         <activity android:name=".activity.SMSCodeActivity">
         </activity>
-        <activity android:name=".activity.CommentListActivity"
-                  android:theme="@style/AppThemeLightStatuBar"/>
-        <activity android:name=".activity.CitySelecterActivity"
-                  android:theme="@style/AppThemeLightStatuBar"/>
-
-        <activity android:name=".activity.PlateDetailsActivity"
-                  android:theme="@style/AppThemeLightStatuBar"
+        <activity
+            android:name=".activity.CommentListActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.CitySelecterActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.PlateDetailsActivity"
+            android:theme="@style/AppThemeLightStatuBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
-        <activity android:name=".activity.PublishBBSActivity"
-                  android:theme="@style/AppThemeLightStatuBar"/>
-        <activity android:name=".activity.BBSCommentActivity"
-                  android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.PublishBBSActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity
+            android:name=".activity.BBSCommentActivity"
+            android:theme="@style/AppThemeLightStatuBar"/>
+        <activity android:name=".activity.FavoriteActivity">
+        </activity>
     </application>
 
 </manifest>

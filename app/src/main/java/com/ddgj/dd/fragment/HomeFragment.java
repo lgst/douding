@@ -77,7 +77,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private void initCacha() {
         /*加载缓存广告*/
         adHttphelper = new HttpHelper<ADBean>(getActivity(), ADBean.class, true);
-        String adData = FileUtil.readJsonFromCacha(ADBean.class.getName());
+        String adData = FileUtil.readJsonFromCache(ADBean.class.getName());
         if (adData != null) {
             List<ADBean> adBeens = adHttphelper.analysisAndLoadOriginality(adData);
             viewpager.setAdapter(new ADAdapter(act, adBeens));
@@ -89,7 +89,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         */
         oriHttpHelper = new HttpHelper<Originality>(getActivity(), Originality.class, true);
         //获取缓存的JSON数据
-        String oriData = FileUtil.readJsonFromCacha(Originality.class.getName());
+        String oriData = FileUtil.readJsonFromCache(Originality.class.getName());
         //根据JSON数据获取数据集合
         mOriginalitys = oriHttpHelper.analysisAndLoadOriginality(oriData);
         originalityListView.setAdapter(new OriginalityPLVAdapter(act, mOriginalitys));
@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         /*加载缓存专利*/
         patentHttpHelper = new HttpHelper<Patent>(getActivity(), Patent.class, true);
         //JSON数据
-        String patentData = FileUtil.readJsonFromCacha(Patent.class.getName());
+        String patentData = FileUtil.readJsonFromCache(Patent.class.getName());
         //解析JSON数据，返回集合
         mPatents = patentHttpHelper.analysisAndLoadOriginality(patentData);
         patentListView.setAdapter(new PatentPLVAdapter(getActivity(), mPatents));
@@ -111,6 +111,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         params.put("pageNumber", "1");
         params.put("pageSingle", "3");
         params.put("originality_differentiate", "0");
+        params.put("originality_name","");
         oriHttpHelper.getDatasPost(GET_HOT_ORIGINALITY, params, new DataCallback<Originality>() {
             @Override
             public void Failed(Exception e) {
@@ -130,6 +131,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("originality_id", originality.getOriginality_id());
+                originality.setOriginality_differentiate("0");
                 oriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
             }
         });
@@ -142,6 +144,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
         params.put("pageSingle", "3");
+        params.put("patent_name","");
         patentHttpHelper.getDatasPost(GET_HOT_PATENT, params, new DataCallback<Patent>() {
             @Override
             public void Failed(Exception e) {

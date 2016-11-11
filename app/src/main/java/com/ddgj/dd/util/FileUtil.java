@@ -272,10 +272,6 @@ public class FileUtil {
 //        Log.i("lgst", mPrivateCache);
     }
 
-    public void deleteUserIcon() {
-        deleteFile(new File(mImageCache + "/" + "user_icon"));
-    }
-
     /**获取缓存大小*/
     public long getCacheSize() {
         File imageCache = new File(mImageCache);
@@ -396,6 +392,9 @@ public class FileUtil {
     /*临时缓存路径*/
     public String getmTempCache() {
         return mTempCache;
+    }
+    public String getmTempLogCache() {
+        return mTempCache+"log/";
     }
 
 

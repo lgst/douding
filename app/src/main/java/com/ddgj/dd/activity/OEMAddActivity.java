@@ -391,6 +391,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismiss();
                         finish();
                     }
                 })

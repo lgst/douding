@@ -21,24 +21,16 @@ import com.baidu.location.LocationClientOption;
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.bean.Order;
-import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Call;
 
 /**
  * 订制二级页面
@@ -70,9 +62,9 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
      */
     private static final int UPDATE = 2;
 
-    private List<Order> mOrders;
+    private List<Order> mOrders = new ArrayList<Order>();
 
-    private OrderAdapter mAdapter;
+    private OrderAdapter mAdapter = new OrderAdapter(mOrders);
     private LinearLayout mLoading;
     public LocationClient mLocationClient = null;
     /**定位回调*/
@@ -90,6 +82,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private String mAddr;
+    private HttpHelper<Order> mHttpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +91,12 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         classes = getIntent().getIntExtra("classes", -1);
         prices = getResources().getStringArray(R.array.price);
         initView();
-        mOrders = new ArrayList<Order>();
         initData(LOAD);
-        mLocationClient = new LocationClient(this);     //声明LocationClient类
         initLocation();
-        mLocationClient.registerLocationListener(myListener);    //注册监听函数
-        mLocationClient.start();
     }
 
     private void initLocation() {
+        mLocationClient = new LocationClient(this);     //声明LocationClient类
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
@@ -121,6 +111,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
         mLocationClient.setLocOption(option);
+        mLocationClient.registerLocationListener(myListener);    //注册监听函数
+        mLocationClient.start();
     }
 
     private void initData(final int flag) {
@@ -132,59 +124,77 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         String price = mTvPrice.getText().toString();
         if (!price.equals("全部价格")) {
             params.put("made_price", price);
-            Log.i("lgst", price);
         }
         params.put("city", mAddr);
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
         params.put("made_type_id", String.valueOf(classes));
-        Log.i("lgst", String.valueOf(classes));
-        OkHttpUtils.post().url(GET_ORDER_FOR_TYPE).params(params).build().execute(new StringCallback() {
+        mHttpHelper = new HttpHelper<Order>(this,Order.class);
+        mHttpHelper.getDatasPost(GET_ORDER_FOR_TYPE, params, new DataCallback<Order>() {
             @Override
-            public void onError(Call call, Exception e, int id) {
+            public void Failed(Exception e) {
                 mPageNumber--;//网络访问失败，页码下次不能加1 所以先减一
                 mplv.onRefreshComplete();
             }
 
             @Override
-            public void onResponse(String response, int id) {
-                Log.i("lgst", response);
-                try {
-                    JSONObject jo = new JSONObject(response);
-                    int status = jo.getInt("status");
-                    if (status == STATUS_SUCCESS) {
-                        JSONArray ja = jo.getJSONArray("data");
-                        if (flag == LOAD) {
-                            mOrders.clear();
-                        }
-                        for (int i = 0; i < ja.length(); i++) {
-                            String orderStr = ja.getJSONObject(i).toString();
-                            Order order = new Gson().fromJson(orderStr, Order.class);
-                            mOrders.add(order);
-                        }
-                        if (flag == LOAD) {
-                            mAdapter = new OrderAdapter(mOrders);
-                            mplv.setAdapter(mAdapter);
-                        } else {
-                            if (mAdapter != null)
-                                mAdapter.notifyDataSetChanged();
-                        }
-                        if (mplv.isRefreshing())//关闭刷新
-                            mplv.onRefreshComplete();
-                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-                            mLoading.setVisibility(View.GONE);
-                    } else {
-                        mOrders.clear();
-                        if (mAdapter != null) {
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            public void Success(List<Order> datas) {
+                if (flag == LOAD)
+                    mOrders.clear();
+                mOrders.addAll(datas);
+                if (mplv.isRefreshing())//关闭刷新
+                    mplv.onRefreshComplete();
+                if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+                    mLoading.setVisibility(View.GONE);
+                mAdapter.notifyDataSetChanged();
             }
         });
+//        OkHttpUtils.post().url(GET_ORDER_FOR_TYPE).params(params).build().execute(new StringCallback() {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//                mPageNumber--;//网络访问失败，页码下次不能加1 所以先减一
+//                mplv.onRefreshComplete();
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                Log.i("lgst", response);
+//                try {
+//                    JSONObject jo = new JSONObject(response);
+//                    int status = jo.getInt("status");
+//                    if (status == STATUS_SUCCESS) {
+//                        JSONArray ja = jo.getJSONArray("data");
+//                        if (flag == LOAD) {
+//                            mOrders.clear();
+//                        }
+//                        for (int i = 0; i < ja.length(); i++) {
+//                            String orderStr = ja.getJSONObject(i).toString();
+//                            Order order = new Gson().fromJson(orderStr, Order.class);
+//                            mOrders.add(order);
+//                        }
+//                        if (flag == LOAD) {
+//                            mAdapter = new OrderAdapter(mOrders);
+//                            mplv.setAdapter(mAdapter);
+//                        } else {
+//                            if (mAdapter != null)
+//                                mAdapter.notifyDataSetChanged();
+//                        }
+//                        if (mplv.isRefreshing())//关闭刷新
+//                            mplv.onRefreshComplete();
+//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+//                            mLoading.setVisibility(View.GONE);
+//                    } else {
+//                        mOrders.clear();
+//                        if (mAdapter != null) {
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        });
     }
 
     @Override
@@ -204,7 +214,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         mTvPrice.setOnClickListener(this);
         mTitle.setText(getIntent().getStringExtra("title"));
         mLoading = (LinearLayout) findViewById(R.id.loading);
-
+        mplv.setAdapter(mAdapter);
         mplv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -225,26 +235,29 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("made_id", order.getMade_id());
-                OkHttpUtils.post().url(GET_ORDER_DETAILS).params(params).build().execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
-                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
-                            String url = responseInfo.getData();
-                            Log.e("lgst", url);
-                            startActivity(new Intent(OrderListActivity.this, WebActivity.class)
-                                    .putExtra("title", order.getMade_name())
-                                    .putExtra("url", HOST + url)
-                                    .putExtra("account", order.getAccount())
-                                    .putExtra("content", order.getMade_describe()));
-                        }
-                    }
-                });
+                mHttpHelper.startDetailsPage(GET_ORDER_DETAILS,params,order);
+//                OkHttpUtils.post().url(GET_ORDER_DETAILS).params(params).build().execute(new StringCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e, int id) {
+//                        Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response, int id) {
+//                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+//                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
+//                            String url = responseInfo.getData();
+//                            Log.e("lgst", url);
+//                            startActivity(new Intent(OrderListActivity.this, WebActivity.class)
+//                                    .putExtra("title", order.getMade_name())
+//                                    .putExtra("url", HOST + url)
+//                                    .putExtra("id",order.getMade_id())
+//                                    .putExtra("classes",2)
+//                                    .putExtra("account", order.getAccount())
+//                                    .putExtra("content", order.getMade_describe()));
+//                        }
+//                    }
+//                });
             }
         });
     }

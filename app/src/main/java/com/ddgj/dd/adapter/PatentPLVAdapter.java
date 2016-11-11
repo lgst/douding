@@ -83,6 +83,7 @@ public class PatentPLVAdapter extends BaseAdapter {
         Glide.with(act)
                 .load(NetWorkInterface.HOST + "/" + userIcon)
                 .thumbnail(0.5f)
+                .error(R.drawable.ic_user_header_default)
                 .into(vh.userIcon);
         vh.title.setText(patent.getPatent_name());
         vh.userName.setText(patent.getAccount());
@@ -129,6 +130,9 @@ public class PatentPLVAdapter extends BaseAdapter {
 
     /**折*/
     private void setImages(Patent patent, ViewHolder vh) {
+        vh.img1.setVisibility(View.GONE);
+        vh.img2.setVisibility(View.GONE);
+        vh.img3.setVisibility(View.GONE);
         if (patent.getPatent_picture() == null) {
             return;
         }
@@ -137,18 +141,21 @@ public class PatentPLVAdapter extends BaseAdapter {
             for (int i = 0; i < imgs.length; i++) {
                 switch (i) {
                     case 0:
+                        vh.img1.setVisibility(View.VISIBLE);
                         Glide.with(act)
                                 .load(NetWorkInterface.HOST + "/" + imgs[i])
                                 .thumbnail(0.1f)
                                 .into(vh.img1);
                         break;
                     case 1:
+                        vh.img2.setVisibility(View.VISIBLE);
                         Glide.with(act)
                                 .load(NetWorkInterface.HOST + "/" + imgs[i])
                                 .thumbnail(0.1f)
                                 .into(vh.img2);
                         break;
                     case 2:
+                        vh.img3.setVisibility(View.VISIBLE);
                         Glide.with(act)
                                 .load(NetWorkInterface.HOST + "/" + imgs[i])
                                 .thumbnail(0.1f)

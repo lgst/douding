@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.AboutActivity;
+import com.ddgj.dd.activity.FavoriteActivity;
 import com.ddgj.dd.activity.LoginActivity;
 import com.ddgj.dd.activity.MineProjectActivity;
 import com.ddgj.dd.activity.SettingsActivity;
@@ -250,6 +251,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
      * 点击我的收藏
      */
     private void clcikMineFavorite() {
+        if(UserHelper.getInstance().isLogined())
+        startActivity(new Intent(getActivity(), FavoriteActivity.class));
+        else {
+            Toast.makeText(getActivity(),"请先登录！",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(),LoginActivity.class).putExtra("flag",LoginActivity.BACK));
+
+        }
     }
 
     /**

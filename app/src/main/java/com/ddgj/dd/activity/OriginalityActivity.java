@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -19,6 +21,7 @@ import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
+import com.ddgj.dd.view.ListScrollDistanceCalculator;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -81,7 +84,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_originality);
         mOriginalitys = new ArrayList<Originality>();
-        mAdapter = new OriginalityPLVAdapter(this,mOriginalitys);
+        mAdapter = new OriginalityPLVAdapter(this, mOriginalitys);
         mOriHttpHelper = new HttpHelper<Originality>(this, Originality.class);
         initView();
         initDatas(LOAD, classes);
@@ -99,6 +102,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
+        params.put("originality_name", content.getText().toString().trim());
         if (classes == MINE) {
             params.put("o_account_id", UserHelper.getInstance().getUser().getAccount_id());
         } else {
@@ -169,7 +173,8 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("originality_id", originality.getOriginality_id());
-                mOriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS,params,originality);
+                originality.setOriginality_differentiate("0");
+                mOriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
             }
         });
         mplv.setAdapter(mAdapter);
@@ -187,7 +192,63 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                 }
             }
         });
+        ListScrollDistanceCalculator lsdc = new ListScrollDistanceCalculator();
+        lsdc.setScrollDistanceListener(new ListScrollDistanceCalculator.ScrollDistanceListener() {
+            @Override
+            public void onScrollDistanceChanged(int delta, int total) {
+                Log.i(TAG, "delta:" + delta + "  total:" + total);
+                if (total > 0) {
+                    if (is) {
+                        floatingActionButton.clearAnimation();
+                        Animation anim = AnimationUtils.loadAnimation(OriginalityActivity.this, R.anim.slide_in_from_bottom);
+                        floatingActionButton.setAnimation(anim);
+                        anim.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                floatingActionButton.setVisibility(View.VISIBLE);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        is = false;
+                    }
+                } else {
+                    if (!is) {
+                        floatingActionButton.clearAnimation();
+                        Animation anim = AnimationUtils.loadAnimation(OriginalityActivity.this, R.anim.slide_out_to_bottom);
+                        floatingActionButton.setAnimation(anim);
+                        anim.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                floatingActionButton.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        is = true;
+                    }
+                }
+            }
+        });
+        mplv.setOnScrollListener(lsdc);
     }
+
+    private boolean is = true;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -195,6 +256,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
             content.setText(text);
+            initDatas(LOAD, classes);
         }
     }
 

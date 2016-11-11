@@ -13,7 +13,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@mipmap/ic_account_box_grey600_24dp"
+            android:src="@drawable/ic_user_header_default"
             app:border_color="@color/white"
             app:border_width="1dp"/>
         <LinearLayout

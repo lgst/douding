@@ -4,7 +4,7 @@
                 android:layout_height="match_parent">
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
-        android:id="@+id/listView"
+        android:id="@+id/list_view"
         android:focusable="true"
         android:background="@color/white"
         android:layout_width="match_parent"

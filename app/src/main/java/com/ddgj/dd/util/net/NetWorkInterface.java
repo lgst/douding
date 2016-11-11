@@ -10,7 +10,9 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://www.51douding.com";
+    public static final String HOST = "http://192.168.2.180:8080/newdouding";
+//    public static final String HOST = "http://www.51douding.com";
+
     /**
      * 注册接口
      */
@@ -134,16 +136,16 @@ public interface NetWorkInterface {
      * 获取代工产品
      */
     public static final String GET_ORDER_PRODUCT_DETAILS = HOST + "/foundryDetails.do";
-  /***
+    /***
      * 添加评论
-     *OriginalityDetails.do
+     * OriginalityDetails.do
      */
-    public static final String ADD_COMMENT_BBS= HOST + "/addFollowCard.do";
-/***
+    public static final String ADD_COMMENT_BBS = HOST + "/addFollowCard.do";
+    /***
      * 获取所有评论
-     *OriginalityDetails.do
+     * OriginalityDetails.do
      */
-    public static final String GET_ALL_COMMENT_BBS= HOST + "/findFollowCard.do";
+    public static final String GET_ALL_COMMENT_BBS = HOST + "/findFollowCard.do";
 
     /**
      * 获取自己的订制接口
@@ -182,7 +184,9 @@ public interface NetWorkInterface {
      * originality_id
      */
     public static final String ORIGINALITY_SUPPORT = HOST + "/modifyOriginalityPraise.do";
-    /**创意点赞*/
+    /**
+     * 创意点赞
+     */
     public static final String PATENT_SUPPORT = HOST + "/modifyPantentPraise.do";
     /**
      * 获取工厂接口
@@ -200,7 +204,7 @@ public interface NetWorkInterface {
      * 获取创意产品详情接口
      * OriginalityDetails.do
      */
-    public static final String GET__PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
+    public static final String GET_PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
 
     /**
      * 版本更新检查
@@ -211,4 +215,21 @@ public interface NetWorkInterface {
      * 获取自己的订制接口
      */
     public static final String GET_MINE_ORDER = HOST + "/findMyCustom_made.do";
+    /**
+     * 添加收藏接口
+     */
+    String ADD_FAVORITE = HOST + "/addCollections.do";
+    /**
+     * 删除收藏接口
+     */
+    String DELETE_FAVORITE = HOST + "/delCollections.do";
+    /**
+     * 获取我的收藏接口
+     */
+    String GET_FAVORITE = HOST + "/findMyCollections.do";
+
+    /**
+     * 上传异常信息接口
+     */
+    String UPLOAD_ERROR = HOST + "/addError_infor.do";
 }

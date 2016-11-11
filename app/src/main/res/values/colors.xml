@@ -3,6 +3,7 @@
     <color name="colorPrimary">#014886</color>
     <color name="colorPrimaryDark">#013461</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorBg">#F4F2F7</color>
     <color name="red">#e60012</color>
 
     <color name="colorActionBar">@color/colorPrimary</color>
@@ -13,7 +14,7 @@
     <color name="alphaBlack">#88000000</color>
     <color name="grey">#808080</color>
     <color name="grey_light">#CCCCCC</color>
-    <color name="grey_lightE">#EEEEEE</color>
+    <color name="grey_lightE">#F4F2F7</color>
     <color name="alpha">#00000000</color>
 
     <color name="factorysizecolor">#014886</color>

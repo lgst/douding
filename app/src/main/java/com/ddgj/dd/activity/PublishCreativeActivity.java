@@ -236,14 +236,14 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
                         @Override
                         public void onError(okhttp3.Call call, Exception e, int id) {
                             Log.e("fabu", e.getMessage() + " 失败id:" + id);
-                            showToastLong("失败");
+                            showToastLong("添加失败！");
                             dialog.dismiss();
                         }
 
                         @Override
                         public void onResponse(String response, int id) {
                             Log.e("fabu", " 成功id:" + id);
-                            showToastLong("成功");
+                            showToastLong("添加成功！");
                             PublishCreativeActivity.this.finish();
                             dialog.dismiss();
                         }

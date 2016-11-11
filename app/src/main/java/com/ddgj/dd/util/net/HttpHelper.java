@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ddgj.dd.activity.WebActivity;
+import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.Patent;
@@ -78,7 +79,7 @@ public class HttpHelper<T> implements NetWorkInterface {
                                 sweetAlertDialog.dismiss();
                             }
                         });
-                if (((Activity)context).isFinishing())
+                if (((Activity) context).isFinishing())
                     sweetAlertDialog.show();
                 Toast.makeText(context, "图像上传失败！", Toast.LENGTH_SHORT).show();
             }
@@ -114,6 +115,29 @@ public class HttpHelper<T> implements NetWorkInterface {
                     e.printStackTrace();
                 }
 //                Log.i("lgst", "上传成功" + response.body().string());
+            }
+        });
+    }
+
+    public static void uploadError() {
+        String[] files =  new File(FileUtil.getInstance().getmTempLogCache()).list();
+        if(files.length<=0){
+            return;
+        }
+        final File file = new File(FileUtil.getInstance().getmTempLogCache(),files[0]);
+        if (!file.exists())
+            return;
+        OkHttpUtils.post().url(UPLOAD_ERROR).addFile("error_files",file.getName(),file).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i(TAG, "onResponse: " + response);
+                System.out.println(response);
+                file.delete();
             }
         });
     }
@@ -164,7 +188,7 @@ public class HttpHelper<T> implements NetWorkInterface {
 //                        Log.i("lgst", response);
                         callback.Success(analysisAndLoadOriginality(response));
                         if (save)
-                            FileUtil.saveJsonToCacha(response, tClass.getName());
+                            FileUtil.saveJsonToCache(response, tClass.getName());
                     }
                 }
         );
@@ -182,13 +206,13 @@ public class HttpHelper<T> implements NetWorkInterface {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         showNetworkNotConnectToast();
-                        Log.e(TAG, "onError: " + e.getMessage());
+//                        Log.e(TAG, "onError: " + e.getMessage());
                         callback.Failed(e);
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
+//                        Log.i("lgst", response);
                         callback.Success(analysisAndLoadOriginality(response));
                     }
                 }
@@ -258,19 +282,41 @@ public class HttpHelper<T> implements NetWorkInterface {
                     .putExtra("url", HOST + url)
                     .putExtra("account", originality.getAccount())
                     .putExtra("content", originality.getOriginality_details())
-                    .putExtra("id", originality.getOriginality_id())
-                    .putExtra("classes", 0);
+                    .putExtra("id", originality.getOriginality_id());
+            if (originality.getOriginality_differentiate().equals("0"))
+                intent.putExtra("classes", 1);
+            else
+                intent.putExtra("classes", 7);
         } else if (obj instanceof Patent) {//专利详情
             Patent patent = (Patent) obj;
             intent.putExtra("title", patent.getPatent_name())
                     .putExtra("url", HOST + url)
                     .putExtra("account", patent.getAccount())
-                    .putExtra("content", patent.getPatent_details());
+                    .putExtra("content", patent.getPatent_details())
+                    .putExtra("id", patent.getPatent_id())
+                    .putExtra("classes", 0);
         } else if (obj instanceof Order) {//订制详情
             Order order = (Order) obj;
             intent.putExtra("title", order.getMade_name())
                     .putExtra("url", HOST + url)
-                    .putExtra("content", order.getMade_describe());
+                    .putExtra("account", order.getAccount())
+                    .putExtra("content", order.getMade_describe())
+                    .putExtra("id", order.getMade_id());
+            if (order.getMade_differentiate().equals("0"))
+                intent.putExtra("classes", 2);//订制
+            else intent.putExtra("classes", 3);//代工
+        } else if (obj instanceof EnterpriseUser) {//工厂
+            EnterpriseUser user = (EnterpriseUser) obj;
+            intent.putExtra("title", user.getFacilitator_name())
+                    .putExtra("url", HOST + url)
+                    .putExtra("account", user.getAccount())
+                    .putExtra("content", "")
+                    .putExtra("id", user.getAccount_id());
+            if (user.getModify_differentiate().equals("2"))
+                intent.putExtra("classes", 4);
+            else if (user.getModify_differentiate().equals("1"))
+                intent.putExtra("classes", 5);
+            else intent.putExtra("classes", 6);
         }
         mContext.startActivity(intent);
     }

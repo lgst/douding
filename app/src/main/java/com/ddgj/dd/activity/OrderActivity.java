@@ -49,7 +49,7 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
     }
 
     private void initCache() {
-        mOrders = mOrderHttpHelper.analysisAndLoadOriginality(FileUtil.readJsonFromCacha("order"));
+        mOrders = mOrderHttpHelper.analysisAndLoadOriginality(FileUtil.readJsonFromCache("order"));
         mSuccess.setAdapter(new OrderAdapter(mOrders));
     }
 

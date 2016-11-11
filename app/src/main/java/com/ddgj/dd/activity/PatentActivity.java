@@ -100,6 +100,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
+        params.put("patent_name",content.getText().toString().trim());
         if (classes == MINE)
             params.put("p_account_id", UserHelper.getInstance().getUser().getAccount_id());
         mPatentHttpHelper.getDatasPost(getUrl(classes), params, new DataCallback<Patent>() {
@@ -190,7 +191,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
             content.setText(text);
-            initDatas(UPDATE, classes);
+            initDatas(LOAD, classes);
         }
     }
 

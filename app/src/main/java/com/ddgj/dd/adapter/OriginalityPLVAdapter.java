@@ -81,6 +81,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
         Glide.with(act)
                 .load(NetWorkInterface.HOST + "/" + userIcon)
                 .thumbnail(0.5f)
+                .error(R.drawable.ic_user_header_default)
                 .into(vh.userIcon);
 //        标题
         vh.title.setText(originality.getOriginality_name());
@@ -91,7 +92,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
             vh.type.setText(types[Integer.parseInt(originality.getOriginality_type())]);
 //        介绍
         vh.content.setText(originality.getOriginality_details());
-        //tu
+        //图
         showImages(act, originality, vh);
         vh.approve.setText(originality.getO_praise_amount());
         vh.approve.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +124,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
                     if (jo.getInt("status") == 0) {
                         Toast.makeText(v.getContext(), "点赞成功！", Toast.LENGTH_SHORT).show();
                         TextView tv = (TextView) v;
-                        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString())+1));
+                        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) + 1));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -133,12 +134,20 @@ public class OriginalityPLVAdapter extends BaseAdapter {
     }
 
     private void showImages(Activity act, Originality originality, ViewHolder vh) {
+        vh.img1.setVisibility(View.GONE);
         if (originality.getO_picture() != null) {
             String[] imgs = originality.getO_picture().split(",");
-            Glide.with(act)
-                    .load(NetWorkInterface.HOST + "/" + imgs[0])
-                    .thumbnail(0.1f)
-                    .into(vh.img1);
+            for (int i = 0; i < imgs.length; i++) {
+                if (!imgs.equals("null")) {
+                    vh.img1.setVisibility(View.VISIBLE);
+                    Glide.with(act)
+                            .load(NetWorkInterface.HOST + "/" + imgs[i])
+                            .thumbnail(0.1f)
+                            .into(vh.img1);
+                    break;
+                }
+
+            }
         }
     }
 

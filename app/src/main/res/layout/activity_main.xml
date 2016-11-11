@@ -33,7 +33,7 @@
         android:id="@+id/act_main_radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/act_main_radio_btn_home"

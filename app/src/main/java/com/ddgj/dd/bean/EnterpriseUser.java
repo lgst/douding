@@ -77,6 +77,7 @@ public class EnterpriseUser extends User implements Serializable {
     private String facilitator_landing_time;
     private String add_time;
     private String modify_time;
+    private String modify_differentiate;
 
     /**
      * 保存到SharedPreferences
@@ -102,6 +103,7 @@ public class EnterpriseUser extends User implements Serializable {
                 .putString("facilitator_landing_time", facilitator_landing_time)
                 .putString("add_time", add_time)
                 .putString("head_picture", head_picture)
+                .putString("modify_differentiate", modify_differentiate)
                 .putString("modify_time", modify_time).commit();
     }
 
@@ -126,10 +128,19 @@ public class EnterpriseUser extends User implements Serializable {
         facilitator_license = sharedPreferences.getString("facilitator_license", "");
         facilitator_picture = sharedPreferences.getString("facilitator_picture", "");
         facilitator_ip = sharedPreferences.getString("facilitator_ip", "");
+        modify_differentiate = sharedPreferences.getString("modify_differentiate", "");
         facilitator_landing_time = sharedPreferences.getString("facilitator_landing_time", "");
         add_time = sharedPreferences.getString("add_time", "");
         modify_time = sharedPreferences.getString("modify_time", "");
         head_picture = sharedPreferences.getString("head_picture", "");
+    }
+
+    public String getModify_differentiate() {
+        return modify_differentiate;
+    }
+
+    public void setModify_differentiate(String modify_differentiate) {
+        this.modify_differentiate = modify_differentiate;
     }
 
     public String getPassword() {

@@ -60,8 +60,7 @@ public class OrderAdapter extends BaseAdapter {
                     continue;
                 Glide.with(parent.getContext())
                         .load(NetWorkInterface.HOST + "/" + imgs[i])
-                        .error(R.mipmap.ic_crop_original_grey600_48dp)
-                        .placeholder(R.mipmap.ic_crop_original_grey600_48dp)
+                        .error(R.drawable.ic_image_default)
                         .thumbnail(0.1f)
                         .into(vh.img);
                 File file = Glide.getPhotoCacheDir(parent.getContext());

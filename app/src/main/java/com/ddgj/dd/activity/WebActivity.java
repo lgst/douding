@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -43,8 +44,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
+
+import static com.ddgj.dd.R.id.favorite;
 
 public class WebActivity extends BaseActivity implements Animation.AnimationListener {
     private RelativeLayout mContainer;
@@ -67,6 +72,9 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         initWebView();
     }
 
+    /**
+     * 初始化WebView
+     */
     private void initWebView() {
 
         mWebView.setWebViewClient(new WebViewClient() {
@@ -80,7 +88,7 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.startsWith("tel:")||url.startsWith("mailto:")){
+                if (url.startsWith("tel:") || url.startsWith("mailto:")) {
                     return true;
                 }
                 view.loadUrl(url);
@@ -118,8 +126,8 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         mTitle.setText(getIntent().getStringExtra("title"));
         commentContainerLL = (LinearLayout) findViewById(R.id.comment_container);
 //        if (getIntent().getIntExtra("classes", -1) != -1) {
-            if (getIntent().getIntExtra("classes", -1) == 0)
-                commentContainerLL.setVisibility(View.VISIBLE);
+        if (getIntent().getIntExtra("classes", -1) == 1)
+            commentContainerLL.setVisibility(View.VISIBLE);
 //        }
         mContainer = (RelativeLayout) findViewById(R.id.content_container);
         mWebView = new WebView(getApplicationContext());
@@ -161,10 +169,18 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         mWebView.destroy();
     }
 
+    /**
+     * 返回
+     * @param v
+     */
     public void backClick(View v) {
         finish();
     }
 
+    /**
+     * 更多
+     * @param v
+     */
     public void moreClick(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         String user = null;
@@ -173,13 +189,11 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         }
         if (user == null) {//未登录
             popup.getMenuInflater().inflate(R.menu.pop_menu_mine, popup.getMenu());
-        } else if (mAccount == null)//没有发布人
-        {
+        } else if (mAccount == null) {//没有发布人，广告没有发布人
             popup.getMenuInflater().inflate(R.menu.pop_menu_mine, popup.getMenu());
         } else if (mAccount.equals(user)) {//发布人是自己
             popup.getMenuInflater().inflate(R.menu.pop_menu_mine, popup.getMenu());
         } else {
-            //Inflating the Popup using xml file
             popup.getMenuInflater().inflate(R.menu.pop_menu, popup.getMenu());
         }
 //        通过反射开启图标显示
@@ -193,18 +207,18 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.send_message://发送消息
-                        Log.i(TAG, "onMenuItemClick: " + "send message");
                         startActivity(new Intent(WebActivity.this, ChatActivity.class)
                                 .putExtra(EaseConstant.EXTRA_USER_ID, mAccount));
                         break;
                     case R.id.share://分享
-                        Log.i(TAG, "onMenuItemClick: " + "share");
                         share();
+                        break;
+                    case favorite://收藏
+                        favorite();
                         break;
                 }
                 return true;
@@ -212,6 +226,51 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         });
 
         popup.show(); //showing popup menu
+    }
+
+    /**
+     * 收藏
+     */
+    private void favorite() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("collection_type", String.valueOf(getIntent().getIntExtra("classes", -1)));
+        params.put("c_u_id", UserHelper.getInstance().getUser().getAccount_id());
+        params.put("c_u_account", mAccount);
+        params.put("c_from_id", getIntent().getStringExtra("id"));
+        params.put("c_from_title", getIntent().getStringExtra("title"));
+        params.put("c_from_picture", "");
+        OkHttpUtils.post().params(params).url(NetWorkInterface.ADD_FAVORITE).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "收藏失败: " + e.getMessage());
+                showToastShort("网络请求失败，请稍后重试！");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i(TAG, "onResponse: " + response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    if (0 == jo.getInt("status"))
+                        Snackbar.make(mTitle,"收藏成功！",Snackbar.LENGTH_LONG).setAction("查看", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(WebActivity.this,FavoriteActivity.class));
+                            }
+                        }).show();
+                    else
+                        Snackbar.make(mTitle,"您已经收藏过本条数据！",Snackbar.LENGTH_LONG).setAction("查看", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(WebActivity.this,FavoriteActivity.class));
+                            }
+                        }).show();
+//                        showToastShort("收藏成功！");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -251,6 +310,10 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
                 }).open();
     }
 
+    /**
+     * 评论
+     * @param v
+     */
     public void commentClick(View v) {
         User user = UserHelper.getInstance().getUser();
         if (user == null) {
@@ -261,9 +324,13 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
         }
         startActivity(new Intent(this, CommentListActivity.class)
                 .putExtra("topic_id", getIntent().getStringExtra("id"))
-                .putExtra("classes", getIntent().getIntExtra("classes",-1)));
+                .putExtra("classes", getIntent().getIntExtra("classes", -1)));
     }
 
+    /**
+     * 点赞
+     * @param v
+     */
     public void supportClick(View v) {
         OkHttpUtils.get().url(NetWorkInterface.ORIGINALITY_SUPPORT + "?originality_id=" + getIntent().getStringExtra("id"))
                 .build().execute(new StringCallback() {
@@ -288,7 +355,6 @@ public class WebActivity extends BaseActivity implements Animation.AnimationList
             }
         });
     }
-
 
 
     private void imgReset() {

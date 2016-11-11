@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,15 +24,13 @@ import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +51,9 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
     private OrderAdapter mAdapter;
     private BaseActivity activity;
     private SweetAlertDialog mDialog;
+    private View mView;
+    private int pageNumber = 1;
+    private boolean refresh;
 
     @Nullable
     @Override
@@ -62,7 +64,7 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
 
     @Override
     protected void initView() {
-        mplv = (SwipeMenuListView) findViewById(R.id.listView);
+        mplv = (SwipeMenuListView) findViewById(R.id.list_view);
         mLoading = (LinearLayout) findViewById(R.id.loading);
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,7 +84,7 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
                         ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
-                            Log.e("lgst", url);
+//                            Log.e("lgst", url);
                             startActivity(new Intent(activity, WebActivity.class)
                                     .putExtra("title", order.getMade_name())
                                     .putExtra("url", HOST + url));
@@ -116,7 +118,7 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
                 switch (index) {
                     case 0:
                         // 删除
-                        Log.i("lgst", "onMenuItemClick: " + "delete");
+//                        Log.i("lgst", "onMenuItemClick: " + "delete");
                         showDeleteDialog(position);
                         break;
                 }
@@ -124,6 +126,29 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
                 return false;
             }
         });
+        mplv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                Log.i("lgst", "onScrollStateChanged: " + scrollState);
+                if (scrollState == SCROLL_STATE_IDLE)
+                    refresh = true;
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                Log.i("lgst", "onScroll: " + firstVisibleItem + " visib:" + visibleItemCount + " total:" + totalItemCount);
+                if (firstVisibleItem + visibleItemCount >= totalItemCount && refresh) {
+                    //加载数据
+                    pageNumber++;
+                    initData();
+                    refresh = false;
+                }
+            }
+        });
+        mView = getActivity().getLayoutInflater().inflate(R.layout.item_listview_footer,null);
+        mplv.addFooterView(mView);
+        mAdapter = new OrderAdapter(mOders);
+        mplv.setAdapter(mAdapter);
     }
 
     @Override
@@ -142,45 +167,61 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
             activity.showToastNotNetWork();
             return;
         }
-        if (mOders.size() > 0) {
-            return;
-        }
+//        if (mOders.size() > 0) {
+//            return;
+//        }
         Map<String, String> params = new HashMap<String, String>();
-        params.put("pageNumber", "1");
-        params.put("pageSingle", "1000");
+        params.put("pageNumber", String.valueOf(pageNumber));
+        params.put("pageSingle", "10");
         params.put("made_differentiate", "0");
         params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
 //        params.put("originality_differentiate",String.valueOf(0));
+        new HttpHelper<Order>(getActivity(),Order.class)
+                .getDatasPost(GET_MINE_ORDER, params, new DataCallback<Order>() {
+                    @Override
+                    public void Failed(Exception e) {
+                        Log.e("lgst", "我的订制获取出错："+e.getMessage());
+                    }
 
-        OkHttpUtils.post().url(GET_MINE_ORDER).params(params).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                activity.showToastNotNetWork();
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                Log.i("lgst", response);
-                try {
-                    JSONObject jo = new JSONObject(response);
-                    int status = jo.getInt("status");
-                    if (status == STATUS_SUCCESS) {
-                        JSONArray ja = jo.getJSONArray("data");
-                        for (int i = 0; i < ja.length(); i++) {
-                            String orderStr = ja.getJSONObject(i).toString();
-                            Order order = new Gson().fromJson(orderStr, Order.class);
-                            mOders.add(order);
-                        }
-                        mAdapter = new OrderAdapter(mOders);
-                        mplv.setAdapter(mAdapter);
+                    @Override
+                    public void Success(List<Order> datas) {
+                        if(datas.size()<10)
+                            mplv.removeFooterView(mView);
+                        mOders.addAll(datas);
+                        mAdapter.notifyDataSetChanged();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
                             mLoading.setVisibility(View.GONE);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+                });
+//        OkHttpUtils.post().url(GET_MINE_ORDER).params(params).build().execute(new StringCallback() {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//                activity.showToastNotNetWork();
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                Log.i("lgst", response);
+//                try {
+//                    JSONObject jo = new JSONObject(response);
+//                    int status = jo.getInt("status");
+//                    if (status == STATUS_SUCCESS) {
+//                        JSONArray ja = jo.getJSONArray("data");
+//                        for (int i = 0; i < ja.length(); i++) {
+//                            String orderStr = ja.getJSONObject(i).toString();
+//                            Order order = new Gson().fromJson(orderStr, Order.class);
+//                            mOders.add(order);
+//                        }
+//                        mAdapter = new OrderAdapter(mOders);
+//                        mplv.setAdapter(mAdapter);
+//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+//                            mLoading.setVisibility(View.GONE);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     /**

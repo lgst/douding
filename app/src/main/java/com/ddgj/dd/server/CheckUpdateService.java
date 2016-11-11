@@ -71,11 +71,12 @@ public class CheckUpdateService extends Service implements NetWorkInterface {
                         startUpdate(url);
                     }
                 })
-                .setCancelText("暂不更新")
+                .setCancelText("退出")
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismiss();
+                        System.exit(0);
                     }
                 })
                 .setCancelable(true);
