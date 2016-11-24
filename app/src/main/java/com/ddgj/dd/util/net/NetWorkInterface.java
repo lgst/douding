@@ -249,4 +249,8 @@ public interface NetWorkInterface {
      * 查询订单
      */
     String QUERY_ORDER = HOST + "/findOrder.do";
+    /**
+     * 查询订单
+     */
+    String GET_ORIGINALITY_DETAIL = HOST + "/findByOriginalityId.do";
 }

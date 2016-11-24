@@ -308,10 +308,6 @@
             android:name=".activity.PhotoScale"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.OriginalityDetailActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".activity.OrderDetailActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -323,6 +319,7 @@
         </activity>
         <activity android:name=".activity.MineCustomActivity">
         </activity>
+        <activity android:name=".activity.OriginalityDetailActivity"></activity>
     </application>
 
 </manifest>

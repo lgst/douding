@@ -53,7 +53,7 @@ public class DDGJApplication extends Application {
         dbHelper.openDatabase();
         UserHelper.getInstance().initUserInfo(this);//用户初始化
         FileUtil.getInstance().init(getApplicationContext());//目录初始化
-        SDKInitializer.initialize(getApplicationContext());//百度地图初始化
+       // SDKInitializer.initialize(getApplicationContext());//百度地图初始化
         initLocation();
         initEM();//环信easeui初始化
         initOkhttp();//OKhttp初始化

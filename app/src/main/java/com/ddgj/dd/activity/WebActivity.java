@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Call;
+import static com.ddgj.dd.R.id.favorite;
 
 import static com.ddgj.dd.R.id.favorite;
 
