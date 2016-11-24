@@ -174,7 +174,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.order:
 //                page = 2;
-                startActivity(new Intent(getActivity(),MineCustomActivity.class));
+                if (UserHelper.getInstance().isLogined())
+                    startActivity(new Intent(getActivity(), MineCustomActivity.class));
+                else
+                    Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
                 return;
             case R.id.oem:
                 page = 3;
@@ -205,11 +208,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void clickOrder() {
-        if(UserHelper.getInstance().isLogined())
+        if (UserHelper.getInstance().isLogined())
             startActivity(new Intent(getActivity(), MineOrderActivity.class));
         else {
-            Toast.makeText(getActivity(),"请先登录！",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(),LoginActivity.class).putExtra("flag",LoginActivity.BACK));
+            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
 
         }
     }
@@ -270,11 +273,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
      * 点击我的收藏
      */
     private void clcikMineFavorite() {
-        if(UserHelper.getInstance().isLogined())
-        startActivity(new Intent(getActivity(), FavoriteActivity.class));
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), FavoriteActivity.class));
         else {
-            Toast.makeText(getActivity(),"请先登录！",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(),LoginActivity.class).putExtra("flag",LoginActivity.BACK));
+            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
 
         }
     }
