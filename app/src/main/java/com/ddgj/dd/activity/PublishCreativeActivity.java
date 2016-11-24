@@ -199,6 +199,15 @@ public class PublishCreativeActivity extends BaseActivity implements View.OnClic
      */
     private void toCommitIdea() {
         if (check(sEditName, sEditIntro, sEditInfor, sEditUserName, sEditUserPhone)) {
+            if (!TextCheck.checkPhoneNumber(sEditUserPhone)) {
+                showToastShort("手机号码格式不正确");
+                return;
+            }
+
+            if (!TextCheck.checkEmail(sEditUserEmail)) {
+                showToastShort("邮箱格式不正确");
+                return;
+            }
             dialog = showLoadingDialog("", "正在发送您的创意");
             Map<String, String> params = new HashMap<String, String>();
             params.put("originality_name", String.valueOf(sEditName));

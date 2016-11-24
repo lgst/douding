@@ -152,6 +152,7 @@ public class MineOriginalityFragment extends BaseFragment implements NetWorkInte
         mListView.setAdapter(mAdapter);
         mView = getActivity().getLayoutInflater().inflate(R.layout.item_listview_footer, null);
         mListView.addFooterView(mView);
+        mListView.setEmptyView(findViewById(R.id.not_data));
     }
 
     /**

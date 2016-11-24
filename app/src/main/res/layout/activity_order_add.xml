@@ -44,6 +44,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -196,6 +197,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -230,7 +232,7 @@
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
-                    android:text="产品描述"/>
+                    android:text="订制需求描述"/>
 
                 <EditText
                     android:id="@+id/product_intro"
@@ -250,6 +252,7 @@
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
+                    android:visibility="gone"
                     android:text="产品备注"/>
 
                 <EditText
@@ -258,6 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="left"
+                    android:visibility="gone"
                     android:background="@drawable/selector_edittext"
                     android:inputType="textMultiLine"
                     android:minLines="4"
@@ -351,7 +355,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="所在城市："/>
+                    android:text="所 在 市 ： "/>
 
                 <TextView
                     android:id="@+id/order_user_city"

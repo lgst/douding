@@ -78,7 +78,7 @@ public class PatentPLVAdapter extends BaseAdapter {
         final Patent patent = patents.get(position);
 
         String userIcon = patent.getHead_picture();
-        if(userIcon==null)
+        if (userIcon == null)
             userIcon = UserHelper.getInstance().getUser().getHead_picture();
         Glide.with(act)
                 .load(NetWorkInterface.HOST + "/" + userIcon)
@@ -102,6 +102,7 @@ public class PatentPLVAdapter extends BaseAdapter {
         vh.date.setText(StringUtils.getDate(patent.getP_creation_time()));
         return convertView;
     }
+
     public void supportClick(final View v, String id) {
         OkHttpUtils.get().url(NetWorkInterface.PATENT_SUPPORT + "?patent_id=" + id)
                 .build().execute(new StringCallback() {
@@ -119,7 +120,7 @@ public class PatentPLVAdapter extends BaseAdapter {
                     if (jo.getInt("status") == 0) {
                         Toast.makeText(v.getContext(), "点赞成功！", Toast.LENGTH_SHORT).show();
                         TextView tv = (TextView) v;
-                        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString())+1));
+                        tv.setText(String.valueOf(Integer.parseInt(tv.getText().toString()) + 1));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -128,7 +129,9 @@ public class PatentPLVAdapter extends BaseAdapter {
         });
     }
 
-    /**折*/
+    /**
+     * 折
+     */
     private void setImages(Patent patent, ViewHolder vh) {
         vh.img1.setVisibility(View.GONE);
         vh.img2.setVisibility(View.GONE);
@@ -139,6 +142,8 @@ public class PatentPLVAdapter extends BaseAdapter {
         if (!patent.getPatent_picture().equals("")) {
             String[] imgs = patent.getPatent_picture().split("\\,");
             for (int i = 0; i < imgs.length; i++) {
+                if (imgs[i].equals("null"))
+                    continue;
                 switch (i) {
                     case 0:
                         vh.img1.setVisibility(View.VISIBLE);

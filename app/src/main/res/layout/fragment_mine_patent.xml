@@ -9,6 +9,9 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <include layout="@layout/item_not_data"
+             android:id="@+id/not_data"
+    />
     <LinearLayout
         android:id="@+id/loading"
         android:layout_width="match_parent"

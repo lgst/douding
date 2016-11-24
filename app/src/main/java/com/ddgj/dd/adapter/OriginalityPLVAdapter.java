@@ -143,6 +143,7 @@ public class OriginalityPLVAdapter extends BaseAdapter {
                     Glide.with(act)
                             .load(NetWorkInterface.HOST + "/" + imgs[i])
                             .thumbnail(0.1f)
+                            .error(R.drawable.ic_image_default)
                             .into(vh.img1);
                     break;
                 }

@@ -4,36 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_lightE"
     android:orientation="vertical"
-    android:background="@color/grey_light"
     tools:context="com.ddgj.dd.activity.MainActivity">
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <com.ddgj.dd.view.CustomViewPager
             android:id="@+id/act_main_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
         </com.ddgj.dd.view.CustomViewPager>
         <View
-            android:layout_alignParentBottom="true"
-            android:layout_above="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@drawable/up_shadow"></View>
+            android:layout_height="2dp"
+            android:layout_above="@+id/view"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/up_shadow"/>
     </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
 
-    <View android:layout_width="match_parent" android:layout_height="4dp"
-    android:background="@color/colorPrimary"/>
     <RadioGroup
-        android:elevation="50dp"
         android:id="@+id/act_main_radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/grey_lightE"
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/act_main_radio_btn_home"

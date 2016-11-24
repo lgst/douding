@@ -60,6 +60,24 @@ public class Order implements Serializable {
     private String pageNumber;
     private String pageSingle;
     private String account;
+    private String city;
+    private String made_o_u_id;
+
+    public String getMade_o_u_id() {
+        return made_o_u_id;
+    }
+
+    public void setMade_o_u_id(String made_o_u_id) {
+        this.made_o_u_id = made_o_u_id;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public String getAccount() {
         return account;

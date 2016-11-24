@@ -63,6 +63,7 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
         initView();
         initData(LOAD);
         mplv.setAdapter(mAdapter);
+        mplv.setRefreshing();
     }
 
     private void initData(final int flag) {

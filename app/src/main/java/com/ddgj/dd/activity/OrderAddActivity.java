@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.bean.EnterpriseUser;
+import com.ddgj.dd.bean.PersonalUser;
+import com.ddgj.dd.bean.User;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.TextCheck;
@@ -120,7 +123,6 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
         productName = (EditText) findViewById(R.id.product_name);
-
         orderTitle = (EditText) findViewById(R.id.order_title);
         orderPrice = (EditText) findViewById(R.id.order_price);
         orderNumber = (EditText) findViewById(R.id.order_number);
@@ -134,6 +136,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         orderUserEmail = (EditText) findViewById(R.id.order_user_email);
         orderUserEmail.setOnFocusChangeListener(this);
         orderUserCity = (TextView) findViewById(R.id.order_user_city);
+        orderUserCity.setText(getSharedPreferences("location", MODE_PRIVATE).getString("city", null));
         madeType = (Spinner) findViewById(R.id.made_type_spinner);
         madeState = (Spinner) findViewById(R.id.made_state);
         pickPic = (Button) findViewById(R.id.pick_pic);
@@ -142,10 +145,19 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
         commitOrder.setOnClickListener(this);
         selectPic = (ImageView) findViewById(R.id.select_pic);
         orderUserAddress = (EditText) findViewById(R.id.order_user_address);
-
-
+        orderUserAddress.setText(getSharedPreferences("location", MODE_PRIVATE).getString("address", null));
         //添加图片
         addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
+        User user = UserHelper.getInstance().getUser();
+        if (user instanceof EnterpriseUser) {
+            orderUserName.setText(((EnterpriseUser) user).getFacilitator_name());
+            orderUserPhone.setText(((EnterpriseUser) user).getFacilitator_contact());
+            orderUserEmail.setText(((EnterpriseUser) user).getFacilitator_email());
+        } else if (user instanceof PersonalUser) {
+            orderUserName.setText(((PersonalUser) user).getUser_name());
+            orderUserPhone.setText(((PersonalUser) user).getPhone_number());
+            orderUserEmail.setText(((PersonalUser) user).getUser_email());
+        }
     }
 
     @Override
@@ -178,14 +190,14 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
      * 提交定制信息
      */
     private void toCommitIdea() {
-        if (check(sProductName,
+        if (check(//sProductName,
                 sOrderTitle,
                 sOrderPrice,
                 sOrderNumber,
                 sOrderDate,
-                sOrderSpecifications,
+//                sOrderSpecifications,
                 sProductIntro,
-                sProductInfor,
+//                sProductInfor,
                 sOrderUserName,
                 sOrderUserPhone,
                 sOrderUserEmail,
@@ -193,6 +205,15 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 sMadeType,
                 addr,
                 city)) {
+            if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
+                showToastShort("手机号码格式不正确");
+                return;
+            }
+
+            if (!TextCheck.checkEmail(sOrderUserEmail)) {
+                showToastShort("邮箱格式不正确");
+                return;
+            }
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
             params.put("made_name", String.valueOf(sProductName));
@@ -211,7 +232,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             params.put("made_state", "0");
             params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
             params.put("head_picture", "");
-            params.put("city",city);
+            params.put("city", city);
             params.put("made_differentiate", "0");
 
 
@@ -306,12 +327,12 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
      * @param userphone5
      * @return
      */
-    private boolean check(String ideaname,
+    private boolean check(//String ideaname,
                           String ideaintro,
-                          String idrainfor,
+//                          String idrainfor,
                           String username,
                           String userphone1,
-                          String userphone2,
+//                          String userphone2,
                           String userphone3,
                           String userphone4,
                           String userphone5,
@@ -321,11 +342,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                           String userphone8,
                           String addr,
                           String city) {
-        if (ideaname.isEmpty() || ideaintro.isEmpty()
-                || idrainfor.isEmpty()
+        if (ideaintro.isEmpty()
                 || username.isEmpty()
                 || userphone1.isEmpty()
-                || userphone2.isEmpty()
                 || userphone3.isEmpty()
                 || userphone4.isEmpty()
                 || userphone5.isEmpty()

@@ -14,6 +14,7 @@ import com.ddgj.dd.activity.WebActivity;
 import com.ddgj.dd.bean.ADBean;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +23,12 @@ import java.util.List;
 public class ADAdapter extends PagerAdapter implements NetWorkInterface {
     private Activity act;
     private List<ADBean> ads;
+    private List<View> views;
 
     public ADAdapter(Activity act, List<ADBean> ads) {
         this.ads = ads;
         this.act = act;
+        views = new ArrayList<View>();
     }
 
     @Override
@@ -39,7 +42,7 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         ImageView imageView = (ImageView) act.getLayoutInflater().inflate(R.layout.item_home_list_ad_item, null);
         final ADBean ad = ads.get(position);
         Glide.with(act)
@@ -51,7 +54,6 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("lgst", "Url:" + ad.getLink_address());
                 act.startActivity(new Intent(act, WebActivity.class)
                         .putExtra("url", "http://" + ad.getLink_address())
                         .putExtra("title", ad.getNote())
@@ -59,11 +61,13 @@ public class ADAdapter extends PagerAdapter implements NetWorkInterface {
             }
         });
         container.addView(imageView);
+        views.add(imageView);
         return imageView;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         notifyDataSetChanged();
+        container.removeView(views.get(position));
     }
 }

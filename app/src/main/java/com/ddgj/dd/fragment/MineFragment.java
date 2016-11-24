@@ -17,6 +17,8 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.activity.AboutActivity;
 import com.ddgj.dd.activity.FavoriteActivity;
 import com.ddgj.dd.activity.LoginActivity;
+import com.ddgj.dd.activity.MineCustomActivity;
+import com.ddgj.dd.activity.MineOrderActivity;
 import com.ddgj.dd.activity.MineProjectActivity;
 import com.ddgj.dd.activity.SettingsActivity;
 import com.ddgj.dd.activity.UserCenterActivity;
@@ -100,6 +102,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         findViewById(R.id.share_to_friend).setOnClickListener(this);
         //关于
         findViewById(R.id.about_us).setOnClickListener(this);
+        //我的订单
+        findViewById(R.id.mine_order).setOnClickListener(this);
         //用户头像
         userIcon = (CircleImageView) findViewById(R.id.user_icon);
         //用户名
@@ -110,6 +114,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         if (UserHelper.getInstance().getUser() != null &&
                 UserHelper.getInstance().getUser().getAccount_type().equals("0")) {
             findViewById(R.id.oem).setVisibility(View.GONE);
+            findViewById(R.id.mine_order).setVisibility(View.GONE);
         }
         findViewById(R.id.oem).setOnClickListener(this);
         mOemCount = (TextView) findViewById(R.id.oem_count);
@@ -168,8 +173,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 page = 1;
                 break;
             case R.id.order:
-                page = 2;
-                break;
+//                page = 2;
+                startActivity(new Intent(getActivity(),MineCustomActivity.class));
+                return;
             case R.id.oem:
                 page = 3;
                 break;
@@ -188,11 +194,24 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.about_us:
                 clickAboutUs();
                 return;
+            case R.id.mine_order:
+                clickOrder();
+                return;
         }
         if (UserHelper.getInstance().isLogined())
             startActivity(new Intent(getActivity(), MineProjectActivity.class).putExtra("page", page));
         else
             Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+    }
+
+    private void clickOrder() {
+        if(UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineOrderActivity.class));
+        else {
+            Toast.makeText(getActivity(),"请先登录！",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(),LoginActivity.class).putExtra("flag",LoginActivity.BACK));
+
+        }
     }
 
     /**

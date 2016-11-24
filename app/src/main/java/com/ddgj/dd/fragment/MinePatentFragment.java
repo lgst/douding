@@ -149,6 +149,7 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
         });
         mView = getActivity().getLayoutInflater().inflate(R.layout.item_listview_footer, null);
         mplv.addFooterView(mView);
+        mplv.setEmptyView(findViewById(R.id.not_data));
     }
 
     @Override

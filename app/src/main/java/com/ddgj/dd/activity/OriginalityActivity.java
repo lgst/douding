@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -36,7 +35,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
     private List<Originality> mOriginalitys;
     private OriginalityPLVAdapter mAdapter;
     private RadioGroup mRg;
-    private LinearLayout mLoading;
+    //    private LinearLayout mLoading;
     private TextView content;
     /**
      * 页码
@@ -77,6 +76,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
     private static final int MINE = 13;
     private FloatingActionButton floatingActionButton;
     private HttpHelper<Originality> mOriHttpHelper;
+    private View notDataView;
 
 
     @Override
@@ -87,7 +87,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         mAdapter = new OriginalityPLVAdapter(this, mOriginalitys);
         mOriHttpHelper = new HttpHelper<Originality>(this, Originality.class);
         initView();
-        initDatas(LOAD, classes);
+//        initDatas(LOAD, classes);
     }
 
     /**
@@ -113,10 +113,9 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
             @Override
             public void Failed(Exception e) {
                 mPageNumber--;
-                mplv.onRefreshComplete();
                 Log.e(TAG, "Failed: " + e.getMessage());
-                if (mplv.isRefreshing())//关闭刷新
-                    mplv.onRefreshComplete();
+                //关闭刷新
+                mplv.onRefreshComplete();
             }
 
             @Override
@@ -127,8 +126,10 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                 mAdapter.notifyDataSetChanged();
                 if (mplv.isRefreshing())//关闭刷新
                     mplv.onRefreshComplete();
-                if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-                    mLoading.setVisibility(View.GONE);
+                if (!mOriginalitys.isEmpty())//关闭加载数据页面
+                    notDataView.setVisibility(View.GONE);
+                else
+                    notDataView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -149,7 +150,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
 
     @Override
     public void initView() {
-        mLoading = (LinearLayout) findViewById(R.id.loading);
+//        mLoading = (LinearLayout) findViewById(R.id.loading);
         mRg = (RadioGroup) findViewById(R.id.rg);
         mplv = (PullToRefreshListView) findViewById(R.id.plv);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -246,6 +247,10 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
             }
         });
         mplv.setOnScrollListener(lsdc);
+        mplv.setRefreshing(true);
+        notDataView = findViewById(R.id.not_data);
+//        ((ViewGroup)mplv.getParent()).addView(notDataView);
+//        mplv.setEmptyView(notDataView);
     }
 
     private boolean is = true;
@@ -270,9 +275,9 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (mLoading.getVisibility() == View.VISIBLE) {
-            return;
-        }
+//        if (mLoading.getVisibility() == View.VISIBLE) {
+//            return;
+//        }
         switch (checkedId) {
             case R.id.rb_all://全部
                 changClasses(ALL);
@@ -296,10 +301,11 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
 
     private void changClasses(int classes) {
         this.classes = classes;
-        mLoading.setVisibility(View.VISIBLE);
+//        mLoading.setVisibility(View.VISIBLE);
         mOriginalitys.clear();
         mAdapter.notifyDataSetChanged();
         mPageNumber = 1;
-        initDatas(LOAD, classes);
+        mplv.setRefreshing(true);
+//        initDatas(LOAD, classes);
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.ddgj.dd.util.net.NetWorkInterface.GET_PRODUCTMADE;
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_PRODUCT_DETAILS;
+import static com.ddgj.dd.util.net.NetWorkInterface.GET__PRODUCT_DETAILS;
 
 /**
  * Created by Administrator on 2016/11/8.
@@ -159,6 +159,6 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
         ori.setOriginality_differentiate("1");
         params.put("client_side", "app");
         params.put("originality_id", ori.getOriginality_id());
-        mHttpHelper.startDetailsPage(GET_PRODUCT_DETAILS, params, ori);
+        mHttpHelper.startDetailsPage(GET__PRODUCT_DETAILS, params, ori);
     }
 }

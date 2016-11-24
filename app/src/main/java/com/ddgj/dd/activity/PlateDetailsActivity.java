@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.PostBean;
 import com.ddgj.dd.bean.PostContentBean;
@@ -154,7 +155,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
      * 动态添加所有的view
      */
     private void addAllContent(ArrayList<PostContentBean> beanArrayList) {
-        String[] imgs = postBean.getPicture_id().split("\\,");
+        final String[] imgs = postBean.getPicture_id().split("\\,");
         for (int i = 0; i < imgs.length; i++) {
             Log.e("toJson", "所有图片的链接" + imgs[i]);
             // NetWorkInterface.HOST + "/" + imgs[i]
@@ -172,11 +173,18 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 ImageView imageView = new ImageView(this);
                 imageView.setLayoutParams(layoutParams);
-                imageView.setScaleType(ImageView.ScaleType.CENTER);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                final int finalJ = j;
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(PlateDetailsActivity.this,PhotoScale.class).putExtra("photoURL",imgs[finalJ]));
+                    }
+                });
                 postContentAll.addView(imageView);
                 Glide.with(this)
                         .load(NetWorkInterface.HOST + "/" + imgs[j])
-                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(imageView);
                 j++;
             } else {
@@ -185,6 +193,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                 TextView textView = new TextView(this);
                 textView.setLayoutParams(layoutParams);
                 textView.setText(content);
+                textView.setTextIsSelectable(true);
                 postContentAll.addView(textView);
             }
 

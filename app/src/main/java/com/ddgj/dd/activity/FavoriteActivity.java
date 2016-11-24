@@ -128,6 +128,9 @@ public class FavoriteActivity extends BaseActivity {
                 return false;
             }
         });
+       // View emptyView = getLayoutInflater().inflate(R.layout.item_not_data, (ViewGroup) mListView.getParent());
+       // ((ViewGroup)mListView.getParent()).addView(emptyView);
+        mListView.setEmptyView(findViewById(R.id.not_data));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -163,41 +166,14 @@ public class FavoriteActivity extends BaseActivity {
                         break;
                     case 4: {
                         startEnterpriseDetailPage(params,info,"4");
-//                        params.put("client_side", "app");
-//                        EnterpriseUser user = new EnterpriseUser();
-//                        user.setAccount(info.getC_u_account());
-//                        user.setAccount_id(info.getC_from_id());
-//                        user.setFacilitator_name(info.getC_from_title());
-//                        user.setModify_differentiate("4");
-//                        params.put("acilitator_id", user.getAccount_id());
-//                        new HttpHelper<EnterpriseUser>(FavoriteActivity.this, EnterpriseUser.class)
-//                                .startDetailsPage(GET_ORDER_FACTORY_DETAILS, params, user);
                         break;
                     }
                     case 5: {
                         startEnterpriseDetailPage(params,info,"5");
-//                        params.put("client_side", "app");
-//                        EnterpriseUser user = new EnterpriseUser();
-//                        user.setAccount(info.getC_u_account());
-//                        user.setAccount_id(info.getC_from_id());
-//                        user.setFacilitator_name(info.getC_from_title());
-//                        user.setModify_differentiate("5");
-//                        params.put("acilitator_id", user.getAccount_id());
-//                        new HttpHelper<EnterpriseUser>(FavoriteActivity.this, EnterpriseUser.class)
-//                                .startDetailsPage(GET_ORDER_FACTORY_DETAILS, params, user);
                         break;
                     }
                     case 6: {
                         startEnterpriseDetailPage(params,info,"6");
-//                        params.put("client_side", "app");
-//                        EnterpriseUser user = new EnterpriseUser();
-//                        user.setAccount(info.getC_u_account());
-//                        user.setAccount_id(info.getC_from_id());
-//                        user.setFacilitator_name(info.getC_from_title());
-//                        user.setModify_differentiate("6");
-//                        params.put("acilitator_id", user.getAccount_id());
-//                        new HttpHelper<EnterpriseUser>(FavoriteActivity.this, EnterpriseUser.class)
-//                                .startDetailsPage(GET_ORDER_FACTORY_DETAILS, params, user);
                         break;
                     }
                     case 7:

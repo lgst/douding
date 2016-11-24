@@ -104,7 +104,7 @@ public class FileUtil {
 				fos = new FileOutputStream(outputFile);
                 //旋转图片
                 Bitmap bitmap1 = rotateBitmapByDegree(bitmap, getBitmapDegree(path));
-                bitmap1.compress(CompressFormat.JPEG, 50, fos);
+                bitmap1.compress(CompressFormat.JPEG, 100, fos);
                 fos.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

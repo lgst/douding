@@ -100,8 +100,8 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
             showToastNotNetWork();
             return;
         }
-        final String usernameContent = usernaemEt.getText().toString().trim();
-        final String pwdContent = pwdEt.getText().toString().trim();
+        final String usernameContent = usernaemEt.getText().toString().trim().toLowerCase();
+        final String pwdContent = pwdEt.getText().toString().trim().toLowerCase();
         if (checkInput(usernameContent, pwdContent)) {
             dialog = showLoadingDialog("登录中...", "");
             OkHttpClient client = new OkHttpClient();

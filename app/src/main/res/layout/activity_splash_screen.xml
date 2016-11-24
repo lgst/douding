@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/white"
     tools:context=".activity.SplashScreenActivity">
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_web_launcher"/>
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@mipmap/ic_splash"
+        android:layout_marginTop="128dp" android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
         android:gravity="center"
         android:text="@string/splash_bottom_text"
-        android:textColor="@color/white"/>
+        android:textColor="@color/colorPrimary" android:layout_marginBottom="50dp"
+        android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
+        android:id="@+id/textView3"/>
 </RelativeLayout>

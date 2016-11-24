@@ -23,14 +23,16 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * Created by Administrator on 2016/10/6.
  */
 public class ClassesGridViewAdapter extends BaseAdapter {
-    private String[] names = new String[]{"个人创意", "专利服务", "私人订制", "委托代工", "全民众筹", "中国智造"};
+    private String[] names = new String[]{"个人创意", "专利服务", "私人订制", "委托代工", "全民众筹", "中国智造", "采购", "悬赏"};
     private final int[] IMGS = new int[]{
             R.mipmap.ic_home_classes_chuangyi,
             R.mipmap.ic_home_classes_zhuangli,
             R.mipmap.ic_home_classes_dingzhi,
             R.mipmap.ic_home_classes_daigong,
             R.mipmap.ic_home_classes_zhongchou,
-            R.mipmap.ic_home_classes_gongchang};
+            R.mipmap.ic_home_classes_gongchang,
+            R.mipmap.ic_home_classes_caigou,
+            R.mipmap.ic_home_classes_xuanshang};
     private Context context;
 
     public ClassesGridViewAdapter(Context contexts) {
@@ -39,7 +41,7 @@ public class ClassesGridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 6;
+        return names.length;
     }
 
     @Override
@@ -54,13 +56,13 @@ public class ClassesGridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_list_classes_item,null,false);
-        ((ImageView)convertView.findViewById(R.id.img)).setImageResource(IMGS[position]);
-        ((TextView)convertView.findViewById(R.id.name)).setText(names[position]);
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_list_classes_item, null, false);
+        ((ImageView) convertView.findViewById(R.id.img)).setImageResource(IMGS[position]);
+        ((TextView) convertView.findViewById(R.id.name)).setText(names[position]);
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (position){
+                switch (position) {
                     case 0://创意
                         context.startActivity(new Intent(context, OriginalityActivity.class));
                         break;
@@ -68,17 +70,25 @@ public class ClassesGridViewAdapter extends BaseAdapter {
                         context.startActivity(new Intent(context, PatentActivity.class));
                         break;
                     case 2://订制
-                        context.startActivity(new Intent(context, OrderActivity.class).putExtra("page",3));
+                        context.startActivity(new Intent(context, OrderActivity.class).putExtra("page", 3));
                         break;
                     case 3://代工
-                        context.startActivity(new Intent(context, OEMActivity.class).putExtra("page",4));
+                        context.startActivity(new Intent(context, OEMActivity.class).putExtra("page", 4));
                         break;
                     case 4://众筹
 //                        context.startActivity(new Intent(context, .class).putExtra("page",5));
-                        showLoadingDialog("提示","该模块暂未开通！");
+                        showLoadingDialog("提示", "该模块暂未开通！");
                         break;
                     case 5://工厂 中国智造
-                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page",6));
+                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page", 6));
+                        break;
+                    case 6:// 采购
+//                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page", 6));
+                        showLoadingDialog("提示", "该模块暂未开通！");
+                        break;
+                    case 7:// 悬赏
+//                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page", 6));
+                        showLoadingDialog("提示", "该模块暂未开通！");
                         break;
                 }
             }
@@ -86,8 +96,8 @@ public class ClassesGridViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public SweetAlertDialog showLoadingDialog(String title, String content){
-        SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.NORMAL_TYPE);
+    public SweetAlertDialog showLoadingDialog(String title, String content) {
+        SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE);
         dialog.setContentText(content)
                 .setTitleText(title)
                 .show();

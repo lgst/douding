@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -33,7 +32,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     private List<Patent> mPatents;
     private PatentPLVAdapter mAdapter;
     private RadioGroup mRg;
-    private LinearLayout mLoading;
+//    private LinearLayout mLoading;
     private TextView content;
     private FloatingActionButton floatingActionButton;
 
@@ -76,6 +75,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     private static final int MINE = 13;
 
     private HttpHelper<Patent> mPatentHttpHelper;
+    private View notDataView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         mPatentHttpHelper = new HttpHelper<Patent>(this, Patent.class);
         mAdapter = new PatentPLVAdapter(this,mPatents);
         initView();
-        initDatas(LOAD, classes);
+        mplv.setRefreshing(true);
+//        initDatas(LOAD, classes);
     }
 
     /**
@@ -119,8 +120,10 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                 mAdapter.notifyDataSetChanged();
                 if (mplv.isRefreshing())//关闭刷新
                     mplv.onRefreshComplete();
-                if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-                    mLoading.setVisibility(View.GONE);
+                if (datas.isEmpty())//关闭加载数据页面
+                    notDataView.setVisibility(View.VISIBLE);
+                else
+                    notDataView.setVisibility(View.GONE);
             }
         });
     }
@@ -141,7 +144,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
     @Override
     public void initView() {
-        mLoading = (LinearLayout) findViewById(R.id.loading);
+//        mLoading = (LinearLayout) findViewById(R.id.loading);
         mRg = (RadioGroup) findViewById(R.id.rg);
         mplv = (PullToRefreshListView) findViewById(R.id.plv);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -169,6 +172,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
             }
         });
         mplv.setAdapter(mAdapter);
+        notDataView = findViewById(R.id.not_data);
+//        mplv.setEmptyView(notDataView);
         mRg.setOnCheckedChangeListener(this);
         content = (TextView) findViewById(R.id.search_edit_text);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
@@ -205,9 +210,6 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (mLoading.getVisibility() == View.VISIBLE) {
-            return;
-        }
         switch (checkedId) {
             case R.id.rb_all://全部
                 changClasses(ALL);
@@ -231,10 +233,10 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
     private void changClasses(int classes) {
         this.classes = classes;
-        mLoading.setVisibility(View.VISIBLE);
         mPatents.clear();
         mAdapter.notifyDataSetChanged();
         mPageNumber = 1;
-        initDatas(LOAD, classes);
+        mplv.setRefreshing(true);
+//        initDatas(LOAD, classes);
     }
 }

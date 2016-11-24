@@ -250,6 +250,37 @@
                         android:layout_marginRight="16dp"
                         android:src="@mipmap/ic_chevron_right_black_24dp"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/mine_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/ripple_bg_white"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/ic_order"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="我的订单"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="16dp"
+                        android:src="@mipmap/ic_chevron_right_black_24dp"/>
+                </LinearLayout>
 
                 <View
                     style="@style/LineGrey1px"
@@ -302,8 +333,8 @@
                         android:src="@drawable/ic_settings_blue_24dp"/>
 
                     <TextView
-                        style="@style/MineFragmentListTextStyle"
-                        android:text="@string/app_settings" android:id="@+id/textView2"/>
+                        android:id="@+id/textView2"
+                        style="@style/MineFragmentListTextStyle" android:text="@string/app_settings"/>
 
                     <ImageView
                         android:layout_width="24dp"

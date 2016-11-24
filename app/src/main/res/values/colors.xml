@@ -23,4 +23,8 @@
     <color name="select_pic_bg">#014886</color>
     <color name="all_bg_color">#013461</color>
     <color name="base_color_text_white">#FFFFFFFF</color>
+
+    <color name="waiting">#63c662</color>
+    <color name="working">#ff9a52</color>
+    <color name="finished">#ff3745</color>
 </resources>

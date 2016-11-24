@@ -160,7 +160,17 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
      */
     private void toCommitIdea() {
 
-        if (check(sPatentName, sPatentIntro, sPatentInfor, sPatentUserName, sPatentUserEmail, sPatentUserPhone, sPatentNumber, sPatentEmpower, sPatentAssignmentPrice)) {
+        if (check(sPatentName, sPatentIntro, sPatentInfor, sPatentUserName, sPatentUserEmail,
+                sPatentUserPhone, sPatentNumber, sPatentEmpower, sPatentAssignmentPrice)) {
+            if (!TextCheck.checkPhoneNumber(sPatentUserPhone)) {
+                showToastShort("手机号码格式不正确");
+                return;
+            }
+
+            if (!TextCheck.checkEmail(sPatentUserEmail)) {
+                showToastShort("邮箱格式不正确");
+                return;
+            }
             dialog = showLoadingDialog("", "正在发送您的专利");
             Map<String, String> params = new HashMap<String, String>();
             params.put("patent_name", String.valueOf(sPatentName));

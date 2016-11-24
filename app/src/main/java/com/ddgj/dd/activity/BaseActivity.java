@@ -25,6 +25,7 @@ public abstract class BaseActivity extends FragmentActivity {
     public static final int SUCCESS = 100;
     public static final int FAILDE = 101;
 
+
     public void showToastShort(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

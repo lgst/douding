@@ -23,8 +23,7 @@
         <ImageView android:layout_width="100dp"
                    android:layout_height="100dp"
                    android:layout_gravity="center_horizontal"
-                   android:src="@mipmap/ic_alpha_logo"
-        />
+                   android:src="@mipmap/ic_web_launcher"/>
         <TextView android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:text="公司简介"

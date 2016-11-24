@@ -10,8 +10,8 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-    public static final String HOST = "http://192.168.2.180:8080/newdouding";
 //    public static final String HOST = "http://www.51douding.com";
+    public static final String HOST = "http://192.168.2.180:8080/newdouding";
 
     /**
      * 注册接口
@@ -204,7 +204,7 @@ public interface NetWorkInterface {
      * 获取创意产品详情接口
      * OriginalityDetails.do
      */
-    public static final String GET_PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
+    public static final String GET__PRODUCT_DETAILS = HOST + "/OriginalityDetails.do";
 
     /**
      * 版本更新检查
@@ -232,4 +232,21 @@ public interface NetWorkInterface {
      * 上传异常信息接口
      */
     String UPLOAD_ERROR = HOST + "/addError_infor.do";
+
+    /**
+     * 查询手机号码是否已经注册
+     */
+    String CHECK_PHONE_IS_USED = HOST + "/findPhone.do";
+    /**
+     * 获得订制详情
+     */
+    String GET_ORDER_DETAIL = HOST + "/findCustom_made.do";
+    /**
+     * 订制下单
+     */
+    String ADD_ORDER = HOST + "/addOrder.do";
+    /**
+     * 查询订单
+     */
+    String QUERY_ORDER = HOST + "/findOrder.do";
 }

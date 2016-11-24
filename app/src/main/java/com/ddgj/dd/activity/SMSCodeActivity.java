@@ -3,23 +3,40 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.bean.ResponseInfo;
+import com.ddgj.dd.util.net.NetWorkInterface;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import okhttp3.Call;
 
 import static com.ddgj.dd.R.id.sms_code;
 
-public class SMSCodeActivity extends BaseActivity implements TextWatcher {
+public class SMSCodeActivity extends BaseActivity {
     private boolean cancle = false;
-    EventHandler eh = new EventHandler() {
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mSendCode.setEnabled(false);
+        }
+    };
+    private EventHandler eh = new EventHandler() {
         @Override
         public void afterEvent(int event, int result, Object data) {
 
@@ -36,7 +53,7 @@ public class SMSCodeActivity extends BaseActivity implements TextWatcher {
                 } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     //获取验证码成功
                     Log.i(TAG, "afterEvent: 获取验证码成功！");
-                    mSendCode.setEnabled(false);
+                    mHandler.sendEmptyMessage(1);
 //                    startTimer();
                 } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                     //返回支持发送验证码的国家列表
@@ -93,14 +110,19 @@ public class SMSCodeActivity extends BaseActivity implements TextWatcher {
     private EditText mSmsCode;
     private Button mSendCode;
     private Button mSubmit;
+    private View inputPhoneL;
+    private View sendCodeL;
+    private TextView phoneIsUsed;
 
     @Override
     public void initView() {
         mSmsCode = (EditText) findViewById(sms_code);
-        mSmsCode.addTextChangedListener(this);
         mSendCode = (Button) findViewById(R.id.send_code);
         mSubmit = (Button) findViewById(R.id.submit);
         mPhone = (EditText) findViewById(R.id.phone);
+        inputPhoneL = findViewById(R.id.input_phone);
+        sendCodeL = findViewById(R.id.send_code_view);
+        phoneIsUsed = (TextView) findViewById(R.id.tv_phone_isused);
     }
 
     @Override
@@ -122,37 +144,48 @@ public class SMSCodeActivity extends BaseActivity implements TextWatcher {
         finish();
     }
 
+    public void nextClick(View v) {
+        if (!checkNetWork()) {//网络检查
+            showToastNotNetWork();
+            return;
+        }
+        Map<String, String> params = new HashMap<String, String>();
+        phone = mPhone.getText().toString().trim();
+        if (!phone.matches("(13\\d|14[57]|15[^4,\\D]|17[678]|18\\d)\\d{8}|170[059]\\d{7}")) {
+            showToastShort("手机号码有误！");
+            return;
+        }
+        params.put("answer", phone);
+        OkHttpUtils.post().params(params).url(NetWorkInterface.CHECK_PHONE_IS_USED).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i(TAG, "onResponse: " + response);
+                ResponseInfo info = new Gson().fromJson(response, ResponseInfo.class);
+                if (info.getStatus() == 1) {
+                    showToastShort("该手机号码已被注册！");
+                }
+                if (info.getStatus() == 0) {
+                    SMSSDK.getVerificationCode(country, phone);
+                    startTimer();
+                    inputPhoneL.setVisibility(View.GONE);
+                    sendCodeL.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
     public void sendCodeClick(View v) {
         if (!checkNetWork()) {//网络检查
             showToastNotNetWork();
             return;
         }
-        phone = mPhone.getText().toString();
-        if (phone.matches("(13\\d|14[57]|15[^4,\\D]|17[678]|18\\d)\\d{8}|170[059]\\d{7}")) {
-            SMSSDK.getVerificationCode(country, phone);
-            startTimer();
-            Log.i(TAG, "sendCodeClick: ");
-        } else {
-            showToastShort("手机号码有误！");
-        }
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//        if (count >= 4) {
-//            mSubmit.setEnabled(true);
-//        } else {
-//            mSubmit.setEnabled(false);
-//        }
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
+        SMSSDK.getVerificationCode(country, phone);
+        startTimer();
+        Log.i(TAG, "sendCodeClick: ");
     }
 }

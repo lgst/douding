@@ -19,19 +19,15 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".DDGJApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme1"
         tools:replace="android:icon, android:theme">
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -156,7 +152,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme1">
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
@@ -186,33 +182,41 @@
         </activity>
         <activity
             android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.OriginalityActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.PatentActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.WebActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity"/>
         <activity
             android:name=".activity.PublishPatentActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity
             android:name=".activity.PublishCreativeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity
             android:name=".activity.OrderActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.OrderAddActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
@@ -221,32 +225,44 @@
         </activity>
         <activity
             android:name=".activity.OEMFactoryActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.OEMActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.OEMProductActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar">
         </activity>
         <activity
             android:name=".activity.OEMAddActivity"
             android:theme="@style/AppThemeLightStatuBar"/>
-        <activity android:name=".activity.SettingsActivity">
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.MineProjectActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity
             android:name=".activity.PublishProductActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
-        <activity android:name=".activity.ChatActivity"/>
+        <activity
+            android:name=".activity.ChatActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.FactoryActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".server.CheckUpdateService"
@@ -254,25 +270,55 @@
             android:exported="true">
         </service>
 
-        <activity android:name=".activity.SMSCodeActivity">
+        <activity
+            android:name=".activity.SMSCodeActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.CommentListActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity
             android:name=".activity.CitySelecterActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity
+            android:name=".activity.FavoriteActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.PlateDetailsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
             android:name=".activity.PublishBBSActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
         <activity
             android:name=".activity.BBSCommentActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
-        <activity android:name=".activity.FavoriteActivity">
+        <activity
+            android:name=".activity.PhotoViewer"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.PhotoScale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.OriginalityDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.OrderDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.PreviewImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name=".activity.MineOrderActivity">
+        </activity>
+        <activity android:name=".activity.MineCustomActivity">
         </activity>
     </application>
 

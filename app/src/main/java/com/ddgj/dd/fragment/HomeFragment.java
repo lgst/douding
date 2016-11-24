@@ -80,9 +80,11 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         String adData = FileUtil.readJsonFromCache(ADBean.class.getName());
         if (adData != null) {
             List<ADBean> adBeens = adHttphelper.analysisAndLoadOriginality(adData);
-            viewpager.setAdapter(new ADAdapter(act, adBeens));
-            viewpager.setLooperPic(true);//是否设置自动轮播
-            indicator.setViewPager(viewpager);
+            if (!adBeens.isEmpty()) {
+                viewpager.setAdapter(new ADAdapter(act, adBeens));
+                viewpager.setLooperPic(true);//是否设置自动轮播
+                indicator.setViewPager(viewpager);
+            }
         }
         /*
         *加载缓存创意
@@ -111,7 +113,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         params.put("pageNumber", "1");
         params.put("pageSingle", "3");
         params.put("originality_differentiate", "0");
-        params.put("originality_name","");
+        params.put("originality_name", "");
         oriHttpHelper.getDatasPost(GET_HOT_ORIGINALITY, params, new DataCallback<Originality>() {
             @Override
             public void Failed(Exception e) {
@@ -144,7 +146,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", "1");
         params.put("pageSingle", "3");
-        params.put("patent_name","");
+        params.put("patent_name", "");
         patentHttpHelper.getDatasPost(GET_HOT_PATENT, params, new DataCallback<Patent>() {
             @Override
             public void Failed(Exception e) {
@@ -184,7 +186,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
      */
     private void initAD() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("login", UserHelper.getInstance().isLogined() ? "0" : "1");
+        params.put("login", UserHelper.getInstance().isLogined() ? "0" : "0");
         adHttphelper.getDatasPost(GET_AD, params, new DataCallback<ADBean>() {
             @Override
             public void Failed(Exception e) {
@@ -193,6 +195,8 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
 
             @Override
             public void Success(List<ADBean> datas) {
+                if (datas.isEmpty())
+                    return;
                 viewpager.setAdapter(new ADAdapter(act, datas));
                 viewpager.setLooperPic(true);//是否设置自动轮播
                 indicator.setViewPager(viewpager);

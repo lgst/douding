@@ -84,7 +84,6 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
                         ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
-//                            Log.e("lgst", url);
                             startActivity(new Intent(activity, WebActivity.class)
                                     .putExtra("title", order.getMade_name())
                                     .putExtra("url", HOST + url));
@@ -118,25 +117,21 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
                 switch (index) {
                     case 0:
                         // 删除
-//                        Log.i("lgst", "onMenuItemClick: " + "delete");
                         showDeleteDialog(position);
                         break;
                 }
-                // false : close the menu; true : not close the menu
                 return false;
             }
         });
         mplv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                Log.i("lgst", "onScrollStateChanged: " + scrollState);
                 if (scrollState == SCROLL_STATE_IDLE)
                     refresh = true;
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//                Log.i("lgst", "onScroll: " + firstVisibleItem + " visib:" + visibleItemCount + " total:" + totalItemCount);
                 if (firstVisibleItem + visibleItemCount >= totalItemCount && refresh) {
                     //加载数据
                     pageNumber++;
@@ -149,6 +144,7 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
         mplv.addFooterView(mView);
         mAdapter = new OrderAdapter(mOders);
         mplv.setAdapter(mAdapter);
+        mplv.setEmptyView(findViewById(R.id.not_data));
     }
 
     @Override
@@ -167,15 +163,11 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
             activity.showToastNotNetWork();
             return;
         }
-//        if (mOders.size() > 0) {
-//            return;
-//        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(pageNumber));
         params.put("pageSingle", "10");
         params.put("made_differentiate", "0");
         params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
-//        params.put("originality_differentiate",String.valueOf(0));
         new HttpHelper<Order>(getActivity(),Order.class)
                 .getDatasPost(GET_MINE_ORDER, params, new DataCallback<Order>() {
                     @Override
@@ -193,35 +185,6 @@ public class MineOrderFragment extends BaseFragment implements NetWorkInterface 
                             mLoading.setVisibility(View.GONE);
                     }
                 });
-//        OkHttpUtils.post().url(GET_MINE_ORDER).params(params).build().execute(new StringCallback() {
-//            @Override
-//            public void onError(Call call, Exception e, int id) {
-//                activity.showToastNotNetWork();
-//            }
-//
-//            @Override
-//            public void onResponse(String response, int id) {
-//                Log.i("lgst", response);
-//                try {
-//                    JSONObject jo = new JSONObject(response);
-//                    int status = jo.getInt("status");
-//                    if (status == STATUS_SUCCESS) {
-//                        JSONArray ja = jo.getJSONArray("data");
-//                        for (int i = 0; i < ja.length(); i++) {
-//                            String orderStr = ja.getJSONObject(i).toString();
-//                            Order order = new Gson().fromJson(orderStr, Order.class);
-//                            mOders.add(order);
-//                        }
-//                        mAdapter = new OrderAdapter(mOders);
-//                        mplv.setAdapter(mAdapter);
-//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-//                            mLoading.setVisibility(View.GONE);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
     }
 
     /**

@@ -19,11 +19,19 @@
         app:titleTextColor="@color/white"
     >
     </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
     <com.baoyz.swipemenulistview.SwipeMenuListView
-        android:background="@color/white"
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
     </com.baoyz.swipemenulistview.SwipeMenuListView>
+    <include layout="@layout/item_not_data"
+             android:id="@+id/not_data"
+    />
+    </RelativeLayout>
 </LinearLayout>

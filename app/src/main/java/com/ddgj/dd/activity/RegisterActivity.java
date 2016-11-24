@@ -79,7 +79,7 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
         //获取账号
-        final String username = userName.getText().toString().trim();
+        final String username = userName.getText().toString().trim().toLowerCase();
         //获取密码
         String password = passWord.getText().toString().trim();
         //获取确认密码

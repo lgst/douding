@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class FactoryActivity extends BaseActivity {
-    private static final String[] TABS = {"企业","产品"};
+    private static final String[] TABS = {"工厂","创意产品"};
     private List<Fragment> mFragments = new ArrayList<Fragment>();
 
     @Override

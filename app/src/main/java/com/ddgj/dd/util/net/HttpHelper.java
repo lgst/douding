@@ -120,14 +120,14 @@ public class HttpHelper<T> implements NetWorkInterface {
     }
 
     public static void uploadError() {
-        String[] files =  new File(FileUtil.getInstance().getmTempLogCache()).list();
-        if(files.length<=0){
+        String[] files = new File(FileUtil.getInstance().getmTempLogCache()).list();
+        if (files == null || files.length <= 0) {
             return;
         }
-        final File file = new File(FileUtil.getInstance().getmTempLogCache(),files[0]);
+        final File file = new File(FileUtil.getInstance().getmTempLogCache(), files[0]);
         if (!file.exists())
             return;
-        OkHttpUtils.post().url(UPLOAD_ERROR).addFile("error_files",file.getName(),file).build().execute(new StringCallback() {
+        OkHttpUtils.post().url(UPLOAD_ERROR).addFile("error_files", file.getName(), file).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 Log.e(TAG, "onError: " + e.getMessage());
@@ -307,10 +307,11 @@ public class HttpHelper<T> implements NetWorkInterface {
             else intent.putExtra("classes", 3);//代工
         } else if (obj instanceof EnterpriseUser) {//工厂
             EnterpriseUser user = (EnterpriseUser) obj;
+            String content = user.getFacilitator_field();
             intent.putExtra("title", user.getFacilitator_name())
                     .putExtra("url", HOST + url)
                     .putExtra("account", user.getAccount())
-                    .putExtra("content", "")
+                    .putExtra("content", content==null?"":content)
                     .putExtra("id", user.getAccount_id());
             if (user.getModify_differentiate().equals("2"))
                 intent.putExtra("classes", 4);

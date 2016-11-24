@@ -13,7 +13,6 @@ import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -21,7 +20,10 @@ import java.util.List;
  */
 
 public class OrderAdapter extends BaseAdapter {
+    //    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
+    private String[] STATUS = {"等待接单", "已接单", "成功", "失败", "服务方申请合作", "服务方申请验收"};
     private List<Order> mOrders;
+
 
     public OrderAdapter(List<Order> orders) {
         mOrders = orders;
@@ -53,26 +55,27 @@ public class OrderAdapter extends BaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
         Order order = mOrders.get(position);
+        vh.img.setVisibility(View.GONE);
         if (order.getMade_picture() != null) {
             String imgs[] = order.getMade_picture().split(",");
             for (int i = 0; i < imgs.length; i++) {
                 if (imgs[i].isEmpty() || imgs[i].equals("null"))
                     continue;
+                vh.img.setVisibility(View.VISIBLE);
                 Glide.with(parent.getContext())
                         .load(NetWorkInterface.HOST + "/" + imgs[i])
                         .error(R.drawable.ic_image_default)
                         .thumbnail(0.1f)
                         .into(vh.img);
-                File file = Glide.getPhotoCacheDir(parent.getContext());
-//                Log.i("lgst",file.getAbsolutePath());
                 break;
             }
         }
-        vh.title_text.setText(order.getMade_name());
+        vh.title_text.setText(order.getMade_title());
         vh.content_text.setText(order.getMade_describe());
         vh.mAddress.setText(order.getMade_u_address());
         vh.browse.setText(order.getMade_price());
         vh.date.setText(StringUtils.getDate(order.getMade_time()));
+        vh.status.setText(STATUS[Integer.parseInt(order.getMade_state())]);
         return convertView;
     }
 
@@ -84,6 +87,7 @@ public class OrderAdapter extends BaseAdapter {
         public TextView content_text;
         public TextView browse;
         public TextView date;
+        TextView status;
         public TextView mAddress;
 
         public ViewHolder(View rootView) {
@@ -94,6 +98,7 @@ public class OrderAdapter extends BaseAdapter {
             this.content_text = (TextView) rootView.findViewById(R.id.content_text);
             this.browse = (TextView) rootView.findViewById(R.id.browse);
             this.date = (TextView) rootView.findViewById(R.id.date);
+            this.status = (TextView) rootView.findViewById(R.id.tv_status);
         }
 
     }

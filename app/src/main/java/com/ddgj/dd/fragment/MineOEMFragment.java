@@ -146,7 +146,7 @@ public class MineOEMFragment extends BaseFragment implements NetWorkInterface {
         });
         mAdapter = new OrderAdapter(mOrders);
         mplv.setAdapter(mAdapter);
-        mplv.getLastVisiblePosition();
+        mplv.setEmptyView(findViewById(R.id.not_data));
     }
 
     /**

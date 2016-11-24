@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".activity.PatentActivity">
+    tools:context=".activity.OriginalityActivity">
     <LinearLayout
         style="@style/ActionBarLightTheme">
         <ImageView
@@ -43,8 +43,8 @@
                 android:id="@+id/search_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginRight="16dp"
+                android:layout_weight="1"
                 android:background="@color/alpha"
                 android:gravity="center_vertical"
                 android:hint="@string/input_text_search"/>
@@ -131,23 +131,7 @@
             android:layout_margin="16dp"
             android:src="@mipmap/ic_add_white_24dp"
             app:backgroundTint="@color/colorPrimary"/>
-        <LinearLayout
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ProgressBar
-                style="@style/Base.Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/loading_data"/>
-        </LinearLayout>
+        <include
+            android:id="@+id/not_data" layout="@layout/item_not_data" android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>

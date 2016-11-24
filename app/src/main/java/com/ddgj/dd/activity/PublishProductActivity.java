@@ -198,7 +198,16 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
      * 上传创意信息
      */
     private void toCommitIdea() {
-        if (check(sEditName, sEditIntro, sEditInfor, sEditUserName, sEditUserPhone)) {
+        if (check(sEditName, sEditIntro, sEditInfor, sEditUserName,sEditUserEmail, sEditUserPhone)) {
+            if (!TextCheck.checkPhoneNumber(sEditUserPhone)) {
+                showToastShort("手机号码格式不正确");
+                return;
+            }
+
+            if (!TextCheck.checkEmail(sEditUserEmail)) {
+                showToastShort("邮箱格式不正确");
+                return;
+            }
             dialog = showLoadingDialog("", "正在发送您的产品");
             Map<String, String> params = new HashMap<String, String>();
             params.put("originality_name", String.valueOf(sEditName));
@@ -280,7 +289,7 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
      * @param userphone
      * @return
      */
-    private boolean check(String ideaname, String ideaintro, String idrainfor, String username, String userphone) {
+    private boolean check(String ideaname, String ideaintro, String idrainfor, String username, String useremail, String userphone) {
         if (ideaname.isEmpty()) {
             showToastShort("请输入创意名称");
             return false;
@@ -295,6 +304,10 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
         }
         if (username.isEmpty()) {
             showToastShort("请输入姓名：");
+            return false;
+        }
+        if (useremail.isEmpty()) {
+            showToastShort("请输入邮箱");
             return false;
         }
         if (userphone.isEmpty()) {
