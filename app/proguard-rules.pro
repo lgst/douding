@@ -111,3 +111,5 @@ public static final ** CREATOR;
     public static *** v(...);
     public static *** i(...);
 }
+
+-dontwarn org.apache.http.**

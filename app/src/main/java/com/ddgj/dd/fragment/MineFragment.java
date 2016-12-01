@@ -1,8 +1,6 @@
 package com.ddgj.dd.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +16,14 @@ import com.ddgj.dd.activity.AboutActivity;
 import com.ddgj.dd.activity.FavoriteActivity;
 import com.ddgj.dd.activity.LoginActivity;
 import com.ddgj.dd.activity.MineCustomActivity;
+import com.ddgj.dd.activity.MineOEMActivity;
 import com.ddgj.dd.activity.MineOrderActivity;
-import com.ddgj.dd.activity.MineProjectActivity;
+import com.ddgj.dd.activity.MineOriginalityActivity;
+import com.ddgj.dd.activity.MinePatentActivity;
 import com.ddgj.dd.activity.SettingsActivity;
 import com.ddgj.dd.activity.UserCenterActivity;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
-import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
@@ -103,20 +102,20 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         //关于
         findViewById(R.id.about_us).setOnClickListener(this);
         //我的订单
-        findViewById(R.id.mine_order).setOnClickListener(this);
+        mOrder = (LinearLayout) findViewById(R.id.mine_order);
+        mOrder.setOnClickListener(this);
         //用户头像
         userIcon = (CircleImageView) findViewById(R.id.user_icon);
         //用户名
         userName = (TextView) findViewById(R.id.user_name);
         //用户身份
         userType = (TextView) findViewById(R.id.user_type);
-
+        mOem = (LinearLayout) findViewById(R.id.oem);
+        mOem.setOnClickListener(this);
         if (UserHelper.getInstance().getUser() != null &&
                 UserHelper.getInstance().getUser().getAccount_type().equals("0")) {
-            findViewById(R.id.oem).setVisibility(View.GONE);
-            findViewById(R.id.mine_order).setVisibility(View.GONE);
+            mOem.setVisibility(View.GONE);
         }
-        findViewById(R.id.oem).setOnClickListener(this);
         mOemCount = (TextView) findViewById(R.id.oem_count);
         findViewById(R.id.order).setOnClickListener(this);
         mOrderCount = (TextView) findViewById(R.id.order_count);
@@ -164,24 +163,23 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        int page = 0;
+        if (!UserHelper.getInstance().isLogined()) {
+            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (v.getId()) {
             case R.id.originality:
-
-                break;
+                startActivity(new Intent(getActivity(), MineOriginalityActivity.class));
+                return;
             case R.id.patent:
-                page = 1;
-                break;
+                startActivity(new Intent(getActivity(), MinePatentActivity.class));
+                return;
             case R.id.order:
-//                page = 2;
-                if (UserHelper.getInstance().isLogined())
-                    startActivity(new Intent(getActivity(), MineCustomActivity.class));
-                else
-                    Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), MineCustomActivity.class));
                 return;
             case R.id.oem:
-                page = 3;
-                break;
+                startActivity(new Intent(getActivity(), MineOEMActivity.class));
+                return;
             case R.id.click_login:
                 clickLogin();
                 return;
@@ -201,10 +199,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
                 clickOrder();
                 return;
         }
-        if (UserHelper.getInstance().isLogined())
-            startActivity(new Intent(getActivity(), MineProjectActivity.class).putExtra("page", page));
-        else
-            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
     }
 
     private void clickOrder() {
@@ -213,7 +207,6 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         else {
             Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
-
         }
     }
 
@@ -316,16 +309,17 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private void updateUI() {
         userName.setText(getResources().getString(R.string.click_login));
         userIcon.setImageResource(R.mipmap.ic_account_circle_white_48dp);
+        mOem.setVisibility(View.VISIBLE);
+        mOrder.setVisibility(View.VISIBLE);
+        mOriginalityCount.setText("0");
+        mOrderCount.setText("0");
+        mOemCount.setText("0");
+        mPatentCount.setText("0");
     }
 
     private void updateUI(String username) {
         userName.setText(username);
-        Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getInstance().getmImageCache() + "user_icon");
-        if (bitmap != null)
-            userIcon.setImageBitmap(bitmap);
-        else {
-            Glide.with(this).load(NetWorkInterface.HOST + "/" + UserHelper.getInstance().getUser().getHead_picture())
-                    .into(userIcon);
-        }
+        Glide.with(this).load(NetWorkInterface.HOST + "/" + UserHelper.getInstance().getUser().getHead_picture())
+                .into(userIcon);
     }
 }

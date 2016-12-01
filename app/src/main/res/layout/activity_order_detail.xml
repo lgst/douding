@@ -70,12 +70,14 @@
                             android:id="@+id/tv_order_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/holo_red_light"/>
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:textColor="@android:color/white"/>
                     </LinearLayout>
                     <LinearLayout android:layout_width="match_parent"
                                   android:layout_height="wrap_content"
                                   android:gravity="center_vertical"
-                                  android:orientation="horizontal">
+                                  android:orientation="vertical">
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/tv_date"
                             android:layout_width="wrap_content"
@@ -84,13 +86,9 @@
                             android:drawablePadding="8dp"
                             android:minWidth="100dp"
                             android:textColor="@android:color/darker_gray"/>
-                        <View style="@style/LineGrey1px"
-                              android:layout_width="1px"
-                              android:layout_height="16dp"
-                              android:layout_marginLeft="16dp"
-                              android:layout_marginRight="16dp"/>
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/tv_address"
+                            android:layout_marginTop="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@mipmap/ic_location"
@@ -169,6 +167,13 @@
                         android:horizontalSpacing="1dp"
                         android:numColumns="5"
                         android:verticalSpacing="1dp"/>
+                    <com.ddgj.dd.view.CustomListView
+                        android:id="@+id/lv_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+                    </com.ddgj.dd.view.CustomListView>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
@@ -205,8 +210,8 @@
                           android:layout_width="0dp"
                           android:layout_height="match_parent"
                           android:layout_weight="5"
-                          android:clickable="true"
                           android:background="@drawable/ease_btn_blue_selector"
+                          android:clickable="true"
                           android:drawableLeft="@drawable/ic_call"
                           android:gravity="center"
                           android:text="18165157887"
@@ -215,10 +220,10 @@
                           android:layout_width="0dp"
                           android:layout_height="match_parent"
                           android:layout_weight="5"
+                          android:background="@drawable/ease_btn_blue_selector"
                           android:clickable="true"
                           android:drawableRight="@drawable/ic_send"
                           android:gravity="center"
-                          android:background="@drawable/ease_btn_blue_selector"
                           android:text="发送消息"
                           android:textColor="@android:color/white"/>
             </LinearLayout>

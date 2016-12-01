@@ -1,14 +1,14 @@
 package com.ddgj.dd.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.OrderFactoryAdapter;
@@ -32,10 +32,8 @@ import java.util.Map;
 
 import okhttp3.Call;
 
-public class OrderFactoryActivity extends BaseActivity implements View.OnClickListener, NetWorkInterface {
+public class OrderFactoryActivity extends BaseActivity implements NetWorkInterface {
 
-    private ImageView mBack;
-    private TextView mTitle;
     private PullToRefreshListView mplv;
     private LinearLayout mLoading;
     private List<EnterpriseUser> mFactorys = new ArrayList<EnterpriseUser>();
@@ -56,6 +54,7 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
      */
     private static final int UPDATE = 2;
     private OrderFactoryAdapter mAdapter;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +72,11 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        params.put("modify_differentiate", getIntent().getStringExtra("classes"));
+        params.put("modify_differentiate", "0");
 
         OkHttpUtils.post().url(GET_ORDER_FACTORY).params(params).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-//                Log.e("lgst", e.getMessage() + " id:" + id);
                 mPageNumber--;
                 mplv.onRefreshComplete();
                 showToastNotNetWork();
@@ -92,10 +90,8 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
                     int status = jo.getInt("status");
                     if (status == STATUS_SUCCESS) {
                         JSONArray ja = jo.getJSONArray("data");
-//                        Log.i("lgst", jo.getString("msg") + "------" + classes);
                         if (flag == LOAD) {
                             mFactorys.clear();
-//                            Log.i("lgst","CLEAR");
                         }
                         for (int i = 0; i < ja.length(); i++) {
                             String str = ja.getJSONObject(i).toString();
@@ -103,18 +99,13 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
                             EnterpriseUser factory = new Gson().fromJson(str, EnterpriseUser.class);
                             mFactorys.add(factory);
                         }
-//                        Log.i("lgst", "==" + mOriginalitys.size());
                         if (flag == LOAD) {
-//                            Log.i("lgst","LOAD");
                             mAdapter = new OrderFactoryAdapter(mFactorys);
                             mplv.setAdapter(mAdapter);
                         } else {
-//                            Log.i("lgst","UPDATE");
                             if (mAdapter != null)
                                 mAdapter.notifyDataSetChanged();
                         }
-//                        if (i < mPageSingle)//如果返回数据小于请求数量则表示已经取到最后一条数据，页码就不能再加一，每次请求前页码加一，所以这里要减一
-//                            mPageNumber--;
                         if (mplv.isRefreshing())//关闭刷新
                             mplv.onRefreshComplete();
                         if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
@@ -130,14 +121,17 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void initView() {
-        mBack = (ImageView) findViewById(R.id.back);
-        mBack.setOnClickListener(this);
-        mTitle = (TextView) findViewById(R.id.title);
-        if (getIntent().getStringExtra("classes").equals("1")) {
-            mTitle.setText("代工工厂");
-        } else {
-            mTitle.setText("订制工厂");
-        }
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_back_blue);
+        mToolbar.setTitle("订制工厂");
+        mToolbar.setBackgroundColor(Color.WHITE);
+        mToolbar.setTitleTextColor(Color.parseColor("#014886"));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mplv = (PullToRefreshListView) findViewById(R.id.list);
         mLoading = (LinearLayout) findViewById(R.id.loading);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -155,8 +149,8 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
         });
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-                final EnterpriseUser user = mFactorys.get(position-1);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final EnterpriseUser user = mFactorys.get(position - 1);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("acilitator_id", user.getAccount_id());
@@ -168,7 +162,7 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst",response);
+                        Log.i("lgst", response);
                         ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
                         if (responseInfo.getStatus() == STATUS_SUCCESS) {
                             String url = responseInfo.getData();
@@ -181,14 +175,5 @@ public class OrderFactoryActivity extends BaseActivity implements View.OnClickLi
                 });
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
-        }
     }
 }

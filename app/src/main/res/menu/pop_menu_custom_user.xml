@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/call"
+          android:icon="@drawable/ic_call_blue"
+          android:title="拨打电话"/>
+    <item android:id="@+id/send_message"
+          android:icon="@drawable/ic_send_blue"
+          android:title="发送消息"/>
+</menu>

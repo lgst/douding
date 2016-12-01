@@ -250,6 +250,9 @@
                         android:layout_marginRight="16dp"
                         android:src="@mipmap/ic_chevron_right_black_24dp"/>
                 </LinearLayout>
+                <View
+                    style="@style/LineGrey1px"
+                    android:layout_marginLeft="16dp"/>
                 <LinearLayout
                     android:id="@+id/mine_order"
                     android:layout_width="match_parent"

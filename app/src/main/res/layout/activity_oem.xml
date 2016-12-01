@@ -7,19 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ddgj.dd.activity.OEMActivity">
-    <RelativeLayout
-        style="@style/ActionBarLightTheme">
-        <ImageView
-            android:id="@+id/back"
-            style="@style/TitleBarImageTheme"
-            android:clickable="true"
-            android:src="@mipmap/ic_blue_back"/>
-        <TextView
-            android:id="@+id/title"
-            style="@style/TitleBarTextTheme"
-            android:text="委托代工"
-            android:textColor="@color/colorPrimary"/>
-    </RelativeLayout>
+    <include layout="@layout/toolbar"/>
     <View style="@style/LineGrey1px"/>
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="match_parent"

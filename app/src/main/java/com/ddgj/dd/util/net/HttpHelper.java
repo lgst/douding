@@ -283,7 +283,7 @@ public class HttpHelper<T> implements NetWorkInterface {
                     .putExtra("account", originality.getAccount())
                     .putExtra("content", originality.getOriginality_details())
                     .putExtra("id", originality.getOriginality_id());
-            if (originality.getOriginality_differentiate().equals("0"))
+            if (originality==null || originality.getOriginality_differentiate().equals("0"))
                 intent.putExtra("classes", 1);
             else
                 intent.putExtra("classes", 7);

@@ -19,16 +19,14 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
-import com.ddgj.dd.activity.WebActivity;
+import com.ddgj.dd.activity.OEMDetailActivity;
 import com.ddgj.dd.adapter.OrderAdapter;
 import com.ddgj.dd.bean.Order;
-import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -70,27 +68,8 @@ public class MineOEMFragment extends BaseFragment implements NetWorkInterface {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Order order = mOrders.get(position);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("made_id", order.getMade_id());
-                OkHttpUtils.post().url(GET_ORDER_PRODUCT_DETAILS).params(params).build().execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取我的代工详情页失败：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
-                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
-                            String url = responseInfo.getData();
-                            Log.e("lgst", url);
-                            startActivity(new Intent(activity, WebActivity.class)
-                                    .putExtra("title", order.getMade_name())
-                                    .putExtra("url", HOST + url));
-                        }
-                    }
-                });
+                startActivity(new Intent(getActivity(), OEMDetailActivity.class)
+                        .putExtra("id", order.getMade_id()));
             }
         });
         SwipeMenuCreator creator = new SwipeMenuCreator() {

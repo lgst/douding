@@ -1,11 +1,13 @@
 package com.ddgj.dd.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/11/23.
  * 订单实体类
  */
 
-public class Orders {
+public class Orders implements Serializable {
 
     /**
      * order_id : 63f0c5c4-66b2-43b6-8757-43c85e660de0

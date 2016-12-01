@@ -6,6 +6,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -23,6 +24,8 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import static android.graphics.BitmapFactory.decodeFile;
 
 public class FileUtil {
     private Context mContext;
@@ -73,55 +76,131 @@ public class FileUtil {
     }
 
 
-
-	/**
-	 * 图片压缩
-	 * @param fileUri
+    /**
+     * 图片压缩
+     *
+     * @param fileUri
      * @return
      */
-	public static File scal(Uri fileUri, File dir){
+    public static File scalba(Uri fileUri, File dir) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(fileUri.getPath(), options);
+        int height = options.outHeight;
+        int width = options.outWidth;
+        options.inJustDecodeBounds = false;
+        Bitmap bmp = BitmapFactory.decodeFile(fileUri.getPath());
+        float size = (float) bmp.getByteCount() / 4f;
+        if(size<=1024000f)
+            return new File(fileUri.getPath());
+        float scale = 1024000f / size;//100KB
+        bmp = ThumbnailUtils.extractThumbnail(bmp, (int)(width * scale), (int)(height * scale));
 
-		String path = fileUri.getPath();
-		File outputFile = new File(path);
-		long fileSize = outputFile.length();
-		final long fileMaxSize = 200 * 1024;
-		if (fileSize >= fileMaxSize) {
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			BitmapFactory.decodeFile(path, options);
-			int height = options.outHeight;
-			int width = options.outWidth;
-			double scale = Math.sqrt((float) fileSize / fileMaxSize);
-			options.outHeight = (int) (height / scale);
-			options.outWidth = (int) (width / scale);
-			options.inSampleSize = (int) (scale + 0.5);
-			options.inJustDecodeBounds = false;
+        File outputFile = new File(fileUri.getPath());
+        outputFile = new File(createImageFile(dir).getPath());
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(outputFile);
+            //旋转图片
+            Bitmap bitmap1 = rotateBitmapByDegree(bmp, getBitmapDegree(fileUri.getPath()));
+            bitmap1.compress(CompressFormat.JPEG, 100, fos);
+            fos.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Log.d("", "sss ok " + outputFile.length());
+        if (!bmp.isRecycled()) {
+            bmp.recycle();
+        } else {
+            File tempFile = outputFile;
+            outputFile = new File(createImageFile(dir).getPath());
+            copyFileUsingFileChannels(tempFile, outputFile);
+        }
+        return outputFile;
+    }
 
-			Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-			outputFile = new File(createImageFile(dir).getPath());
-			FileOutputStream fos = null;
-			try {
-				fos = new FileOutputStream(outputFile);
+    /**
+     * 图片压缩
+     *
+     * @param fileUri
+     * @return
+     */
+    public static File scal(Uri fileUri, File dir) {
+
+        String path = fileUri.getPath();
+        File outputFile = new File(path);
+        long fileSize = outputFile.length();
+        final long fileMaxSize = 200 * 1024;
+        if (fileSize >= fileMaxSize) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+            int height = options.outHeight;
+            int width = options.outWidth;
+            double scale = Math.sqrt((float) fileSize / fileMaxSize);
+            options.outHeight = (int) (height / scale);
+            options.outWidth = (int) (width / scale);
+            options.inSampleSize = (int) (scale + 0.5);
+            options.inJustDecodeBounds = false;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            outputFile = new File(createImageFile(dir).getPath());
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(outputFile);
                 //旋转图片
                 Bitmap bitmap1 = rotateBitmapByDegree(bitmap, getBitmapDegree(path));
                 bitmap1.compress(CompressFormat.JPEG, 100, fos);
                 fos.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Log.d("", "sss ok " + outputFile.length());
-			if (!bitmap.isRecycled()) {
-				bitmap.recycle();
-			}else{
-				File tempFile = outputFile;
-				outputFile = new File(createImageFile(dir).getPath());
-				copyFileUsingFileChannels(tempFile, outputFile);
-			}
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Log.d("", "sss ok " + outputFile.length());
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            } else {
+                File tempFile = outputFile;
+                outputFile = new File(createImageFile(dir).getPath());
+                copyFileUsingFileChannels(tempFile, outputFile);
+            }
 
-		}
-		return outputFile;
+        }
+        return outputFile;
 
+    }
+
+    /**
+     * 图片压缩
+     * path：路径
+     * maxSize：最大值 KB
+     */
+    public static final File compressBitmap(String path, float maxSize) {
+        Bitmap bitmap = decodeFile(path);
+        if (bitmap == null) {
+            return null;
+        }
+        if (bitmap.getByteCount() <= maxSize)
+            return new File(path);
+        Matrix matrix = new Matrix();
+        //计算缩放比例
+        float scale = maxSize / (float) bitmap.getByteCount();
+        //设置矩阵缩放比例
+        matrix.setScale(scale, scale);
+        //根据矩阵创建Bitmap
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+        //保存图片
+        OutputStream outst = null;
+        String cache = getInstance().getmTempCache()+"/"+System.currentTimeMillis()+".jpg";
+        try {
+            outst = new FileOutputStream(cache);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (outst != null)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outst);
+        return new File(cache);
     }
 
     public static Uri createImageFile(File dir) {
@@ -130,48 +209,47 @@ public class FileUtil {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-		File image = null;
-		try {
-			image = File.createTempFile(
-					imageFileName,  /* prefix */
-					".jpg",         /* suffix */
-					dir      /* directory */
-			);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    dir      /* directory */
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		// Save a file: path for use with ACTION_VIEW intents
-		return Uri.fromFile(image);
-	}
-	public static void copyFileUsingFileChannels(File source, File dest){
-		FileChannel inputChannel = null;
-		FileChannel outputChannel = null;
-		try {
-			try {
-				inputChannel = new FileInputStream(source).getChannel();
-				outputChannel = new FileOutputStream(dest).getChannel();
-				outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} finally {
-			try {
-				inputChannel.close();
-				outputChannel.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        // Save a file: path for use with ACTION_VIEW intents
+        return Uri.fromFile(image);
+    }
+
+    public static void copyFileUsingFileChannels(File source, File dest) {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            try {
+                inputChannel = new FileInputStream(source).getChannel();
+                outputChannel = new FileOutputStream(dest).getChannel();
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                inputChannel.close();
+                outputChannel.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 将图片按照某个角度进行旋转
      *
-     * @param bm
-     *            需要旋转的图片
-     * @param degree
-     *            旋转角度
+     * @param bm     需要旋转的图片
+     * @param degree 旋转角度
      * @return 旋转后的图片
      */
     public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
@@ -197,8 +275,7 @@ public class FileUtil {
     /**
      * 读取图片的旋转的角度
      *
-     * @param path
-     *            图片绝对路径
+     * @param path 图片绝对路径
      * @return 图片的旋转角度
      */
     public static int getBitmapDegree(String path) {
@@ -225,6 +302,7 @@ public class FileUtil {
         }
         return degree;
     }
+
     public static String saveFile(Context c, String filePath, String fileName, byte[] bytes) {
         String fileFullName = "";
         FileOutputStream fos = null;
@@ -272,7 +350,9 @@ public class FileUtil {
 //        Log.i("lgst", mPrivateCache);
     }
 
-    /**获取缓存大小*/
+    /**
+     * 获取缓存大小
+     */
     public long getCacheSize() {
         File imageCache = new File(mImageCache);
         File tempCache = new File(mTempCache);
@@ -384,7 +464,9 @@ public class FileUtil {
         }
     }
 
-    /**图片缓存路径*/
+    /**
+     * 图片缓存路径
+     */
     public String getmImageCache() {
         return mImageCache;
     }
@@ -393,8 +475,9 @@ public class FileUtil {
     public String getmTempCache() {
         return mTempCache;
     }
+
     public String getmTempLogCache() {
-        return mTempCache+"log/";
+        return mTempCache + "log/";
     }
 
 
@@ -420,6 +503,7 @@ public class FileUtil {
             }
         }
     }
+
     /**
      * 读取缓存，json数据
      */

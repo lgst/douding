@@ -266,7 +266,7 @@ public class CameraActivity extends BaseActivity {
             e.printStackTrace();
         }
         if (outst != null)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, outst);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outst);
     }
 
     @Override

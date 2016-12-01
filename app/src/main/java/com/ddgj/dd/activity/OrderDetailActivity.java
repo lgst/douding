@@ -22,17 +22,20 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Order;
+import com.ddgj.dd.bean.Orders;
 import com.ddgj.dd.bean.User;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
 import com.ddgj.dd.view.CustomGridView;
+import com.ddgj.dd.view.CustomListView;
 import com.google.gson.Gson;
 import com.hyphenate.easeui.EaseConstant;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,11 +66,26 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
     private Order mOrder;
     private ArrayList<String> mImagesList;
     private RelativeLayout rlBottom;
+    private CustomListView mLvUser;
+    private boolean isGet;
+    private int sum;
+    private User user;
+    //    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
+    private static final String[] STATUS = {"等待接单", "工作中", "交易成功", "交易失败", "待确认合作", "待验收"};
+    private int[] colors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+        user = UserHelper.getInstance().getUser();
+        colors = new int[]{R.color.waiting,
+                R.color.working,
+                R.color.finished,
+                R.color.grey,
+                R.color.colorPrimary,
+                R.color.blue};
+        initView();
         initData();
     }
 
@@ -94,7 +112,15 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
                                 }
                             }
                         }
-                        initView();
+                        if (user != null) {
+                            JSONArray ja = jo.getJSONArray("sum");
+                            for (int i = 0; i < ja.length(); i++) {
+                                Orders o = new Gson().fromJson(ja.getString(i), Orders.class);
+                                isGet = o.getO_c_u_id().equals(UserHelper.getInstance().getUser().getAccount_id());
+                                sum = i;
+                            }
+                        }
+                        setData();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -103,9 +129,39 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
         });
     }
 
+    private void setData() {
+        mTvUserName.setText(mOrder.getAccount());
+        mTvOrderName.setText(mOrder.getMade_title());
+        mTvOrderPrice.setText("￥" + mOrder.getMade_price());
+        int status = Integer.parseInt(mOrder.getMade_state());
+        mTvOrderStatus.setText(STATUS[status]);
+        mTvOrderStatus.setBackgroundColor(getResources().getColor(colors[status]));
+        mTvDate.setText(mOrder.getMade_time());
+        mTvAddress.setText(mOrder.getMade_u_address());
+        mTvAmount.setText(mOrder.getMade_amount());
+        mTvTime.setText(mOrder.getMade_cycle());
+        mTvDetail.setText(mOrder.getMade_describe());
+        mTvPhone.setText(mOrder.getMade_u_contact());
+        Glide.with(this).load(HOST + "/" + mOrder.getHead_picture()).error(R.mipmap.ic_account_circle_grey600_24dp).into(mCivUserIcon);
+        if (mImagesList != null)
+            mImages.setAdapter(new ImageGVAdapter());
+        if (user != null && !user.getAccount().equals(mOrder.getAccount())) {//判断是否为自己的需求，如果不是，显示底部操作按钮
+            if (isGet) {//已经接单，显示联系方式
+//                mGetOrderBtn.setVisibility(View.GONE);
+                mLlConcat.setVisibility(View.VISIBLE);
+            } else {//没有接单显示接单按钮
+                mGetOrderBtn.setVisibility(View.VISIBLE);
+            }
+        }
+        if (getIntent().getBooleanExtra("mine", false)) {
+            rlBottom.setVisibility(View.GONE);
+        } else if (sum == 0) {
+
+        }
+    }
+
     @Override
     protected void initView() {
-        User user = UserHelper.getInstance().getUser();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("订制详情");
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -118,45 +174,26 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
             }
         });
         mCivUserIcon = (CircleImageView) findViewById(R.id.civ_user_icon);
-        Glide.with(this).load(HOST + "/" + mOrder.getHead_picture()).error(R.mipmap.ic_account_circle_grey600_24dp).into(mCivUserIcon);
         mTvUserName = (AppCompatTextView) findViewById(R.id.tv_user_name);
-        mTvUserName.setText(mOrder.getAccount());
         mTvOrderName = (AppCompatTextView) findViewById(R.id.tv_order_name);
-        mTvOrderName.setText(mOrder.getMade_title());
         mTvOrderPrice = (AppCompatTextView) findViewById(R.id.tv_order_price);
-        mTvOrderPrice.setText("￥" + mOrder.getMade_price());
         mTvOrderStatus = (AppCompatTextView) findViewById(R.id.tv_order_status);
-        mTvOrderStatus.setText(mOrder.getMade_state());
         mTvDate = (AppCompatTextView) findViewById(R.id.tv_date);
-        mTvDate.setText(mOrder.getMade_time());
         mTvAddress = (AppCompatTextView) findViewById(R.id.tv_address);
-        mTvAddress.setText(mOrder.getMade_u_address());
         mTvAmount = (TextView) findViewById(R.id.tv_amount);
-        mTvAmount.setText(mOrder.getMade_amount());
         mTvTime = (TextView) findViewById(R.id.tv_time);
-        mTvTime.setText(mOrder.getMade_cycle());
         mTvDetail = (TextView) findViewById(R.id.tv_detail);
-        mTvDetail.setText(mOrder.getMade_describe());
         mImages = (CustomGridView) findViewById(R.id.images);
-        if (mImagesList != null)
-            mImages.setAdapter(new ImageGVAdapter());
         mImages.setOnItemClickListener(this);
         mGetOrderBtn = (Button) findViewById(R.id.get_order_btn);
         mGetOrderBtn.setOnClickListener(this);
         mLlConcat = (LinearLayout) findViewById(R.id.ll_concat);
         mTvPhone = (TextView) findViewById(R.id.tv_phone);
-        mTvPhone.setText(mOrder.getMade_u_contact());
         mTvPhone.setOnClickListener(this);
         mTvEmail = (TextView) findViewById(R.id.tv_IM);
         mTvEmail.setOnClickListener(this);
-        if (user != null && !user.getAccount().equals(mOrder.getAccount())) {//判断是否为自己的需求，如果不是，显示底部操作按钮
-            if (user.getAccount_id().equals(mOrder.getMade_o_u_id())) {//已经接单，显示联系方式
-//                mGetOrderBtn.setVisibility(View.GONE);
-                mLlConcat.setVisibility(View.VISIBLE);
-            } else {//没有接单显示接单按钮
-                mGetOrderBtn.setVisibility(View.VISIBLE);
-            }
-        }
+        rlBottom = (RelativeLayout) findViewById(R.id.rl_bottom);
+        mLvUser = (CustomListView) findViewById(R.id.lv_user);
     }
 
     @Override
@@ -210,6 +247,7 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
                     if (jo.getInt("status") == 0) {
                         mGetOrderBtn.setVisibility(View.GONE);
                         mLlConcat.setVisibility(View.VISIBLE);
+                        showToastLong("接单成功，请联系雇主！");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

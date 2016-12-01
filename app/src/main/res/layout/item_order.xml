@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="1dp"
     app:contentPadding="0dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,7 +69,7 @@
                     android:text="待接单"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/shape_login_edit_text_bg"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:textSize="10sp"/>

@@ -7,25 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ddgj.dd.activity.OEMFactoryActivity">
-    <RelativeLayout
-        style="@style/ActionBarLightTheme"
-        android:background="@color/white">
-        <ImageView
-            android:id="@+id/back"
-            style="@style/TitleBarImageTheme"
-            android:clickable="true"
-            android:onClick="backClick"
-            android:src="@mipmap/ic_blue_back"/>
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/order_factory"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-    </RelativeLayout>
+    <include layout="@layout/toolbar"/>
     <View style="@style/LineGrey1px"/>
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="match_parent"

@@ -82,7 +82,7 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                         startActivity(new Intent(OrderActivity.this, OrderListActivity.class).putExtra("title", names[5]).putExtra("classes", 6));
                         break;
                     case 6://工厂
-                        startActivity(new Intent(OrderActivity.this, OEMFactoryActivity.class).putExtra("classes", "2"));
+                        startActivity(new Intent(OrderActivity.this, OrderFactoryActivity.class));
                         break;
                     case 7://发布
                         if (UserHelper.getInstance().isLogined()) {

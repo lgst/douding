@@ -40,6 +40,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
+import static com.baidu.location.d.j.s;
+
 public class OrderAddActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private EditText productName;
@@ -245,7 +247,8 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             PostFormBuilder post = OkHttpUtils.post();
             if (path != null) {
                 for (int i = 0; i < path.size(); i++) {
-                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
+//                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
+                    file = FileUtil.compressBitmap(path.get(i),(float) (1024 * 1024 * 8));
                     String s = "made_picture";
                     post.addFile(s + i, file.getName(), file);
                 }

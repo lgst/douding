@@ -7,7 +7,7 @@
     <color name="red">#e60012</color>
 
     <color name="colorActionBar">@color/colorPrimary</color>
-
+    <color name="blue">#009dff</color>
     <color name="white">#FFFFFF</color>
     <color name="alphaWhite">#88FFFFFF</color>
     <color name="black">#000000</color>

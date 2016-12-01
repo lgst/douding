@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.view.WindowManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ddgj.dd.R;
@@ -37,6 +37,13 @@ public abstract class BaseActivity extends FragmentActivity {
 
     public void showToastNotNetWork() {
         Toast.makeText(this, getResources().getString(R.string.network_is_not_connection), Toast.LENGTH_LONG).show();
+    }
+
+    public void logi(String msg){
+        Log.i(TAG, msg);
+    }
+    public void loge(String msg){
+        Log.e(TAG, msg);
     }
 
     /**

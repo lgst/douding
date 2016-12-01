@@ -1,7 +1,6 @@
 package com.ddgj.dd;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -93,7 +92,6 @@ public class DDGJApplication extends Application {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             int type = bdLocation.getLocType();
-            Log.i("lgst", "type: " + bdLocation.getProvince());
             String address = bdLocation.getAddrStr();
             String country = bdLocation.getCountry();
             String province = bdLocation.getProvince();

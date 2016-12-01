@@ -12,12 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.TextCheck;
@@ -38,42 +37,31 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 public class OEMAddActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private EditText productName;
     private EditText orderTitle;
     private EditText orderPrice;
     private EditText orderNumber;
     private EditText orderDate;
-    private EditText orderSpecifications;
     private EditText productIntro;
     private EditText productInfor;
     private EditText orderUserName;
     private EditText orderUserPhone;
     private EditText orderUserEmail;
-    private Spinner madeType;
     private Button pickPic;
     private Button commitOrder;
     private ImageView selectPic;
     private ImageView backUp;
     private static final int REQUEST_IMAGE = 2;
     private ArrayList<String> path;
-    private String sProductName;
     private String sOrderTitle;
     private String sOrderPrice;
     private String sOrderNumber;
     private String sOrderDate;
-    private String sOrderSpecifications;
     private String sProductIntro;
-    private String sProductInfor;
     private String sOrderUserName;
     private String sOrderUserPhone;
     private String sOrderUserEmail;
-    private String sMadeType;
     private String sCity;
     private File file;
-    private RadioButton personalMade;
-    private RadioButton entrustMade;
-    private boolean personalMadeChecked;
-    private boolean entrustMadeChecked;
     private EditText orderUserAddress;
     private String sOrderUserAddress;
     private LinearLayout addImageGroup;
@@ -101,12 +89,10 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         city = (TextView) findViewById(R.id.city);
         backUp = (ImageView) findViewById(R.id.backup);
         backUp.setOnClickListener(this);
-        productName = (EditText) findViewById(R.id.product_name);
         orderTitle = (EditText) findViewById(R.id.order_title);
         orderPrice = (EditText) findViewById(R.id.order_price);
         orderNumber = (EditText) findViewById(R.id.order_number);
         orderDate = (EditText) findViewById(R.id.order_date);
-        orderSpecifications = (EditText) findViewById(R.id.order_Specifications);
         productIntro = (EditText) findViewById(R.id.product_intro);
         productInfor = (EditText) findViewById(R.id.product_infor);
         orderUserName = (EditText) findViewById(R.id.order_user_name);
@@ -115,7 +101,6 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         orderUserEmail = (EditText) findViewById(R.id.order_user_email);
         orderUserEmail.setOnFocusChangeListener(this);
         orderUserAddress = (EditText) findViewById(R.id.order_user_address);
-        madeType = (Spinner) findViewById(R.id.made_type_spinner);
         pickPic = (Button) findViewById(R.id.pick_pic);
         pickPic.setOnClickListener(this);
         commitOrder = (Button) findViewById(R.id.commit_order);
@@ -123,6 +108,12 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
         selectPic = (ImageView) findViewById(R.id.select_pic);
         //添加图片
         addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
+        EnterpriseUser user = (EnterpriseUser) UserHelper.getInstance().getUser();
+        orderUserName.setText(user.getFacilitator_name());
+        orderUserPhone.setText(user.getFacilitator_contact());
+        orderUserAddress.setText(user.getFacilitator_address());
+        city.setText(getSharedPreferences("location", MODE_PRIVATE).getString("city", ""));
+        orderUserEmail.setText(user.getFacilitator_email());
     }
 
     @Override
@@ -146,33 +137,29 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void cityClick(View v) {
-        startActivityForResult(new Intent(this,CitySelecterActivity.class),100);
+        startActivityForResult(new Intent(this, CitySelecterActivity.class), 100);
     }
-
 
 
     /**
      * 提交定制信息
      */
     private void toCommitIdea() {
-        if (check(sProductName,
+        if (check(
                 sOrderTitle,
                 sOrderPrice,
                 sOrderNumber,
                 sOrderDate,
-                sOrderSpecifications,
                 sProductIntro,
-                sProductInfor,
                 sOrderUserName,
                 sOrderUserPhone,
                 sOrderUserEmail,
                 sOrderUserAddress,
-                sMadeType,
                 sCity)) {
-            if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
-                showToastShort("手机号码格式不正确");
-                return;
-            }
+//            if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
+//                showToastShort("手机号码格式不正确");
+//                return;
+//            }
 
             if (!TextCheck.checkEmail(sOrderUserEmail)) {
                 showToastShort("邮箱格式不正确");
@@ -180,30 +167,23 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
             }
             dialog = showLoadingDialog("", "正在发送您的定制");
             Map<String, String> params = new HashMap<String, String>();
-            params.put("made_name", String.valueOf(sProductName));
-            params.put("made_title", String.valueOf(sOrderTitle));
-            params.put("made_type_id", String.valueOf(sMadeType));
-            params.put("made_price", String.valueOf(sOrderPrice));
-            params.put("made_amount", String.valueOf(sOrderNumber));
-            params.put("made_cycle", String.valueOf(sOrderDate));
-            params.put("made_specifications", String.valueOf(sOrderSpecifications));
+            params.put("made_name", "");
+            params.put("made_title", sOrderTitle);
+            params.put("made_type_id", "0");
+            params.put("made_price", sOrderPrice);
+            params.put("made_amount", sOrderNumber);
+            params.put("made_cycle", sOrderDate);
+            params.put("made_specifications", "");
             params.put("made_describe", String.valueOf(sProductIntro));
-            params.put("made_note", sProductInfor);
+            params.put("made_note", "");
             params.put("made_u_name", sOrderUserName);
             params.put("made_u_contact", String.valueOf(sOrderUserPhone));
             params.put("made_u_email", String.valueOf(sOrderUserEmail));
             params.put("made_u_address", String.valueOf(sOrderUserAddress));
-//            params.put("made_u_address", String.valueOf(sOrderUserAddress));
             params.put("made_state", "0");
             params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
             params.put("head_picture", "head_picture");
             params.put("made_differentiate", "1");
-
-
-            //file = new File(path.get(0));
-
-            //file =  FileUtil.scal(Uri.parse(path.get(0)));
-            // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
 
             File cacheDir = getCacheDir();
             PostFormBuilder post = OkHttpUtils.post();
@@ -230,10 +210,8 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                             showToastLong("成功");
                             OEMAddActivity.this.finish();
                             dialog.dismiss();
-
                         }
                     });
-
         }
     }
 
@@ -241,90 +219,52 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
      * 获取定制信息
      */
     private void getAllInfor() {
-        sProductName = productName.getText().toString().trim();
         sOrderTitle = orderTitle.getText().toString().trim();
         sOrderPrice = orderPrice.getText().toString().trim();
         sOrderNumber = orderNumber.getText().toString().trim();
         sOrderDate = orderDate.getText().toString().trim();
-        sOrderSpecifications = orderSpecifications.getText().toString().trim();
+//        sOrderSpecifications = orderSpecifications.getText().toString().trim();
         sProductIntro = productIntro.getText().toString().trim();
-        sProductInfor = productInfor.getText().toString().trim();
+//        sProductInfor = productInfor.getText().toString().trim();
         sOrderUserName = orderUserName.getText().toString().trim();
         sOrderUserPhone = orderUserPhone.getText().toString().trim();
         sOrderUserEmail = orderUserEmail.getText().toString().trim();
         sOrderUserAddress = orderUserAddress.getText().toString().trim();
         sCity = city.getText().toString();
-        switch ((String) this.madeType.getSelectedItem()) {
-            case "家具订制":
-                sMadeType = "0";
-                break;
-            case "服装订制":
-                sMadeType = "1";
-                break;
-            case "礼品订制":
-                sMadeType = "2";
-                break;
-            case "机械产品":
-                sMadeType = "3";
-                break;
-            case "电子产品":
-                sMadeType = "4";
-                break;
-            case "其他":
-                sMadeType = "5";
-                break;
-            case "订制工厂":
-                sMadeType = "6";
-                break;
-            case "发布订制":
-                sMadeType = "7";
-                break;
-            default:
-                break;
-        }
-
     }
 
     /**
      * 檢查數據完成
      *
-     * @param ideaname
      * @param ideaintro
      * @param idrainfor
      * @param username
      * @param userphone1
      * @param userphone2
      * @param userphone3
-     * @param userphone4
      * @param userphone5
      * @return
      */
-    private boolean check(String ideaname,
-                          String ideaintro,
-                          String idrainfor,
-                          String username,
-                          String userphone1,
-                          String userphone2,
-                          String userphone3,
-                          String userphone4,
-                          String userphone5,
-                          String userphone6,
-                          String userphone9,
-                          String userphone7,
-                          String userphone8,
-                          String city) {
-        if (ideaname.isEmpty() || ideaintro.isEmpty()
+    private boolean check(
+            String ideaintro,
+            String idrainfor,
+            String username,
+            String userphone1,
+            String userphone2,
+            String userphone3,
+            String userphone5,
+            String userphone9,
+            String userphone7,
+            String city) {
+        if (ideaintro.isEmpty()
                 || idrainfor.isEmpty()
                 || username.isEmpty()
                 || userphone1.isEmpty()
                 || userphone2.isEmpty()
                 || userphone3.isEmpty()
-                || userphone4.isEmpty()
                 || userphone5.isEmpty()
-                || userphone6.isEmpty()
                 || userphone7.isEmpty()
                 || userphone9.isEmpty()
-                || userphone8.isEmpty()
                 || city.isEmpty()) {
             showToastShort("请输入完成信息");
             return false;
@@ -352,8 +292,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
 
             }
         }
-        if(requestCode == 100 && resultCode == SUCCESS)
-        {
+        if (requestCode == 100 && resultCode == SUCCESS) {
             String city = data.getStringExtra("city");
             this.city.setText(city);
         }
@@ -376,18 +315,19 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case R.id.order_user_phone:
-                if (b) {
-                } else {
-                    sOrderUserPhone = orderUserPhone.getText().toString().trim();
-                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
-                        showToastShort("手机号码格式不正确");
-                        phoneError = true;
-                    }
-                }
+//                if (b) {
+//                } else {
+//                    sOrderUserPhone = orderUserPhone.getText().toString().trim();
+//                    if (!TextCheck.checkPhoneNumber(sOrderUserPhone)) {
+//                        showToastShort("手机号码格式不正确");
+//                        phoneError = true;
+//                    }
+//                }
             default:
                 break;
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -417,6 +357,7 @@ public class OEMAddActivity extends BaseActivity implements View.OnClickListener
                 })
                 .show();
     }
+
     static final String[] PERMISSION = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
             Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限

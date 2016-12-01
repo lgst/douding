@@ -33,6 +33,7 @@ public class MineOrderActivity extends BaseActivity {
     }
 
     private void initData() {
+        // 1交易中 2交易成功 3交易失败 4取消订单 5申请验收 6拒绝验收 7确认合作 8拒绝合作
         fragments = new ArrayList<Fragment>();
         Fragment f0 = new MineOrdersFragment();
         Bundle bundle = new Bundle();
@@ -40,7 +41,7 @@ public class MineOrderActivity extends BaseActivity {
         f0.setArguments(bundle);
         Fragment f1 = new MineOrdersFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putString("classes","1");
+        bundle1.putString("classes","");
         f1.setArguments(bundle1);
         Fragment f2 = new MineOrdersFragment();
         Bundle bundle2 = new Bundle();

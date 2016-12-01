@@ -28,7 +28,7 @@
     <application
         android:name=".DDGJApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme1"
@@ -319,9 +319,36 @@
             android:name=".activity.PreviewImageActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
-        <activity android:name=".activity.MineOrderActivity">
+        <activity
+            android:name=".activity.MineOrderActivity"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MineCustomActivity">
+        <activity
+            android:name=".activity.MineCustomActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.MineOrderDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.OrdersDetilActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.OEMDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.OrderFactoryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MineOEMActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.MineOriginalityActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.MinePatentActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

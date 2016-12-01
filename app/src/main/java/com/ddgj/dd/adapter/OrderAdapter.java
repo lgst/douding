@@ -20,13 +20,19 @@ import java.util.List;
  */
 
 public class OrderAdapter extends BaseAdapter {
+    private final int[] colors;
     //    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
-    private String[] STATUS = {"等待接单", "已接单", "成功", "失败", "服务方申请合作", "服务方申请验收"};
+    private String[] STATUS = {"等待接单", "工作中", "交易成功", "交易失败", "待确认合作", "待验收"};
     private List<Order> mOrders;
-
 
     public OrderAdapter(List<Order> orders) {
         mOrders = orders;
+        colors = new int[]{R.color.waiting,
+                R.color.working,
+                R.color.finished,
+                R.color.grey,
+                R.color.colorPrimary,
+                R.color.blue};
     }
 
     @Override
@@ -75,20 +81,22 @@ public class OrderAdapter extends BaseAdapter {
         vh.mAddress.setText(order.getMade_u_address());
         vh.browse.setText(order.getMade_price());
         vh.date.setText(StringUtils.getDate(order.getMade_time()));
-        vh.status.setText(STATUS[Integer.parseInt(order.getMade_state())]);
+        int status = Integer.parseInt(order.getMade_state());
+        vh.status.setText(STATUS[status]);
+        vh.status.setBackgroundColor(parent.getResources().getColor(colors[status]));
         return convertView;
     }
 
 
     public static class ViewHolder {
-        public View rootView;
-        public ImageView img;
-        public TextView title_text;
-        public TextView content_text;
-        public TextView browse;
-        public TextView date;
+        View rootView;
+        ImageView img;
+        TextView title_text;
+        TextView content_text;
+        TextView browse;
+        TextView date;
         TextView status;
-        public TextView mAddress;
+        TextView mAddress;
 
         public ViewHolder(View rootView) {
             this.rootView = rootView;

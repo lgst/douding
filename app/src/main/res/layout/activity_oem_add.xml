@@ -43,7 +43,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -54,12 +55,12 @@
                 <EditText
                     android:id="@+id/product_name"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -75,17 +76,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/shape_rectangle"
-                    android:text="代工标题："/>
+                    android:text="标题："/>
 
                 <EditText
                     android:id="@+id/order_title"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -95,6 +96,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -126,7 +128,7 @@
                 <EditText
                     android:id="@+id/order_price"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
@@ -155,7 +157,7 @@
                 <EditText
                     android:id="@+id/order_number"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
@@ -183,13 +185,13 @@
                 <EditText
                     android:id="@+id/order_date"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -199,7 +201,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -210,12 +213,12 @@
                 <EditText
                     android:id="@+id/order_Specifications"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -234,7 +237,7 @@
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
-                    android:text="产品描述"/>
+                    android:text="代工需求"/>
 
                 <EditText
                     android:id="@+id/product_intro"
@@ -253,7 +256,8 @@
                     android:layout_marginTop="20dp"
                     android:drawableLeft="@drawable/shape_rectangle"
                     android:drawablePadding="5dp"
-                    android:text="产品备注"/>
+                    android:text="产品备注"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/product_infor"
@@ -264,7 +268,8 @@
                     android:gravity="left|top"
                     android:inputType="textMultiLine"
                     android:minLines="4"
-                    android:padding="4dip"/>
+                    android:padding="4dip"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -279,17 +284,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="客户姓名："/>
+                    android:text="工厂名称："/>
 
                 <EditText
                     android:id="@+id/order_user_name"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="2"
                     android:nextFocusForward="@+id/idea_user_email"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -310,7 +315,7 @@
                 <EditText
                     android:id="@+id/order_user_phone"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionNext"
@@ -336,7 +341,7 @@
                 <EditText
                     android:id="@+id/order_user_email"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionDone"
@@ -363,7 +368,7 @@
                 <TextView
                     android:id="@+id/city"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionDone"
@@ -381,17 +386,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="定制地址："/>
+                    android:text="详细地址："/>
 
                 <EditText
                     android:id="@+id/order_user_address"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:gravity="left|top"
                     android:imeOptions="actionDone"
-                    android:maxLines="1"
                     android:inputType="text"
+                    android:maxLines="2"
                     android:nextFocusForward="@+id/pick_pic"
                     android:padding="4dip"/>
             </LinearLayout>
@@ -412,7 +417,7 @@
                 <Button
                     android:id="@+id/pick_pic"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/selector_edittext"
                     android:text="选择图片"/>
 
@@ -468,7 +473,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
-                    android:text="提交代工"
+                    android:text="提交代工需求"
                     android:textColor="@color/white"/>
 
             </LinearLayout>

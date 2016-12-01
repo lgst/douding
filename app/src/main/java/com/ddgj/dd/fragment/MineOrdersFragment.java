@@ -1,5 +1,6 @@
 package com.ddgj.dd.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.activity.OrdersDetilActivity;
 import com.ddgj.dd.bean.Orders;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
@@ -43,7 +45,16 @@ public class MineOrdersFragment extends BaseFragment implements NetWorkInterface
     private List<Orders> mOrdersList = new ArrayList<Orders>();
     private LVAdapter mAdapter;
     // 1交易中 2交易成功 3交易失败 4取消订单 5申请验收 6拒绝验收 7确认合作 8拒绝合作
-    private String[] STATUS = {"","交易中","交易成功","交易失败","取消订单","申请验收","拒绝验收","确认合作","拒绝合作"};
+    private String[] STATUS = {"", "待确认合作", "交易成功", "交易失败", "订单被取消", "验收中", "验收失败", "工作中", "被拒绝合作"};
+    private int[] colors = new int[]{R.color.grey,
+            R.color.colorPrimary,
+            R.color.finished,
+            R.color.grey,
+            R.color.grey,
+            R.color.blue,
+            R.color.grey,
+            R.color.working,
+            R.color.grey};
 
     @Nullable
     @Override
@@ -98,7 +109,8 @@ public class MineOrdersFragment extends BaseFragment implements NetWorkInterface
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                startActivity(new Intent(getActivity(), OrdersDetilActivity.class)
+                .putExtra("orders",mOrdersList.get(position)));
             }
         });
         mAdapter = new LVAdapter();
@@ -141,13 +153,14 @@ public class MineOrdersFragment extends BaseFragment implements NetWorkInterface
                         continue;
                     vh.mImg.setVisibility(View.VISIBLE);
                     Glide.with(getActivity())
-                            .load(pics[i])
+                            .load(HOST+"/"+pics[i])
                             .into(vh.mImg);
                 }
             }
             vh.mTime.setText(orders.getOrder_create_time());
             int status = Integer.parseInt(orders.getOrder_state());
             vh.mTvStatus.setText(STATUS[status]);
+            vh.mTvStatus.setBackgroundColor(getResources().getColor(colors[status]));
             vh.mTvTitle.setText(orders.getMade_title());
             return convertView;
         }

@@ -76,7 +76,7 @@ public class FactoryFragment extends BaseFragment implements AdapterView.OnItemC
             return;
         }
         Map<String, String> params = new HashMap<String, String>();
-        params.put("modify_differentiate", String.valueOf("0"));
+        params.put("modify_differentiate", "0");
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
         mHttpHelper.getDatasPost(GET_FACILITATORMADE, params, new DataCallback<EnterpriseUser>() {

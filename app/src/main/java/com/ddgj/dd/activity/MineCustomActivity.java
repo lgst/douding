@@ -1,5 +1,6 @@
 package com.ddgj.dd.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,8 +38,8 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
     private LinearLayout mLoading;
     private boolean refresh;
     private MlvAdapter mAdapter;
-//    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
-    private static final String[] STATUS = {"等待接单","生产中","成功","失败","服务方申请合作","服务方申请验收"};
+    //    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
+    private static final String[] STATUS = {"等待接单", "工作中", "交易成功", "交易失败", "待确认合作", "待验收"};
     private int[] colors;
 
     @Override
@@ -46,7 +47,12 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_custom);
         initView();
-        colors = new int[]{0,R.color.waiting, R.color.working, R.color.finished,R.color.colorPrimary};
+        colors = new int[]{R.color.waiting,
+                R.color.working,
+                R.color.finished,
+                R.color.grey,
+                R.color.colorPrimary,
+                R.color.blue};
         initData();
     }
 
@@ -112,7 +118,7 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
             }
         });
         mLoading = (LinearLayout) findViewById(R.id.loading);
-        mView = getLayoutInflater().inflate(R.layout.item_listview_footer,null);
+        mView = getLayoutInflater().inflate(R.layout.item_listview_footer, null);
         mListView.addFooterView(mView);
         mAdapter = new MlvAdapter();
         mListView.setAdapter(mAdapter);
@@ -121,7 +127,9 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Order order = mOrders.get(position);
+        startActivity(new Intent(this, MineOrderDetailActivity.class)
+                .putExtra("id", order.getMade_id()));
     }
 
     class MlvAdapter extends BaseAdapter {
