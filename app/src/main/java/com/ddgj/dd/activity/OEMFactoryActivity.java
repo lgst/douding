@@ -1,6 +1,8 @@
 package com.ddgj.dd.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -175,8 +177,12 @@ public class OEMFactoryActivity extends BaseActivity implements View.OnClickList
                 final EnterpriseUser user = mFactorys.get(position - 1);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
-                params.put("acilitator_id", user.getAccount_id());
-                mHttpHelper.startDetailsPage(GET_ORDER_FACTORY_DETAILS,params,user);
+                params.put("acilitator_id", user.getAcilitator_id());
+               // mHttpHelper.startDetailsPage(GET_ORDER_FACTORY_DETAILS,params,user);
+                Intent intent = new Intent(OEMFactoryActivity.this, OEMFactoryDetailActivity.class);
+                intent.putExtra("acilitator_id",user.getAcilitator_id());
+                Log.e("acilitator_id", "acilitator_id)：" +user.getAcilitator_id());
+                startActivity(intent);
 //                OkHttpUtils.post().url(GET_ORDER_FACTORY_DETAILS).params(params).build().execute(new StringCallback() {
 //                    @Override
 //                    public void onError(Call call, Exception e, int id) {

@@ -75,7 +75,11 @@ public class OrderAdapter extends BaseAdapter {
         vh.mAddress.setText(order.getMade_u_address());
         vh.browse.setText(order.getMade_price());
         vh.date.setText(StringUtils.getDate(order.getMade_time()));
-        vh.status.setText(STATUS[Integer.parseInt(order.getMade_state())]);
+        if (order.getMade_differentiate().equals("0")) {
+            vh.status.setText(STATUS[Integer.parseInt(order.getMade_state())]);
+        }else {
+            vh.status.setVisibility(View.GONE);
+        }
         return convertView;
     }
 

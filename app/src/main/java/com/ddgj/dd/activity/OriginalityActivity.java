@@ -175,7 +175,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
                 params.put("client_side", "app");
                 params.put("originality_id", originality.getOriginality_id());
                 originality.setOriginality_differentiate("0");
-               // mOriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
+              // mOriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
                 Intent intent = new Intent(OriginalityActivity.this, OriginalityDetailActivity.class);
                 intent.putExtra("originality_id",originality.getOriginality_id());
                 startActivity(intent);

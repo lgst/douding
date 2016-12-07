@@ -240,7 +240,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
 
             //file =  FileUtil.scal(Uri.parse(path.get(0)));
             // Log.e("fabu1", this.file.getName()+ this.file.length()+"前文件后"+file2.getName()+file2.length());
-            File cacheDir = getCacheDir();
+            File cacheDir = getExternalCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
             if (path != null) {

@@ -179,13 +179,13 @@ public class HttpHelper<T> implements NetWorkInterface {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         showNetworkNotConnectToast();
-//                        Log.e(TAG, "onError: " + e.getMessage());
+                     Log.e("lgst", "onError: " + e.getMessage());
                         callback.Failed(e);
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-//                        Log.i("lgst", response);
+                       Log.e("lgst", response);
                         callback.Success(analysisAndLoadOriginality(response));
                         if (save)
                             FileUtil.saveJsonToCache(response, tClass.getName());

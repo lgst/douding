@@ -168,7 +168,11 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("patent_id", patent.getPatent_id());
-                mPatentHttpHelper.startDetailsPage(GET_PATENT_DETAILS,params,patent);
+                //mPatentHttpHelper.startDetailsPage(GET_PATENT_DETAILS,params,patent);
+                Intent intent = new Intent(PatentActivity.this, PatentDetailActivity.class);
+                intent.putExtra("patent_id",patent.getPatent_id());
+                Log.e("patent", "patent：" + patent.getPatent_id());
+                startActivity(intent);
             }
         });
         mplv.setAdapter(mAdapter);

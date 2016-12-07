@@ -49,6 +49,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
     private StringBuilder builder;
     private File file;
     private ArrayList<String> picList;
+    private ArrayList<File> FileList;
     private SweetAlertDialog dialog;
     private PostContentBean postContentBean;
     private PostContentBean postContentBean1;
@@ -105,6 +106,7 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
         String title = titleName.getText().toString().trim();
         builder = new StringBuilder();
         picList = new ArrayList<>();
+        FileList = new ArrayList<>();
         postContentList = new ArrayList<>();
         for (int i = 0; i < editList.size(); i++) {
             if (editList.get(i).inputStr != null) {
@@ -113,6 +115,8 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 builder.append(editList.get(i).inputStr);
             } else if (editList.get(i).imagePath != null) {
                 picList.add(editList.get(i).imagePath);
+                file = FileUtil.scal(Uri.parse(editList.get(i).imagePath), getCacheDir());
+                FileList.add(file);
                 postContentBean = new PostContentBean(i, "**\n\n这里是图片");
             }
             postContentList.add(postContentBean);
@@ -145,12 +149,11 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
 
         PostFormBuilder post = OkHttpUtils.post();
 
-        if (picList != null) {
+        if (FileList != null) {
             for (int i = 0; i < picList.size(); i++) {
-                file = FileUtil.scal(Uri.parse(picList.get(i)), getCacheDir());
                 String s = "picture";
-                post.addFile(s + i, file.getName(), file);
-                Log.e("fabubbs", picList.get(i));
+                post.addFile(s + i, FileList.get(i).getName(), FileList.get(i));
+
             }
         }
         post.url(NetWorkInterface.PUBLISH_BBS)

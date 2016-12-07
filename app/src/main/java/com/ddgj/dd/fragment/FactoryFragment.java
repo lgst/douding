@@ -1,5 +1,6 @@
 package com.ddgj.dd.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,6 +12,9 @@ import android.widget.ListView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
+import com.ddgj.dd.activity.FactoryDetailActivity;
+import com.ddgj.dd.activity.PatentActivity;
+import com.ddgj.dd.activity.PatentDetailActivity;
 import com.ddgj.dd.adapter.FactoryAdapter;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.util.net.DataCallback;
@@ -88,7 +92,12 @@ public class FactoryFragment extends BaseFragment implements AdapterView.OnItemC
 
             @Override
             public void Success(List<EnterpriseUser> datas) {
+                for (int i = 0; i < datas.size(); i++) {
+                    Log.e("lgst", "获取中国智造工厂失败：" +datas.get(i).getAcilitator_id());
+                }
+
                 if (LOAD == flag)
+
                     mFactorys.clear();
                 mFactorys.addAll(datas);
                 mListView.onRefreshComplete();
@@ -122,7 +131,11 @@ public class FactoryFragment extends BaseFragment implements AdapterView.OnItemC
         EnterpriseUser user = mFactorys.get(position-1);
         Map<String, String> params = new HashMap<String, String>();
         params.put("client_side", "app");
-        params.put("acilitator_id", user.getAccount_id());
-        mHttpHelper.startDetailsPage(GET_FAC_DETAILS,params,user);
+        params.put("acilitator_id", user.getAcilitator_id());
+        //mHttpHelper.startDetailsPage(GET_FAC_DETAILS,params,user);
+        Intent intent = new Intent(getActivity(), FactoryDetailActivity.class);
+        intent.putExtra("acilitator_id",user.getAcilitator_id());
+        Log.e("acilitator_id", "acilitator_id：" + user.getAccount_id());
+        startActivity(intent);
     }
 }

@@ -184,7 +184,11 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("client_side", "app");
                 params.put("made_id", order.getMade_id());
-                mOrderHttpHelper.startDetailsPage(GET_ORDER_PRODUCT_DETAILS,params,order);
+                //mOrderHttpHelper.startDetailsPage(GET_ORDER_PRODUCT_DETAILS,params,order);
+                Intent intent = new Intent(OEMProductActivity.this, OEMProductDetailActivity.class);
+                intent.putExtra("made_id",order.getMade_id());
+                Log.e("made_id", "made_id：" +order.getMade_id());
+                startActivity(intent);
 //                OkHttpUtils.post().url(GET_ORDER_PRODUCT_DETAILS).params(params).build().execute(new StringCallback() {
 //                    @Override
 //                    public void onError(Call call, Exception e, int id) {

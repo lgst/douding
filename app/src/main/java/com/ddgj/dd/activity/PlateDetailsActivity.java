@@ -55,6 +55,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout postContentAll;
     private TextView tvComment;
     private ImageView chat;
+    private String[] mImgs;
 
 
     @Override
@@ -155,12 +156,10 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
      * 动态添加所有的view
      */
     private void addAllContent(ArrayList<PostContentBean> beanArrayList) {
-        final String[] imgs = postBean.getPicture_id().split("\\,");
-        for (int i = 0; i < imgs.length; i++) {
-            Log.e("toJson", "所有图片的链接" + imgs[i]);
-            // NetWorkInterface.HOST + "/" + imgs[i]
-        }
+        if (postBean.getPicture_id() != null) {
+            mImgs = postBean.getPicture_id().split("\\,");
 
+        }
         postContentAll = (LinearLayout) findViewById(R.id.post_content);
         int j = 0;
         for (int i = 0; i < beanArrayList.size(); i++) {
@@ -168,7 +167,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
             String content = postContentBean.getContent();
             if (content.startsWith("**\n\n这里是图片")) {
 
-                Log.e("toJson", "这里是图片" + imgs[j]);
+                Log.e("toJson", "这里是图片" + mImgs[j]);
                 //int px = DensityUtil.dip2px(this, 60);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 ImageView imageView = new ImageView(this);
@@ -178,12 +177,12 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(PlateDetailsActivity.this,PhotoScale.class).putExtra("photoURL",imgs[finalJ]));
+                        startActivity(new Intent(PlateDetailsActivity.this,PhotoScale.class).putExtra("photoURL",mImgs[finalJ]));
                     }
                 });
                 postContentAll.addView(imageView);
                 Glide.with(this)
-                        .load(NetWorkInterface.HOST + "/" + imgs[j])
+                        .load(NetWorkInterface.HOST + "/" + mImgs[j])
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(imageView);
                 j++;

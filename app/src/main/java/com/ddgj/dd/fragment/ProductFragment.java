@@ -13,7 +13,9 @@ import android.widget.ListView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
+import com.ddgj.dd.activity.FactoryDetailActivity;
 import com.ddgj.dd.activity.LoginActivity;
+import com.ddgj.dd.activity.ProductDetailActivity;
 import com.ddgj.dd.activity.PublishProductActivity;
 import com.ddgj.dd.adapter.FactoryProductsAdapter;
 import com.ddgj.dd.bean.EnterpriseUser;
@@ -159,6 +161,10 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
         ori.setOriginality_differentiate("1");
         params.put("client_side", "app");
         params.put("originality_id", ori.getOriginality_id());
-        mHttpHelper.startDetailsPage(GET__PRODUCT_DETAILS, params, ori);
+        //mHttpHelper.startDetailsPage(GET__PRODUCT_DETAILS, params, ori);
+        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra("originality_id",ori.getOriginality_id());
+        Log.e("originality_id", "ori.getOriginality_id()：" +ori.getOriginality_id());
+        startActivity(intent);
     }
 }

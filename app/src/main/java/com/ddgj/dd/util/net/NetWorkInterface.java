@@ -10,8 +10,8 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-//    public static final String HOST = "http://www.51douding.com";
-    public static final String HOST = "http://192.168.2.180:8080/newdouding";
+   //public static final String HOST = "http://www.51douding.com";
+  public static final String HOST = "http://192.168.2.180:8080/newdouding";
 
     /**
      * 注册接口
@@ -224,6 +224,10 @@ public interface NetWorkInterface {
      */
     String DELETE_FAVORITE = HOST + "/delCollections.do";
     /**
+     * 取消收藏接口
+     */
+    String QUXIAO_FAVORITE = HOST + "/cancelCollections.do";
+    /**
      * 获取我的收藏接口
      */
     String GET_FAVORITE = HOST + "/findMyCollections.do";
@@ -250,7 +254,19 @@ public interface NetWorkInterface {
      */
     String QUERY_ORDER = HOST + "/findOrder.do";
     /**
-     * 查询订单
+     * 查询创意详情
      */
     String GET_ORIGINALITY_DETAIL = HOST + "/findByOriginalityId.do";
+    /**
+     * 查询专利详情
+     */
+    String GET_PATENT_DETAIL = HOST + "/findByPatentId.do";
+    /**
+     * 查询产品详情
+     */
+    String GET_FACTORY_DETAIL = HOST + "/findbyId_fcilitator.do";
+    /**
+     * 查询代工产品详情
+     */
+    String GET_DAIGONF_PRODUCT_DETAIL = HOST + "/findCustom_made.do";
 }
