@@ -13,7 +13,6 @@ import android.widget.ListView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.OrderFactoryAdapter;
 import com.ddgj.dd.bean.EnterpriseUser;
-import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -151,28 +150,31 @@ public class OrderFactoryActivity extends BaseActivity implements NetWorkInterfa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final EnterpriseUser user = mFactorys.get(position - 1);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("acilitator_id", user.getAccount_id());
-                OkHttpUtils.post().url(GET_ORDER_FACTORY_DETAILS).params(params).build().execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取代工工厂详情页失败：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
-                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
-                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
-                            String url = responseInfo.getData();
-                            Log.e("lgst", url);
-                            startActivity(new Intent(OrderFactoryActivity.this, WebActivity.class)
-                                    .putExtra("title", user.getFacilitator_name())
-                                    .putExtra("url", HOST + url));
-                        }
-                    }
-                });
+                Intent intent = new Intent(OrderFactoryActivity.this, FactoryDetailActivity.class);
+                intent.putExtra("acilitator_id",user.getAcilitator_id());
+                startActivity(intent);
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("client_side", "app");
+//                params.put("acilitator_id", user.getAccount_id());
+//                OkHttpUtils.post().url(GET_ORDER_FACTORY_DETAILS).params(params).build().execute(new StringCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e, int id) {
+//                        Log.e("lgst", "获取代工工厂详情页失败：" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response, int id) {
+//                        Log.i("lgst", response);
+//                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
+//                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
+//                            String url = responseInfo.getData();
+//                            Log.e("lgst", url);
+//                            startActivity(new Intent(OrderFactoryActivity.this, WebActivity.class)
+//                                    .putExtra("title", user.getFacilitator_name())
+//                                    .putExtra("url", HOST + url));
+//                        }
+//                    }
+//                });
             }
         });
     }

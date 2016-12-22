@@ -5,6 +5,7 @@ package com.ddgj.dd.bean;
  */
 
 public class FavoriteInfo {
+    private int id;
     private String collection_id;
     private String collection_type;
     private String c_u_id;
@@ -17,6 +18,14 @@ public class FavoriteInfo {
     private String nickname;
     private int pageNumber;
     private int pageSingle;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCollection_id() {
         return collection_id;
@@ -112,5 +121,13 @@ public class FavoriteInfo {
 
     public void setPageSingle(int pageSingle) {
         this.pageSingle = pageSingle;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj) return true;
+        if(!(obj instanceof FavoriteInfo)) return false;
+        FavoriteInfo that = (FavoriteInfo) obj;
+        return this.c_from_id.equals(that.getC_from_id());
     }
 }

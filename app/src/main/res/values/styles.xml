@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
     </style>
     <style name="AppThemeLightStatuBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -169,6 +170,5 @@
         <item name="cardCornerRadius">0dp</item>
         <item name="contentPadding">16dp</item>
     </style>
-
 
 </resources>

@@ -1,13 +1,11 @@
 package com.ddgj.dd;
 
 import android.app.Application;
+import android.content.Intent;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.ddgj.dd.db.DBManager;
+import com.ddgj.dd.service.InitService;
 import com.ddgj.dd.util.CrashHandler;
 import com.ddgj.dd.util.FileUtil;
 import com.ddgj.dd.util.net.HttpHelper;
@@ -51,15 +49,19 @@ public class DDGJApplication extends Application {
         dbHelper = new DBManager(this);
         dbHelper.openDatabase();
         UserHelper.getInstance().initUserInfo(this);//用户初始化
-        FileUtil.getInstance().init(getApplicationContext());//目录初始化
-        SDKInitializer.initialize(getApplicationContext());//百度地图初始化
-        initLocation();
+        initBaiduMap();
         initEM();//环信easeui初始化
         initOkhttp();//OKhttp初始化
 //        bug追踪初始化
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
         HttpHelper.uploadError();
+        startService(new Intent(this,InitService.class));
+    }
+
+    private void initBaiduMap() {
+        FileUtil.getInstance().init(getApplicationContext());//目录初始化
+        SDKInitializer.initialize(getApplicationContext());//百度地图初始化
     }
 
     /**
@@ -85,50 +87,5 @@ public class DDGJApplication extends Application {
         EaseUI.getInstance().init(this, options);
     }
 
-    /**
-     * 定位回调
-     */
-    public BDLocationListener myListener = new BDLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation bdLocation) {
-            int type = bdLocation.getLocType();
-            String address = bdLocation.getAddrStr();
-            String country = bdLocation.getCountry();
-            String province = bdLocation.getProvince();
-            String district = bdLocation.getDistrict();
-            String street = bdLocation.getStreet();
-            String streetNumbet = bdLocation.getStreetNumber();
-            String city = bdLocation.getCity();
-            city = city.substring(0, city.length() - 1);
-            if (!city.isEmpty())
-                getSharedPreferences("location", MODE_PRIVATE).edit().putString("city", city)
-                        .putString("address", address)
-                        .putString("country", country)
-                        .putString("district", district)
-                        .putString("province", province)
-                        .putString("street", street)
-                        .putString("streetNumber", streetNumbet).commit();
-        }
-    };
-    public LocationClient mLocationClient = null;
 
-    private void initLocation() {
-        mLocationClient = new LocationClient(this);     //声明LocationClient类
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span = 1000;
-        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);//可选，默认false,设置是否使用gps
-        option.setLocationNotify(true);//可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
-        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
-        mLocationClient.setLocOption(option);
-        mLocationClient.registerLocationListener(myListener);    //注册监听函数
-        mLocationClient.start();
-    }
 }

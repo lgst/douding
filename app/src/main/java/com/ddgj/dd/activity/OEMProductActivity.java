@@ -146,9 +146,6 @@ public class OEMProductActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
             case R.id.fab:
                 if (UserHelper.getInstance().isLogined()) {
                     if (UserHelper.getInstance().getUser().getAccount_type().equals("0")) {

@@ -19,16 +19,18 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
-import com.ddgj.dd.activity.WebActivity;
+import com.ddgj.dd.activity.PatentDetailActivity;
 import com.ddgj.dd.adapter.PatentPLVAdapter;
 import com.ddgj.dd.bean.Patent;
-import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
-import com.google.gson.Gson;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
+import com.lidroid.xutils.exception.DbException;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -52,8 +54,10 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
     private BaseActivity activity;
     private SweetAlertDialog mDialog;
     private boolean refresh;
-    private int pageNumber = 1;
+    private int pageNumber = 0;
     private View mView;
+    private DbUtils mDbu;
+    private boolean noMore;
 
     @Nullable
     @Override
@@ -69,28 +73,11 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
         mplv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Patent originality = mPatents.get(position);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("patent_id", originality.getPatent_id());
-                OkHttpUtils.post().url(GET_PATENT_DETAILS).params(params).build().execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", "获取创意详情页失败：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        ResponseInfo responseInfo = new Gson().fromJson(response, ResponseInfo.class);
-                        if (responseInfo.getStatus() == STATUS_SUCCESS) {
-                            String url = responseInfo.getData();
-                            Log.e("lgst", url);
-                            startActivity(new Intent(activity, WebActivity.class)
-                                    .putExtra("title", originality.getPatent_name())
-                                    .putExtra("url", HOST + url));
-                        }
-                    }
-                });
+                final Patent patent = mPatents.get(position);
+                Intent intent = new Intent(getActivity(), PatentDetailActivity.class);
+                intent.putExtra("patent_id", patent.getPatent_id());
+                Log.e("patent", "patent：" + patent.getPatent_id());
+                startActivity(intent);
             }
         });
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -155,6 +142,7 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mDbu = DbUtils.create(getContext(), StringUtils.getDbName());
         initView();
         initData();
     }
@@ -164,18 +152,30 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
      * classes:分类  ALL：全部   NEW：最新   HOT：最热   MINE：我的
      */
     private void initData() {
+//        if (noMore)
+//            return;
+//        try {
+//            List<Patent> patents = mDbu.findAll(Selector.from(Patent.class).limit(10).offset(pageNumber));
+//            if (patents != null && !patents.isEmpty()) {
+//                mPatents.addAll(patents);
+//                mAdapter.notifyDataSetChanged();
+//            }
+//            if (patents != null || patents.size() < 10) {
+//                mplv.removeFooterView(mView);
+//                noMore = true;
+//            }
+//            mLoading.setVisibility(View.GONE);
+//        } catch (DbException e) {
+//            e.printStackTrace();
+//        }
         if (!activity.checkNetWork()) {
             activity.showToastNotNetWork();
             return;
         }
-//        if (mPatents.size() > 0) {
-//            return;
-//        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(pageNumber));
         params.put("pageSingle", "10");
         params.put("p_account_id", UserHelper.getInstance().getUser().getAccount_id());
-//        params.put("originality_differentiate",String.valueOf(0));
         new HttpHelper<Patent>(getActivity(), Patent.class)
                 .getDatasPost(GET_MINE_PATENT, params, new DataCallback<Patent>() {
                     @Override
@@ -193,33 +193,6 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
                             mLoading.setVisibility(View.GONE);
                     }
                 });
-//        OkHttpUtils.post().url(GET_MINE_PATENT).params(params).build().execute(new StringCallback() {
-//            @Override
-//            public void onError(Call call, Exception e, int id) {
-//                activity.showToastNotNetWork();
-//            }
-//
-//            @Override
-//            public void onResponse(String response, int id) {
-//                Log.i("lgst", response);
-//                try {
-//                    JSONObject jo = new JSONObject(response);
-//                    int status = jo.getInt("status");
-//                    if (status == STATUS_SUCCESS) {
-//                        JSONArray ja = jo.getJSONArray("data");
-//                        for (int i = 0; i < ja.length(); i++) {
-//                            String patentStr = ja.getJSONObject(i).toString();
-//                            Patent originality = new Gson().fromJson(patentStr, Patent.class);
-//                            mPatents.add(originality);
-//                        }
-//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-//                            mLoading.setVisibility(View.GONE);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
     }
 
     /**
@@ -251,7 +224,7 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
      */
     private void deleteData(final int position) {
         Patent ori = mPatents.get(position);
-        String id = ori.getPatent_id();
+        final String id = ori.getPatent_id();
         OkHttpUtils.get().url(DELETE_PATENT + "?" + "patent_id=" + id).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -260,11 +233,17 @@ public class MinePatentFragment extends BaseFragment implements NetWorkInterface
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int i) {
                 Toast.makeText(getActivity(), "删除成功！", Toast.LENGTH_SHORT).show();
                 mPatents.remove(position);
                 mAdapter.notifyDataSetChanged();
-                mDialog.dismiss();
+                try {
+                    mDbu.delete(Patent.class, WhereBuilder.b("patent_id", "=", id));
+                } catch (DbException e) {
+                    e.printStackTrace();
+                } finally {
+                    mDialog.dismiss();
+                }
             }
         });
     }

@@ -11,7 +11,7 @@
         android:background="@color/colorPrimary"
         app:tabIndicatorColor="@color/white"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/grey"/>
+        app:tabTextColor="@color/grey_light"/>
 
 
     <RelativeLayout android:layout_width="match_parent"

@@ -1,24 +1,30 @@
 package com.ddgj.dd.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ddgj.dd.R;
+import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.view.RecycleViewDivider;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -31,14 +37,16 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
      * 分类
      */
     private TextView classes;
-    private ListView searchHistory;
     private EditText searchContent;
     private Toolbar mToolbar;
+    private RecyclerView mRecyclerView;
+    private List<String> mHistory = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        loadHistory();
         initView();
     }
 
@@ -46,7 +54,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     public void initView() {
         searchContent = (EditText) findViewById(R.id.search_edit_text);
         searchContent.setOnEditorActionListener(this);
-        searchHistory = (ListView) findViewById(R.id.list);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,100 +61,117 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 finish();
             }
         });
-        SharedPreferences sp = getSharedPreferences("search_history", MODE_PRIVATE);
-        final String sh = sp.getString("search", "");
-        if (sh.isEmpty())
-            return;
-        final String[] shs = sh.split(",");
-        searchHistory.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return shs.length;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_history, null);
-                TextView tv = (TextView) convertView.findViewById(R.id.text);
-                Log.i("lgst", "p:" + position);
-                tv.setText(shs[position]);
-                return convertView;
-            }
-        });
-        searchHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.putExtra("content", shs[position]);
-                setResult(SUCCESS, intent);
-                SearchActivity.this.finish();
-            }
-        });
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(this,
+                LinearLayoutManager.HORIZONTAL, DensityUtil.dip2px(getApplicationContext(), 8), Color.parseColor("#EEEEEE")));
+        mRecyclerView.setAdapter(new RcvAdapter());
     }
 
-    public void backClick(View v) {
-        finish();
-    }
-
-    /**
-     * 清除搜索历史记录
-     */
-    public void clearClick(View v) {
-        getSharedPreferences("search_history", MODE_PRIVATE).edit().clear().commit();
-        searchHistory.setVisibility(View.INVISIBLE);
-    }
-
-    private void startSearch() {
-        String content = searchContent.getText().toString().trim();
-        if (content.isEmpty()) {
-            showToastShort("请输入关键字");
-            searchContent.requestFocus();
-            return;
+    private void saveHistory(String str) {
+        if (mHistory.contains(str)) {
+            mHistory.remove(str);
         }
-        Intent intent = new Intent();
-        intent.putExtra("content", content);
-        setResult(SUCCESS, intent);
-        saveToHistory(content);
-        finish();
+        mHistory.add(0, str);
+        StringBuilder keySb = new StringBuilder();
+        for (String keyWords : mHistory) {
+            keySb.append(keyWords).append(" ");
+        }
+        SharedPreferences sp = getSharedPreferences("search", MODE_APPEND);
+        sp.edit().putString("search", keySb.toString().trim()).commit();
     }
 
-    private void saveToHistory(String content) {
-        SharedPreferences sp = getSharedPreferences("search_history", MODE_PRIVATE);
-        String searchHistory = sp.getString("search", "");
-        if (searchHistory.isEmpty()) {
-            sp.edit().putString("search", content).commit();
-            return;
+    private void saveHistory() {
+        StringBuilder keySb = new StringBuilder();
+        for (String keyWords : mHistory) {
+            keySb.append(keyWords).append(" ");
         }
-        String[] shs = searchHistory.split(",");
-        if (shs.length >= 10) {
-            searchHistory = searchHistory.substring(0, searchHistory.lastIndexOf(','));
-        }
-        searchHistory = content + "," + searchHistory;
-        sp.edit().putString("search", searchHistory).commit();
+        SharedPreferences sp = getSharedPreferences("search", MODE_APPEND);
+        sp.edit().putString("search", keySb.toString().trim()).commit();
     }
+
+    private void loadHistory() {
+        SharedPreferences sp = getSharedPreferences("search", MODE_APPEND);
+        String keyWords = sp.getString("search", "");
+        if (!keyWords.isEmpty())
+            mHistory.addAll(Arrays.asList(keyWords.split(" ")));
+    }
+
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            if (searchContent.length() != 0)
-                // 当按了搜索之后关闭软键盘
-                ((InputMethodManager) searchContent.getContext().getSystemService(
-                        Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-                        this.getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-            startSearch();
-            return true;
+        if (actionId == EditorInfo.IME_ACTION_SEARCH && submit()) {
+            String content = searchContent.getText().toString().trim();
+            if (content.isEmpty()) {
+                showToastShort("请输入关键字");
+                searchContent.requestFocus();
+                return false;
+            }
+            saveHistory(content);
+            Intent intent = new Intent();
+            intent.putExtra("content", content);
+            setResult(SUCCESS, intent);
+            finish();
         }
         return false;
+    }
+    private boolean submit() {
+        // validate
+        String searchString = searchContent.getText().toString().trim();
+        if (TextUtils.isEmpty(searchString)) {
+            Toast.makeText(this, "输入关键字", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+    class RcvAdapter extends RecyclerView.Adapter {
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(getLayoutInflater().inflate(R.layout.item_history_list, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            ViewHolder vh = (ViewHolder) holder;
+            vh.mText.setText(mHistory.get(position));
+            vh.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveHistory(mHistory.get(position));
+                    Intent intent = new Intent();
+                    intent.putExtra("content", mHistory.get(position));
+                    setResult(SUCCESS, intent);
+                    SearchActivity.this.finish();
+                }
+            });
+            vh.mDel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mHistory.remove(position);
+                    notifyItemRemoved(position);
+                    RcvAdapter.this.notifyItemRangeChanged(0, mHistory.size());
+                    saveHistory();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mHistory.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            View rootView;
+            AppCompatTextView mText;
+            ImageView mDel;
+
+            ViewHolder(View rootView) {
+                super(rootView);
+                this.rootView = rootView;
+                this.mText = (AppCompatTextView) rootView.findViewById(R.id.text);
+                this.mDel = (ImageView) rootView.findViewById(R.id.delete);
+            }
+
+        }
     }
 }

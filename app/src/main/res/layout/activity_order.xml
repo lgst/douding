@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ddgj.dd.activity.OrderActivity">
-    <RelativeLayout
-        style="@style/ActionBarLightTheme"
-        android:background="@color/white">
-        <ImageView
-            style="@style/TitleBarImageTheme"
-            android:onClick="backClick"
-            android:src="@mipmap/ic_blue_back"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_back_blue">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"/>
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
     <View style="@style/LineGrey1px"/>
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -46,10 +46,10 @@
             />
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="32dp"
-                          android:paddingLeft="16dp"
                           android:background="@color/white"
                           android:gravity="center_vertical"
-                          android:orientation="horizontal">
+                          android:orientation="horizontal"
+                          android:paddingLeft="16dp">
                 <ImageView android:layout_width="8dp"
                            android:layout_height="24dp"
                            android:src="@drawable/shape_rectangle"
@@ -64,7 +64,9 @@
                 android:id="@+id/success"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:divider="@color/grey_lightE"
+                android:dividerHeight="8dp">
 
             </com.ddgj.dd.view.CustomListView>
         </LinearLayout>

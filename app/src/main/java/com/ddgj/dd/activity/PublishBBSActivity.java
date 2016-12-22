@@ -1,9 +1,9 @@
 package com.ddgj.dd.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.PostContentBean;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.PermissionUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.RichTextEditor;
@@ -89,13 +90,22 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
             case R.id.select_pic:
-                MultiImageSelector.create(PublishBBSActivity.this)
-                        .start(PublishBBSActivity.this, REQUEST_IMAGE);
+                if (PermissionUtils.requestAllPermissions(this, 200))
+                    MultiImageSelector.create(PublishBBSActivity.this)
+                            .start(PublishBBSActivity.this, REQUEST_IMAGE);
                 break;
             default:
 
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==200)
+            MultiImageSelector.create(PublishBBSActivity.this)
+                    .start(PublishBBSActivity.this, REQUEST_IMAGE);
     }
 
     /**
@@ -202,32 +212,6 @@ public class PublishBBSActivity extends BaseActivity implements View.OnClickList
 
     public void backClick(View v) {
         showDailog();
-    }
-
-    static final String[] PERMISSION = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
-            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
-            Manifest.permission.CAMERA
-//            Manifest.permission.READ_PHONE_STATE,        //读取设备信息
-//            Manifest.permission.ACCESS_COARSE_LOCATION, //百度定位
-//            Manifest.permission.ACCESS_FINE_LOCATION,
-    };
-
-    @Override
-    protected void process(Bundle savedInstanceState) {
-        super.process(savedInstanceState);
-        //如果有什么需要初始化的，在这里写就好～
-    }
-
-    @Override
-    public void getAllGrantedPermission() {
-        //当获取到所需权限后，进行相关业务操作
-        super.getAllGrantedPermission();
-    }
-
-    @Override
-    public String[] getPermissions() {
-        return PERMISSION;
     }
 
     @Override

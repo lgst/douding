@@ -1,9 +1,8 @@
 package com.ddgj.dd.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.bean.User;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.PermissionUtils;
 import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
@@ -39,8 +39,6 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
-
-import static com.baidu.location.d.j.s;
 
 public class OrderAddActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
@@ -170,9 +168,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                 showDailog();
                 break;
             case R.id.pick_pic:
-                //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
-                MultiImageSelector.create(OrderAddActivity.this)
-                        .start(OrderAddActivity.this, REQUEST_IMAGE);
+                if (PermissionUtils.requestAllPermissions(this, 200))
+                    MultiImageSelector.create(OrderAddActivity.this)
+                            .start(OrderAddActivity.this, REQUEST_IMAGE);
                 break;
             case R.id.commit_order:
                 getAllInfor();
@@ -181,6 +179,14 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200)
+            MultiImageSelector.create(OrderAddActivity.this)
+                    .start(OrderAddActivity.this, REQUEST_IMAGE);
     }
 
     public void addrClick(View v) {
@@ -248,7 +254,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
             if (path != null) {
                 for (int i = 0; i < path.size(); i++) {
 //                    file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
-                    file = FileUtil.compressBitmap(path.get(i),(float) (1024 * 1024 * 8));
+                    file = FileUtil.compressBitmap(path.get(i), (float) (1024 * 1024 * 8));
                     String s = "made_picture";
                     post.addFile(s + i, file.getName(), file);
                 }
@@ -268,6 +274,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                             Log.e("fabu", " 成功id:" + id);
                             showToastLong("成功");
                             OrderAddActivity.this.finish();
+//                            EventBus.getDefault().post(new BusEvent(BusEvent.ORDER));
                             dialog.dismiss();
 
                         }
@@ -319,12 +326,9 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
     /**
      * 檢查數據完成
      *
-     * @param ideaname
      * @param ideaintro
-     * @param idrainfor
      * @param username
      * @param userphone1
-     * @param userphone2
      * @param userphone3
      * @param userphone4
      * @param userphone5
@@ -427,7 +431,7 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
     private void showDailog() {
         new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setContentText("")
-                .setTitleText("是否放弃对用户信息的修改？")
+                .setTitleText("是否放弃已编辑内容？")
                 .setConfirmText("放弃")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -443,34 +447,5 @@ public class OrderAddActivity extends BaseActivity implements View.OnClickListen
                     }
                 })
                 .show();
-    }
-
-    static final String[] PERMISSION = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
-            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
-            Manifest.permission.CAMERA
-//            Manifest.permission.READ_PHONE_STATE,        //读取设备信息
-//            Manifest.permission.ACCESS_COARSE_LOCATION, //百度定位
-//            Manifest.permission.ACCESS_FINE_LOCATION,
-    };
-
-    @Override
-    protected void process(Bundle savedInstanceState) {
-        super.process(savedInstanceState);
-
-        //如果有什么需要初始化的，在这里写就好～
-
-    }
-
-    @Override
-    public void getAllGrantedPermission() {
-        //当获取到所需权限后，进行相关业务操作
-
-        super.getAllGrantedPermission();
-    }
-
-    @Override
-    public String[] getPermissions() {
-        return PERMISSION;
     }
 }

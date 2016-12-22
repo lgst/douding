@@ -7,31 +7,34 @@ import java.io.Serializable;
  */
 public class Originality implements Serializable {
 
+
     /**
+     * originality_id : 546c0353-5668-46c0-8481-21eea7069e37
+     * originality_name : 宝宝睡眠器
+     * originality_introduce : 因为我家小宝宝每天睡觉很折腾人，所以希望有一款机器能迅速助小宝睡觉。
+     * originality_details : 创造一个促进睡眠的环境，使小宝能迅速进入睡眠状态，达到睡眠效果。
+     * originality_type : 医疗卫生保健
+     * o_user_name : 流水
+     * o_user_contact : 18092899110
+     * o_user_email : 18092899110@189.com
+     * o_picture : 无图
+     * o_secrecy_type :
+     * o_creation_time : 2016-10-24 09:30:15
+     * o_praise_amount : 0
+     * o_browse_amount : 18
+     * o_originality_address :
+     * o_account_id : bc5cf808-b053-4798-8bb5-70651f0f2d99
+     * o_nickname :
+     * originality_differentiate :
+     * head_picture : img/picture1.jpg
+     * account : wujing791122
      * pageNumber : 0
      * pageSingle : 0
-     * originality_id : 1
-     * originality_name : 豆丁
-     * originality_introduce :
-     * originality_details :
-     * originality_type :
-     * o_user_name :
-     * o_user_contact :
-     * o_user_email :
-     * o_picture : files/20161012/6223620090673535.png
-     * o_secrecy_type :
-     * o_creation_time : 2016-10-14
-     * o_praise_amount : 23
-     * o_browse_amount : 66
-     * o_originality_address : xian
-     * o_account_id :
-     * o_nickname : xii
-     * originality_differentiate :
-     * head_picture : 3333
+     * del_state :
+     * collection_count : 0
+     * comments_count : 0
      */
-
-    private int pageNumber;
-    private int pageSingle;
+    private int id;
     private String originality_id;
     private String originality_name;
     private String originality_introduce;
@@ -50,36 +53,19 @@ public class Originality implements Serializable {
     private String o_nickname;
     private String originality_differentiate;
     private String head_picture;
-    private String facilitator_name;
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
     private String account;
+    private int pageNumber;
+    private int pageSingle;
+    private String del_state;
+    private String collection_count;
+    private String comments_count;
 
-    public String getFacilitator_name() {
-        return facilitator_name;
+    public int getId() {
+        return id;
     }
 
-    public void setFacilitator_name(String facilitator_name) {
-        this.facilitator_name = facilitator_name;
-    }
-
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public int getPageSingle() {
-        return pageSingle;
-    }
-
-    public void setPageSingle(int pageSingle) {
-        this.pageSingle = pageSingle;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getOriginality_id() {
@@ -218,15 +204,67 @@ public class Originality implements Serializable {
         this.originality_differentiate = originality_differentiate;
     }
 
-    public String getAccount() {
-        return account;
-    }
-
     public String getHead_picture() {
         return head_picture;
     }
 
     public void setHead_picture(String head_picture) {
         this.head_picture = head_picture;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public int getPageSingle() {
+        return pageSingle;
+    }
+
+    public void setPageSingle(int pageSingle) {
+        this.pageSingle = pageSingle;
+    }
+
+    public String getDel_state() {
+        return del_state;
+    }
+
+    public void setDel_state(String del_state) {
+        this.del_state = del_state;
+    }
+
+    public String getCollection_count() {
+        return collection_count;
+    }
+
+    public void setCollection_count(String collection_count) {
+        this.collection_count = collection_count;
+    }
+
+    public String getComments_count() {
+        return comments_count;
+    }
+
+    public void setComments_count(String comments_count) {
+        this.comments_count = comments_count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Originality)) return false;
+        Originality that = (Originality) o;
+        return this.getOriginality_id().equals(that.getOriginality_id());
     }
 }

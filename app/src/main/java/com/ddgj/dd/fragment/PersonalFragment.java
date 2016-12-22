@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
 import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.PermissionUtils;
 import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.camera.CameraActivity;
 import com.ddgj.dd.util.net.NetWorkInterface;
@@ -28,7 +30,7 @@ import static com.ddgj.dd.util.net.HttpHelper.uploadUserIcon;
  * Created by lg on 2016/10/8.
  * 个人用户信息
  */
-public class PersonalFragment extends BaseFragment implements NetWorkInterface{
+public class PersonalFragment extends BaseFragment implements NetWorkInterface {
     private TextView name;
     private TextView gender;
     private TextView age;
@@ -73,7 +75,8 @@ public class PersonalFragment extends BaseFragment implements NetWorkInterface{
         setIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), CameraActivity.class).putExtra("scaleType", true).putExtra("path",mIconPath),REQUEST_CODE);
+                if (PermissionUtils.requestAllPermissions(getActivity(), 200))
+                    startActivityForResult(new Intent(getActivity(), CameraActivity.class).putExtra("scaleType", true).putExtra("path", mIconPath), REQUEST_CODE);
             }
         });
         Bitmap bitmap = BitmapFactory.decodeFile(mIconPath);
@@ -85,17 +88,23 @@ public class PersonalFragment extends BaseFragment implements NetWorkInterface{
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200)
+            startActivityForResult(new Intent(getActivity(), CameraActivity.class).putExtra("scaleType", true).putExtra("path", mIconPath), REQUEST_CODE);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == BaseActivity.SUCCESS) {
             Bitmap bitmap = BitmapFactory.decodeFile(mIconPath);
             if (bitmap != null) {
                 mIcon.setImageBitmap(bitmap);
-                uploadUserIcon(getActivity(),mIconPath);
+                uploadUserIcon(getActivity(), mIconPath);
             }
         }
     }
-
 
 
     public void initDatas() {

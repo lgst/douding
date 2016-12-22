@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/tv_custom_customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="承  接  人："
+            android:textSize="16sp"/>
+        <EditText
+            android:id="@+id/et_custom_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_custom_customer"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/tv_custom_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="联系电话："
+            android:textSize="16sp"/>
+        <EditText
+            android:id="@+id/et_custom_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_custom_phone"
+            android:inputType="phone"
+            android:textSize="15sp"
+        />
+    </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+    >
+        <TextView
+            android:id="@+id/tv_custom_allMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="交易总额："
+            android:textSize="16sp"/>
+        <EditText
+            android:id="@+id/et_custom_allMoney"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_custom_allMoney"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+    >
+        <TextView
+            android:id="@+id/tv_custom_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="交货日期："
+            android:textSize="16sp"/>
+        <EditText
+            android:id="@+id/et_custom_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_custom_date"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+    >
+        <TextView
+            android:id="@+id/tv_custom_remark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="备        注："
+            android:textSize="16sp"/>
+        <EditText
+            android:id="@+id/et_custom_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_custom_remark"
+            android:textSize="15sp"
+        />
+    </RelativeLayout>
+    <View style="@style/LineGrey1px"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btn_custom_commit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/selector_bottom_btn_bg"
+        android:gravity="center"
+        android:text="确认承接"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

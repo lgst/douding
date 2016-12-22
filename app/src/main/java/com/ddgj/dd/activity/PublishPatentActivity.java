@@ -1,9 +1,9 @@
 package com.ddgj.dd.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.PermissionUtils;
 import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
@@ -142,9 +143,9 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 showDailog();
                 break;
             case R.id.pick_pic:
-                //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
-                MultiImageSelector.create(PublishPatentActivity.this)
-                        .start(PublishPatentActivity.this, REQUEST_IMAGE);
+                if (PermissionUtils.requestAllPermissions(this, 200))
+                    MultiImageSelector.create(PublishPatentActivity.this)
+                            .start(PublishPatentActivity.this, REQUEST_IMAGE);
                 break;
             case R.id.commit_patent:
                 getAllInfor();
@@ -153,6 +154,14 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200)
+            MultiImageSelector.create(PublishPatentActivity.this)
+                    .start(PublishPatentActivity.this, REQUEST_IMAGE);
     }
 
     /**
@@ -221,6 +230,7 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                         public void onResponse(String response, int id) {
                             Log.e("fabu", " 成功id:" + id);
                             showToastLong("成功");
+//                            EventBus.getDefault().post(BusEvent.PATENT);
                             PublishPatentActivity.this.finish();
                             dialog.dismiss();
                         }
@@ -346,26 +356,5 @@ public class PublishPatentActivity extends BaseActivity implements View.OnClickL
                 })
                 .show();
     }
-    static final String[] PERMISSION = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
-            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
-            Manifest.permission.CAMERA
-    };
 
-    @Override
-    protected void process(Bundle savedInstanceState) {
-        super.process(savedInstanceState);
-        //如果有什么需要初始化的，在这里写就好～
-    }
-
-    @Override
-    public void getAllGrantedPermission() {
-        //当获取到所需权限后，进行相关业务操作
-        super.getAllGrantedPermission();
-    }
-
-    @Override
-    public String[] getPermissions() {
-        return PERMISSION;
-    }
 }

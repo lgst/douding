@@ -18,6 +18,15 @@
 #环信
 -keep class com.hyphenate.** {*;}
 -dontwarn  com.hyphenate.**
+-keep class org.** {*;}
+
+-keep class com.ddgj.dd.util.PermissionUtils
+
+-keep class com.baidu.** { *; }
+-keep class vi.com.gdi.bgl.android.**{*;}
+-keep class com.ddgj.dd.view.** {*;}
+-keep class vi.com.gdi.bgl.android.**{*;}
+
 #OKhttp
 -dontwarn com.squareup.okhttp.**
 -keep class com.squareup.okhttp.** { *;}
@@ -59,11 +68,12 @@
 
 -keep class com.facebook.**
 -keep class com.facebook.** { *; }
--keep class com.umeng.scrshot.**
+-keep class com.umeng.** {*;}
 -keep public class com.tencent.** {*;}
--keep class com.umeng.socialize.sensor.**
--keep class com.umeng.socialize.handler.**
--keep class com.umeng.socialize.handler.*
+#-keep class com.umeng.scrshot.**
+#-keep class com.umeng.socialize.sensor.**
+#-keep class com.umeng.socialize.handler.**
+#-keep class com.umeng.socialize.handler.*
 -keep class     UMMoreHandler{*;}
 -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
 -keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
@@ -113,3 +123,38 @@ public static final ** CREATOR;
 }
 
 -dontwarn org.apache.http.**
+
+-dontwarn android.net.http.**
+
+-keep class com.ddgj.dd.bean.* {*;}
+-keep class com.ddgj.dd.view.**
+-keep class com.ddgj.dd.db.**
+-keep class com.mob.** {*;}
+-keep class cn.smssdk.** {*;}
+
+#EnvnetBus混淆
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(Java.lang.Throwable);
+}
+
+#SweetAlertDialog对话框
+-keep class cn.pedant.** {*;}
+
+-keep class com.baoyz.**{*;}
+
+-keep class com.github.lovetuzitong.** {*;}
+
+-keep class com.squareup.picasso.** {*;}
+
+-keep class com.zhy.** {*;}
+
+-keep class com.soundcloud.** {*;}
+#XUtils
+-keep class com.lidroid.xutils.** {*;}

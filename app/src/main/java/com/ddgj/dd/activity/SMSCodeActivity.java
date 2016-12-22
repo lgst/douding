@@ -45,14 +45,14 @@ public class SMSCodeActivity extends BaseActivity {
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     //提交验证码成功
                     cancle = true;
-                    Log.i(TAG, "afterEvent: 验证成功！");
+//                    Log.i(TAG, "afterEvent: 验证成功！");
                     SMSSDK.unregisterEventHandler(eh);//反注册短信回调
                     setResult(SUCCESS, new Intent().putExtra("phone", phone));
 //                    startActivity(new Intent(SMSCodeActivity.this,RegisterActivity.class).putExtra("phone",phone));
                     finish();
                 } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     //获取验证码成功
-                    Log.i(TAG, "afterEvent: 获取验证码成功！");
+//                    Log.i(TAG, "afterEvent: 获取验证码成功！");
                     mHandler.sendEmptyMessage(1);
 //                    startTimer();
                 } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
@@ -65,6 +65,7 @@ public class SMSCodeActivity extends BaseActivity {
     };
     private String code;
     private EditText mPhone;
+    private boolean forget;
 
     private void startTimer() {
         mSendCode.setEnabled(false);
@@ -90,7 +91,7 @@ public class SMSCodeActivity extends BaseActivity {
             protected void onProgressUpdate(Object[] values) {
                 super.onProgressUpdate(values);
                 mSendCode.setText("重新获取" + "(" + values[0] + "s)");
-                Log.i(TAG, "onProgressUpdate: " + values[0]);
+//                Log.i(TAG, "onProgressUpdate: " + values[0]);
                 if (((Integer) values[0]) == 0) {
                     mSendCode.setText("获取验证码");
                 }
@@ -106,7 +107,7 @@ public class SMSCodeActivity extends BaseActivity {
     }
 
     private String country = "+86";
-    private String phone = "18165157887";
+    private String phone = "";
     private EditText mSmsCode;
     private Button mSendCode;
     private Button mSubmit;
@@ -132,6 +133,7 @@ public class SMSCodeActivity extends BaseActivity {
         initView();
         SMSSDK.initSDK(this, "1851542c409e4", "af95d295ff297f0764bc4955b769148e");
         SMSSDK.registerEventHandler(eh); //注册短信回调
+        forget = getIntent().getBooleanExtra("forget", false);
     }
 
     public void submitClick(View v) {
@@ -159,17 +161,16 @@ public class SMSCodeActivity extends BaseActivity {
         OkHttpUtils.post().params(params).url(NetWorkInterface.CHECK_PHONE_IS_USED).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Log.e(TAG, "onError: " + e.getMessage());
+                Log.e(TAG, "验证手机号出错: " + e.getMessage());
             }
 
             @Override
             public void onResponse(String response, int id) {
                 Log.i(TAG, "onResponse: " + response);
                 ResponseInfo info = new Gson().fromJson(response, ResponseInfo.class);
-                if (info.getStatus() == 1) {
+                if (info.getStatus() == 1 && !forget) {
                     showToastShort("该手机号码已被注册！");
-                }
-                if (info.getStatus() == 0) {
+                }else {
                     SMSSDK.getVerificationCode(country, phone);
                     startTimer();
                     inputPhoneL.setVisibility(View.GONE);
@@ -186,6 +187,6 @@ public class SMSCodeActivity extends BaseActivity {
         }
         SMSSDK.getVerificationCode(country, phone);
         startTimer();
-        Log.i(TAG, "sendCodeClick: ");
+//        Log.i(TAG, "sendCodeClick: ");
     }
 }

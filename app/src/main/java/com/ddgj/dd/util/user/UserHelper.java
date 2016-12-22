@@ -8,6 +8,9 @@ import com.ddgj.dd.R;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.bean.User;
+import com.ddgj.dd.util.StringUtils;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.exception.DbException;
 
 /**
  * 用户操作类，使用前必须初始化调用init()
@@ -68,6 +71,11 @@ public class UserHelper {
         context.getSharedPreferences("user",Context.MODE_PRIVATE).edit().clear().commit();
         //清除登录标志
         setLogined(false);
+        try {
+            DbUtils.create(context, StringUtils.getDbName()).dropDb();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
         //清除用户对象
         user = null;
         Toast.makeText(context,context.getResources().getString(R.string.logout_success),Toast.LENGTH_SHORT).show();

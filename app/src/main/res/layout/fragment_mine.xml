@@ -81,7 +81,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/grey_lightE"
+            android:background="@color/white"
             android:fadingEdge="none"
             android:scrollbars="none">
             <LinearLayout android:layout_width="match_parent"
@@ -258,8 +258,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:background="@drawable/ripple_bg_white"
-                    android:gravity="center_vertical"
                     android:clickable="true"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -284,42 +284,56 @@
                         android:layout_marginRight="16dp"
                         android:src="@mipmap/ic_chevron_right_black_24dp"/>
                 </LinearLayout>
+                <View
+                    style="@style/LineGrey1px"
+                    android:layout_marginLeft="16dp"/>
+                <TextView android:id="@+id/mine_reward" android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/ripple_bg_white"
+                          android:drawableLeft="@mipmap/ic_reward"
+                          android:drawablePadding="16dp"
+                          android:drawableRight="@mipmap/ic_chevron_right_black_24dp"
+                          android:gravity="center_vertical"
+                          android:padding="16dp"
+                          android:text="我的悬赏"
+                          android:textColor="@color/black"
+                          android:textSize="16sp"/>
+                <View
+                    style="@style/LineGrey1px"
+                    android:layout_marginLeft="16dp"/>
+                <TextView android:id="@+id/mine_tender"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/ripple_bg_white"
+                          android:drawableLeft="@mipmap/ic_tender"
+                          android:drawablePadding="16dp"
+                          android:drawableRight="@mipmap/ic_chevron_right_black_24dp"
+                          android:gravity="center_vertical"
+                          android:padding="16dp"
+                          android:text="我的招标"
+                          android:textColor="@color/black"
+                          android:textSize="16sp"/>
 
                 <View
                     style="@style/LineGrey1px"
                     android:layout_marginLeft="16dp"/>
 
-                <LinearLayout
-                    android:id="@+id/mine_favorite"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@drawable/ripple_bg_white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:src="@mipmap/ic_stars_grey600_24dp"/>
-
-                    <TextView
-                        style="@style/MineFragmentListTextStyle"
-                        android:text="@string/mine_favorite"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="16dp"
-                        android:src="@mipmap/ic_chevron_right_black_24dp"/>
-                </LinearLayout>
+                <TextView android:id="@+id/mine_favorite"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/ripple_bg_white"
+                          android:drawableLeft="@mipmap/ic_stars_grey600_24dp"
+                          android:drawablePadding="16dp"
+                          android:drawableRight="@mipmap/ic_chevron_right_black_24dp"
+                          android:gravity="center_vertical"
+                          android:padding="16dp"
+                          android:text="我的收藏"
+                          android:textColor="@color/black"
+                          android:textSize="16sp"/>
                 <View style="@style/LineGrey1px"/>
-                <View style="@style/LineGrey1px"
-                      android:layout_marginTop="16dp"/>
+                <View android:layout_width="match_parent" android:layout_height="16dp"
+                      android:background="@color/grey_lightE"/>
+                <View style="@style/LineGrey1px"/>
                 <LinearLayout
                     android:id="@+id/app_settings"
                     android:layout_width="match_parent"
@@ -337,7 +351,8 @@
 
                     <TextView
                         android:id="@+id/textView2"
-                        style="@style/MineFragmentListTextStyle" android:text="@string/app_settings"/>
+                        style="@style/MineFragmentListTextStyle"
+                        android:text="@string/app_settings"/>
 
                     <ImageView
                         android:layout_width="24dp"
@@ -380,7 +395,10 @@
                         android:src="@mipmap/ic_chevron_right_black_24dp"/>
                 </LinearLayout>
                 <View style="@style/LineGrey1px"/>
-                <View style="@style/LineGrey1px" android:layout_marginTop="16dp"/>
+                <View android:layout_width="match_parent"
+                      android:layout_height="16dp"
+                      android:background="@color/grey_lightE"/>
+                <View style="@style/LineGrey1px"/>
                 <LinearLayout
                     android:id="@+id/about_us"
                     android:layout_width="match_parent"

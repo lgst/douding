@@ -3,6 +3,7 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,8 +33,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     private List<Patent> mPatents;
     private PatentPLVAdapter mAdapter;
     private RadioGroup mRg;
-//    private LinearLayout mLoading;
-    private TextView content;
+    //    private LinearLayout mLoading;
+    private TextView mSearch;
     private FloatingActionButton floatingActionButton;
 
     /**
@@ -76,6 +77,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
 
     private HttpHelper<Patent> mPatentHttpHelper;
     private View notDataView;
+    private String mKeyWords = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         setContentView(R.layout.activity_patent);
         mPatents = new ArrayList<Patent>();
         mPatentHttpHelper = new HttpHelper<Patent>(this, Patent.class);
-        mAdapter = new PatentPLVAdapter(this,mPatents);
+        mAdapter = new PatentPLVAdapter(this, mPatents);
         initView();
         mplv.setRefreshing(true);
 //        initDatas(LOAD, classes);
@@ -101,7 +103,7 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        params.put("patent_name",content.getText().toString().trim());
+        params.put("patent_name", mKeyWords);
         if (classes == MINE)
             params.put("p_account_id", UserHelper.getInstance().getUser().getAccount_id());
         mPatentHttpHelper.getDatasPost(getUrl(classes), params, new DataCallback<Patent>() {
@@ -145,6 +147,13 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
     @Override
     public void initView() {
 //        mLoading = (LinearLayout) findViewById(R.id.loading);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRg = (RadioGroup) findViewById(R.id.rg);
         mplv = (PullToRefreshListView) findViewById(R.id.plv);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -165,17 +174,21 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Patent patent = mPatents.get(position - 1);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("patent_id", patent.getPatent_id());
-                mPatentHttpHelper.startDetailsPage(GET_PATENT_DETAILS,params,patent);
+                Intent intent = new Intent(PatentActivity.this, PatentDetailActivity.class);
+                intent.putExtra("patent_id", patent.getPatent_id());
+                Log.e("patent", "patent：" + patent.getPatent_id());
+                startActivity(intent);
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("client_side", "app");
+//                params.put("patent_id", patent.getPatent_id());
+//                mPatentHttpHelper.startDetailsPage(GET_PATENT_DETAILS,params,patent);
             }
         });
         mplv.setAdapter(mAdapter);
         notDataView = findViewById(R.id.not_data);
 //        mplv.setEmptyView(notDataView);
         mRg.setOnCheckedChangeListener(this);
-        content = (TextView) findViewById(R.id.search_edit_text);
+        mSearch = (TextView) findViewById(R.id.search);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +208,8 @@ public class PatentActivity extends BaseActivity implements RadioGroup.OnChecked
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
-            content.setText(text);
+            mKeyWords = text;
+            mSearch.setText(text);
             initDatas(LOAD, classes);
         }
     }

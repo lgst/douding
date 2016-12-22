@@ -15,6 +15,8 @@ import com.ddgj.dd.activity.OEMActivity;
 import com.ddgj.dd.activity.OrderActivity;
 import com.ddgj.dd.activity.OriginalityActivity;
 import com.ddgj.dd.activity.PatentActivity;
+import com.ddgj.dd.activity.PurchaseActivity;
+import com.ddgj.dd.activity.RewardActivity;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 //import com.ddgj.activity.ListActivity;
@@ -83,12 +85,12 @@ public class ClassesGridViewAdapter extends BaseAdapter {
                         context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page", 6));
                         break;
                     case 6:// 采购
-//                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page", 6));
-                        showLoadingDialog("提示", "该模块暂未开通！");
+                        context.startActivity(new Intent(context, PurchaseActivity.class));
+//                        showLoadingDialog("提示", "该模块暂未开通！");
                         break;
                     case 7:// 悬赏
-//                        context.startActivity(new Intent(context, FactoryActivity.class).putExtra("page", 6));
-                        showLoadingDialog("提示", "该模块暂未开通！");
+                        context.startActivity(new Intent(context, RewardActivity.class));
+//                        showLoadingDialog("提示", "该模块暂未开通！");
                         break;
                 }
             }

@@ -91,10 +91,10 @@ public class FileUtil {
         options.inJustDecodeBounds = false;
         Bitmap bmp = BitmapFactory.decodeFile(fileUri.getPath());
         float size = (float) bmp.getByteCount() / 4f;
-        if(size<=1024000f)
+        if (size <= 1024000f)
             return new File(fileUri.getPath());
         float scale = 1024000f / size;//100KB
-        bmp = ThumbnailUtils.extractThumbnail(bmp, (int)(width * scale), (int)(height * scale));
+        bmp = ThumbnailUtils.extractThumbnail(bmp, (int) (width * scale), (int) (height * scale));
 
         File outputFile = new File(fileUri.getPath());
         outputFile = new File(createImageFile(dir).getPath());
@@ -131,7 +131,7 @@ public class FileUtil {
         String path = fileUri.getPath();
         File outputFile = new File(path);
         long fileSize = outputFile.length();
-        final long fileMaxSize = 200 * 1024;
+        final long fileMaxSize = 500 * 1024;
         if (fileSize >= fileMaxSize) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -192,7 +192,7 @@ public class FileUtil {
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
         //保存图片
         OutputStream outst = null;
-        String cache = getInstance().getmTempCache()+"/"+System.currentTimeMillis()+".jpg";
+        String cache = getInstance().getmTempCache() + "/" + System.currentTimeMillis() + ".jpg";
         try {
             outst = new FileOutputStream(cache);
         } catch (FileNotFoundException e) {
@@ -299,8 +299,9 @@ public class FileUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            return degree;
         }
-        return degree;
     }
 
     public static String saveFile(Context c, String filePath, String fileName, byte[] bytes) {

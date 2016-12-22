@@ -1,6 +1,5 @@
 package com.ddgj.dd.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -102,31 +101,5 @@ public class UserCenterActivity extends BaseActivity {
         } else if (user instanceof EnterpriseUser) {
             startActivityForResult(new Intent(this, EditEnterpriseUserInfoActivity.class), ENTERPRISE_REQUEST_CODE);
         }
-    }
-
-    static final String[] PERMISSION = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
-            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
-            Manifest.permission.CAMERA
-//            Manifest.permission.READ_PHONE_STATE,        //读取设备信息
-//            Manifest.permission.ACCESS_COARSE_LOCATION, //百度定位
-//            Manifest.permission.ACCESS_FINE_LOCATION,
-    };
-
-    @Override
-    protected void process(Bundle savedInstanceState) {
-        super.process(savedInstanceState);
-        //如果有什么需要初始化的，在这里写就好～
-    }
-
-    @Override
-    public void getAllGrantedPermission() {
-        //当获取到所需权限后，进行相关业务操作
-        super.getAllGrantedPermission();
-    }
-
-    @Override
-    public String[] getPermissions() {
-        return PERMISSION;
     }
 }

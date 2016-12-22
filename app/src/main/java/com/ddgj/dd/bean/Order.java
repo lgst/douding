@@ -35,6 +35,7 @@ public class Order implements Serializable {
      * pageSingle :
      */
 
+    private int id;
     private String made_id;
     private String made_name;
     private String made_title;
@@ -62,6 +63,14 @@ public class Order implements Serializable {
     private String account;
     private String city;
     private String made_o_u_id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getMade_o_u_id() {
         return made_o_u_id;
@@ -277,5 +286,13 @@ public class Order implements Serializable {
 
     public void setPageSingle(String pageSingle) {
         this.pageSingle = pageSingle;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)return true;
+        if(!(obj instanceof Order)) return false;
+        Order that = (Order) obj;
+        return this.made_id.equals(that.getMade_id());
     }
 }

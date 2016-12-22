@@ -2,12 +2,12 @@ package com.ddgj.dd.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -32,7 +32,6 @@ import java.util.Map;
  */
 public class OrderListActivity extends BaseActivity implements View.OnClickListener, NetWorkInterface {
 
-    private ImageView mBack;
     private TextView mTvCity;
     private TextView mTvPrice;
     private PullToRefreshListView mplv;
@@ -64,6 +63,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
 
     private String mAddr;
     private HttpHelper<Order> mHttpHelper;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +117,12 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void initView() {
         mTitle = (TextView) findViewById(R.id.title);
-        mBack = (ImageView) findViewById(R.id.back);
         mTvCity = (TextView) findViewById(R.id.tv_city);
         mTvPrice = (TextView) findViewById(R.id.tv_price);
         mplv = (PullToRefreshListView) findViewById(R.id.list);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
         mAddr = getSharedPreferences("location", MODE_PRIVATE).getString("city", "全国");
         mTvCity.setText(mAddr);
-        mBack.setOnClickListener(this);
         mTvCity.setOnClickListener(this);
         mTvPrice.setOnClickListener(this);
         mTitle.setText(getIntent().getStringExtra("title"));
@@ -147,7 +145,15 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Order order = mOrders.get(position - 1);
-                startActivity(new Intent(OrderListActivity.this, OrderDetailActivity.class).putExtra("id", order.getMade_id()));
+                startActivity(new Intent(OrderListActivity.this, OrderDetailActivity.class)
+                        .putExtra("id", order.getMade_id()));
+            }
+        });
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -156,9 +162,6 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
             case R.id.tv_city:
                 startActivityForResult(new Intent(this, CitySelecterActivity.class), 1);
                 overridePendingTransition(R.anim.slide_in_from_right, R.anim.fade_out);

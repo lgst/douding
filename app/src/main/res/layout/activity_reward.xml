@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_reward"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.ddgj.dd.activity.RewardActivity">
+    <include layout="@layout/toolbar"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="200dp"
+            android:orientation="vertical">
+            <View style="@style/LineGrey1px"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/reward"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:clickable="true"
+                    android:drawablePadding="0dp"
+                    android:drawableTop="@drawable/ic_reward_logo"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:text="悬赏"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"/>
+                <TextView
+                    android:id="@+id/tender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:clickable="true"
+                    android:drawablePadding="0dp"
+                    android:drawableTop="@drawable/ic_tender_logo"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:text="招标"
+                    android:textColor="@android:color/black"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+            <View style="@style/LineGrey1px"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@color/grey_lightE"
+                          android:minHeight="200dp"
+                          android:orientation="vertical"
+                          android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="28dp">
+                    <TextView android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="5"
+                              android:text="推荐悬赏"
+                              android:textColor="@android:color/black"
+                              android:textSize="18dp"/>
+                    <TextView android:id="@+id/all_rewards"
+                              android:layout_width="wrap_content"
+                              android:layout_height="match_parent"
+                              android:layout_gravity="center"
+                              android:background="@drawable/shape_red_bg"
+                              android:clickable="true"
+                              android:gravity="center"
+                              android:paddingLeft="16dp"
+                              android:paddingRight="16dp"
+                              android:text="全部悬赏"
+                              android:textColor="@android:color/white"
+                              android:textSize="14dp"
+                              android:visibility="gone"/>
+                </LinearLayout>
+                <com.ddgj.dd.view.CustomListView
+                    android:id="@+id/reward_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:divider="@color/grey_lightE"
+                    android:dividerHeight="8dp"/>
+            </LinearLayout>
+            <View style="@style/LineGrey1px"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@color/grey_lightE"
+                          android:minHeight="200dp"
+                          android:orientation="vertical"
+                          android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="28dp">
+                    <TextView android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="5"
+                              android:text="推荐招标"
+                              android:textColor="@android:color/black"
+                              android:textSize="18dp"/>
+                    <TextView android:id="@+id/all_tenders"
+                              android:layout_width="wrap_content"
+                              android:layout_height="match_parent"
+                              android:background="@drawable/shape_red_bg"
+                              android:clickable="true"
+                              android:gravity="center"
+                              android:paddingLeft="16dp"
+                              android:paddingRight="16dp"
+                              android:text="全部招标"
+                              android:textColor="@android:color/white"
+                              android:textSize="14dp"
+                              android:visibility="gone"/>
+                </LinearLayout>
+                <com.ddgj.dd.view.CustomListView
+                    android:id="@+id/tenders_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:divider="@color/grey_lightE"
+                    android:dividerHeight="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

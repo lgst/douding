@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -18,13 +20,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ddgj.dd.R;
+import com.ddgj.dd.bean.FavoriteInfo;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.Orders;
 import com.ddgj.dd.bean.User;
 import com.ddgj.dd.util.DensityUtil;
+import com.ddgj.dd.util.L;
+import com.ddgj.dd.util.StringUtils;
+import com.ddgj.dd.util.net.BusEvent;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.CircleImageView;
@@ -32,9 +39,18 @@ import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
 import com.google.gson.Gson;
 import com.hyphenate.easeui.EaseConstant;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
+import com.lidroid.xutils.exception.DbException;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +61,7 @@ import java.util.Map;
 
 import okhttp3.Call;
 
-public class OrderDetailActivity extends BaseActivity implements NetWorkInterface, View.OnClickListener, AdapterView.OnItemClickListener {
+public class OrderDetailActivity extends BaseActivity implements NetWorkInterface, View.OnClickListener, AdapterView.OnItemClickListener, Toolbar.OnMenuItemClickListener {
 
     private Toolbar mToolbar;
     private CircleImageView mCivUserIcon;
@@ -70,9 +86,12 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
     private boolean isGet;
     private int sum;
     private User user;
+    private String shareUrl;
     //    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
     private static final String[] STATUS = {"等待接单", "工作中", "交易成功", "交易失败", "待确认合作", "待验收"};
     private int[] colors;
+    private boolean isFavorite;
+    private MenuItem favorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +117,11 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
 
             @Override
             public void onResponse(String response, int id) {
-                Log.i(TAG, "onResponse: " + response);
+//                Log.i(TAG, "onResponse: " + response);
                 try {
                     JSONObject jo = new JSONObject(response);
                     if (jo.getInt("status") == 0) {
+                        shareUrl = HOST + jo.getJSONObject("data").getString("share_url");
                         mOrder = new Gson().fromJson(jo.getString("data"), Order.class);
                         mImagesList = new ArrayList<String>();
                         if (mOrder.getMade_picture() != null) {
@@ -153,10 +173,27 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
                 mGetOrderBtn.setVisibility(View.VISIBLE);
             }
         }
-        if (getIntent().getBooleanExtra("mine", false)) {
+        if (getIntent().getBooleanExtra("mine", false) || mOrder.getMade_state().equals("2")) {
             rlBottom.setVisibility(View.GONE);
         } else if (sum == 0) {
 
+        }
+        if (UserHelper.getInstance().isLogined()) {
+            DbUtils mDbu = DbUtils.create(getApplicationContext(), StringUtils.getDbName());
+            try {
+                FavoriteInfo fs = mDbu.findFirst(Selector.from(FavoriteInfo.class)
+                        .where("c_from_id", "=", mOrder.getMade_id()));
+                if (fs != null) {
+                    //获取收藏状态
+                    isFavorite = true;
+                    favorite.setIcon(R.drawable.ic_favorite);
+                } else {
+                    isFavorite = false;
+                    favorite.setIcon(R.drawable.ic_favorite_border);
+                }
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -165,6 +202,9 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("订制详情");
         mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.inflateMenu(R.menu.menu_share);
+        mToolbar.setOnMenuItemClickListener(this);
+        favorite = mToolbar.getMenu().findItem(R.id.favorite);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             mToolbar.setNavigationIcon(R.drawable.ic_back_white);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -211,10 +251,113 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
         }
     }
 
+    /**
+     * 收藏
+     */
+    private void favorite() {
+        if (!UserHelper.getInstance().isLogined()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("collection_type", "2");
+        params.put("c_u_id", UserHelper.getInstance().getUser().getAccount_id());
+        params.put("c_u_account", mOrder.getAccount());
+        params.put("c_from_id", mOrder.getMade_id());
+        params.put("c_from_title", mOrder.getMade_title());
+        params.put("c_from_picture", "");
+        OkHttpUtils.post().params(params).url(NetWorkInterface.ADD_FAVORITE).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Log.e(TAG, "收藏失败: " + e.getMessage());
+                showToastShort("网络请求失败，请稍后重试！");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Log.i(TAG, "onResponse: " + response);
+                try {
+                    JSONObject jo = new JSONObject(response);
+                    if (0 == jo.getInt("status")) {
+                        Snackbar.make(mToolbar, "收藏成功！", Snackbar.LENGTH_LONG).setAction("查看", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(OrderDetailActivity.this, FavoriteActivity.class));
+                            }
+                        }).show();
+                        EventBus.getDefault().post(new BusEvent(BusEvent.FAVORIT));
+                        favorite.setIcon(R.drawable.ic_favorite);
+                        isFavorite=true;
+                    } else
+                        Snackbar.make(mToolbar, "您已经收藏过本条数据！", Snackbar.LENGTH_LONG).setAction("查看", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(OrderDetailActivity.this, FavoriteActivity.class));
+                            }
+                        }).show();
+//                        showToastShort("收藏成功！");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 取消收藏
+     */
+    private void deleteFavorite() {
+        String c_from_id = null;
+        final DbUtils mDbu = DbUtils.create(getApplicationContext(), StringUtils.getDbName());
+        String collection_id = null;
+        try {
+            FavoriteInfo info = mDbu.findFirst(Selector.from(FavoriteInfo.class)
+                    .where("c_from_id", "=", mOrder.getMade_id()));
+            if (info == null) {
+                return;
+            }
+            c_from_id = info.getC_from_id();
+            collection_id = info.getCollection_id();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        if (c_from_id == null) {
+            return;
+        }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("collection_id", collection_id);
+        final String finalC_from_id = c_from_id;
+        OkHttpUtils.post().params(params).url(NetWorkInterface.DELETE_FAVORITE).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                L.e(TAG, "收藏删除失败：" + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    mDbu.delete(FavoriteInfo.class, WhereBuilder.b("c_from_id", "=", finalC_from_id));
+//                    mDbu.close();
+                    L.i("删除收藏成功: " + response);
+                    favorite.setIcon(R.drawable.ic_favorite_border);
+                    isFavorite=false;
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * 发送消息
+     */
     private void sendMessage() {
         startActivity(new Intent(this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, mOrder.getAccount()));
     }
 
+    /**
+     * 联系雇主
+     */
     private void call() {
         Intent intent = new Intent();
         intent.setData(Uri.parse("tel:" + mOrder.getMade_u_contact()));
@@ -229,6 +372,9 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
                 .putStringArrayListExtra(PreviewImageActivity.PARAMAS_IMAGES, mImagesList));
     }
 
+    /**
+     * 接单
+     */
     private void getOrder() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("made_id", mOrder.getMade_id());
@@ -255,6 +401,56 @@ public class OrderDetailActivity extends BaseActivity implements NetWorkInterfac
             }
         });
     }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.share:
+                share();
+                break;
+            case R.id.favorite:
+                if (isFavorite)
+                    deleteFavorite();
+                else
+                    favorite();
+                break;
+        }
+        return false;
+    }
+
+    private void share() {
+        final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
+                SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE};
+        new ShareAction(this)
+                .setDisplayList(displaylist)
+                .withTitle(mOrder.getMade_title())
+                .withText(mOrder.getMade_describe())
+                .withTargetUrl(shareUrl)
+                .withMedia(new UMImage(this, R.drawable.sina_web_default))
+                .setListenerList(new UMShareListener() {
+                    @Override
+                    public void onResult(SHARE_MEDIA arg0) {
+                        Toast.makeText(OrderDetailActivity.this, "分享已完成！",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA arg0, Throwable arg1) {
+                        Toast.makeText(OrderDetailActivity.this, "分享出错！",
+                                Toast.LENGTH_SHORT).show();
+                        arg1.printStackTrace();
+                        Log.e("lgst", arg1.getMessage());
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA arg0) {
+                        Toast.makeText(OrderDetailActivity.this, "分享已取消！",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).open();
+    }
+
 
     class ImageGVAdapter extends BaseAdapter {
         @Override

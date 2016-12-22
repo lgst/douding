@@ -10,11 +10,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
             android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:navigationIcon="?attr/homeAsUpIndicator">
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:theme="@style/Theme.AppCompat.NoActionBar">
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-
 </merge>

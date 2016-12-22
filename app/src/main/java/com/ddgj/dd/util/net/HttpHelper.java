@@ -79,9 +79,9 @@ public class HttpHelper<T> implements NetWorkInterface {
                                 sweetAlertDialog.dismiss();
                             }
                         });
-                if (((Activity) context).isFinishing())
+                if (!((Activity) context).isFinishing())
                     sweetAlertDialog.show();
-                Toast.makeText(context, "图像上传失败！", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "图像上传失败！", Toast.LENGTH_SHORT).show();
             }
         };
         File iconFile = new File(path);
@@ -205,7 +205,7 @@ public class HttpHelper<T> implements NetWorkInterface {
                 new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        showNetworkNotConnectToast();
+//                        showNetworkNotConnectToast();
 //                        Log.e(TAG, "onError: " + e.getMessage());
                         callback.Failed(e);
                     }

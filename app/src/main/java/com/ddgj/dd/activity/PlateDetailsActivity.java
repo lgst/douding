@@ -1,8 +1,10 @@
 package com.ddgj.dd.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +44,8 @@ import static com.ddgj.dd.util.net.NetWorkInterface.STATUS_SUCCESS;
  */
 public class PlateDetailsActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView backUp;
-    private TextView postTitle;
     private TextView postSubTitle;
+    private Toolbar mToolbar;
     private TextView postPublishData;
     private CircleImageView headPic;
     private TextView userAmount;
@@ -63,13 +64,20 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_plate_deatils);
         chat = (ImageView) findViewById(R.id.chat);
         tvComment = (TextView) findViewById(R.id.tv_comment);
-        backUp = (ImageView) findViewById(R.id.backup);
-        backUp.setOnClickListener(this);
-        postTitle = (TextView) findViewById(R.id.post_title);
         postSubTitle = (TextView) findViewById(R.id.post_sub_title);
         postPublishData = (TextView) findViewById(R.id.post_publish_data);
         userAmount = (TextView) findViewById(R.id.user_amount);
         headPic = (CircleImageView) findViewById(R.id.head_pic);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
+        mToolbar.setNavigationIcon(R.drawable.ic_back_blue);
+        mToolbar.setBackgroundColor(Color.WHITE);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         initData();
     }
 
@@ -123,7 +131,7 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
     public void initView() {
         if (postBean != null && !this.isFinishing()) {
             postPublishData.setText(StringUtils.getDate(postBean.getSend_date()));
-            postTitle.setText(postBean.getTitle());
+            mToolbar.setTitle(postBean.getTitle());
             postSubTitle.setText(postBean.getTitle());
             userAmount.setText(postBean.getAccount());
             postContent = (LinearLayout) findViewById(R.id.post_content);
@@ -206,9 +214,6 @@ public class PlateDetailsActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.backup:
-                finish();
-                break;
             case R.id.tv_comment:
                 if (UserHelper.getInstance().isLogined()) {
                     startActivity(new Intent(this, BBSCommentActivity.class).putExtra("PostID", postBean.getId()));

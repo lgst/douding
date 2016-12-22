@@ -1,13 +1,13 @@
 package com.ddgj.dd.activity;
 
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +23,7 @@ import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.util.DensityUtil;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.PermissionUtils;
 import com.ddgj.dd.util.TextCheck;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
@@ -39,6 +40,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/13.
@@ -82,13 +84,12 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
     private String facilitator_name;
     private String account_id;
     private String head_picture;
+    private Toolbar mToolbar;
 
 
     @Override
     public void initView() {
 
-        backUp = (ImageView) findViewById(R.id.backup);
-        backUp.setOnClickListener(this);
         editName = (EditText) findViewById(R.id.edit_name);
         editIntro = (EditText) findViewById(R.id.edit_intro);
         editInfor = (EditText) findViewById(R.id.edit_infor);
@@ -108,6 +109,17 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
 
         //添加图片
         addImageGroup = (LinearLayout) findViewById(R.id.all_pic);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("添加产品");
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        mToolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimary));
+        mToolbar.setNavigationIcon(R.drawable.ic_back_blue);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDailog();
+            }
+        });
     }
 
     /**
@@ -116,9 +128,10 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
     private void initUser() {
         account_id = UserHelper.getInstance().getUser().getAccount_id();
         head_picture = UserHelper.getInstance().getUser().getHead_picture();
-        if(UserHelper.getInstance().getUser() instanceof PersonalUser){
+        if (UserHelper.getInstance().getUser() instanceof PersonalUser) {
             nickname = ((PersonalUser) UserHelper.getInstance().getUser()).getNickname();
-        }if(UserHelper.getInstance().getUser() instanceof EnterpriseUser){
+        }
+        if (UserHelper.getInstance().getUser() instanceof EnterpriseUser) {
             facilitator_name = ((EnterpriseUser) UserHelper.getInstance().getUser()).getFacilitator_name();
         }
 
@@ -136,7 +149,7 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
     private void initModeSpinner() {
 
         String[] mItems1 = getResources().getStringArray(R.array.originalityTypes);
-        ArrayAdapter spinnerAdapter1=new ArrayAdapter(this,R.layout.textview_spinner_item,mItems1);
+        ArrayAdapter spinnerAdapter1 = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems1);
         typeSpinner.setAdapter(spinnerAdapter1);
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -153,7 +166,7 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
             }
         });
         String[] mItems = getResources().getStringArray(R.array.secrecyType);
-        ArrayAdapter spinnerAdapter=new ArrayAdapter(this,R.layout.textview_spinner_item,mItems);
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.textview_spinner_item, mItems);
         modeSpinner.setAdapter(spinnerAdapter);
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -174,31 +187,31 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.backup:
-//                PublishCreativeActivity.this.finish();
-                showDailog();
-                break;
             case R.id.pick_pic:
-                //this.startActivity(new Intent(this, CameraActivity.class).putExtra("pickPic",1));
-                MultiImageSelector.create(PublishProductActivity.this)
-                        .start(PublishProductActivity.this, REQUEST_IMAGE);
+                if (PermissionUtils.requestAllPermissions(this, 200))
+                    MultiImageSelector.create(PublishProductActivity.this)
+                            .start(PublishProductActivity.this, REQUEST_IMAGE);
                 break;
             case R.id.commit_idea:
                 getAllInfor();
                 toCommitIdea();
                 break;
-            default:
-                break;
         }
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200)
+            MultiImageSelector.create(PublishProductActivity.this)
+                    .start(PublishProductActivity.this, REQUEST_IMAGE);
+    }
 
     /**
      * 上传创意信息
      */
     private void toCommitIdea() {
-        if (check(sEditName, sEditIntro, sEditInfor, sEditUserName,sEditUserEmail, sEditUserPhone)) {
+        if (check(sEditName, sEditIntro, sEditInfor, sEditUserName, sEditUserEmail, sEditUserPhone)) {
             if (!TextCheck.checkPhoneNumber(sEditUserPhone)) {
                 showToastShort("手机号码格式不正确");
                 return;
@@ -231,7 +244,7 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
             File cacheDir = getCacheDir();
 
             PostFormBuilder post = OkHttpUtils.post();
-            if (path!=null) {
+            if (path != null) {
                 for (int i = 0; i < path.size(); i++) {
                     file = FileUtil.scal(Uri.parse(path.get(i)), cacheDir);
                     String s = "o_picture";
@@ -243,9 +256,9 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
                     .params(params).build()
                     .execute(new StringCallback() {
                         @Override
-                        public void onError(okhttp3.Call call, Exception e, int id) {
+                        public void onError(Call call, Exception e, int id) {
                             Log.e("fabu", e.getMessage() + " 失败id:" + id);
-                            showToastLong("失败");
+                            showToastNotNetWork();
                             dialog.dismiss();
                         }
 
@@ -253,7 +266,7 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
                         public void onResponse(String response, int id) {
                             Log.e("fabu", " 成功id:" + id);
                             showToastLong("成功");
-                            PublishProductActivity.this.finish();
+//                            PublishProductActivity.this.finish();
                             dialog.dismiss();
                         }
                     });
@@ -320,11 +333,12 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
                 // 获取返回的图片列表
                 path = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                 // 处理你自己的逻辑 ....
@@ -353,7 +367,7 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
                     // 此处为失去焦点时的处理内容
                     sEditUserEmail = this.userEmail.getText().toString().trim();
 
-                    if (!TextCheck.checkEmail(sEditUserEmail)){
+                    if (!TextCheck.checkEmail(sEditUserEmail)) {
                         showToastShort("邮箱格式不正确");
                     }
                 }
@@ -362,47 +376,13 @@ public class PublishProductActivity extends BaseActivity implements View.OnClick
                 if (b) {
                 } else {
                     sEditUserPhone = this.userPhone.getText().toString().trim();
-                    if (!TextCheck.checkPhoneNumber(sEditUserPhone)){
+                    if (!TextCheck.checkPhoneNumber(sEditUserPhone)) {
                         showToastShort("手机号码格式不正确");
                     }
                 }
             default:
                 break;
         }
-    }
-
-    static final String[] PERMISSION = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,// 写入权限
-            Manifest.permission.READ_EXTERNAL_STORAGE,  //读取权限
-            Manifest.permission.CAMERA
-    };
-
-    @Override
-    protected void process(Bundle savedInstanceState) {
-        super.process(savedInstanceState);
-
-        //如果有什么需要初始化的，在这里写就好～
-
-    }
-
-    @Override
-    public void getAllGrantedPermission() {
-        //当获取到所需权限后，进行相关业务操作
-
-        super.getAllGrantedPermission();
-    }
-
-    @Override
-    public String[] getPermissions() {
-        return PERMISSION;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            showDailog();
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void showDailog() {

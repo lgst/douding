@@ -193,7 +193,6 @@
                       android:clickable="true"
                       android:drawableLeft="@drawable/ic_call"
                       android:gravity="center"
-                      android:text="18165157887"
                       android:textColor="@android:color/white"/>
             <TextView android:id="@+id/tv_IM"
                       android:layout_width="0dp"

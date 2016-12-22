@@ -1,5 +1,6 @@
 package com.ddgj.dd.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,10 +21,13 @@ import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.Patent;
 import com.ddgj.dd.util.DensityUtil;
-import com.ddgj.dd.util.net.HttpHelper;
+import com.ddgj.dd.util.StringUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
+import com.lidroid.xutils.exception.DbException;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -37,11 +41,6 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
-
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_ORDER_FACTORY_DETAILS;
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_ORDER_PRODUCT_DETAILS;
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_ORIGINALITY_DETAILS;
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_PATENT_DETAILS;
 
 public class FavoriteActivity extends BaseActivity {
 
@@ -136,44 +135,49 @@ public class FavoriteActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FavoriteInfo info = mFavorites.get(position);
                 /*0为专利 1为创意 2私人订制 3为代工产品 4为订制厂家 5 为代工厂家 6为中国智造企业 7为帖子*/
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("client_side", "app");
                 switch (Integer.parseInt(info.getCollection_type())) {
-                    case 0:
+                    case 0:{
                         Patent patent = new Patent();
                         patent.setAccount(info.getC_u_account());
                         patent.setPatent_id(info.getC_from_id());
                         patent.setPatent_name(info.getC_from_title());
                         patent.setPatent_details("");//详情在分享中会用到
-                        params.put("patent_id", patent.getPatent_id());
-                        new HttpHelper<Patent>(FavoriteActivity.this, Patent.class).startDetailsPage(GET_PATENT_DETAILS, params, patent);
-                        break;
-                    case 1:
-                        params.put("client_side", "app");
+                        Intent intent = new Intent(FavoriteActivity.this, PatentDetailActivity.class);
+                        intent.putExtra("patent_id",patent.getPatent_id());
+                        Log.e("patent", "patent：" + patent.getPatent_id());
+                        startActivity(intent);
+//                        params.put("patent_id", patent.getPatent_id());
+//                        new HttpHelper<Patent>(FavoriteActivity.this, Patent.class).startDetailsPage(GET_PATENT_DETAILS, params, patent);
+                        break;}
+                    case 1:{
+//                        params.put("client_side", "app");
                         Originality originality = new Originality();
                         originality.setAccount(info.getC_u_account());
                         originality.setOriginality_id(info.getC_from_id());
                         originality.setOriginality_name(info.getC_from_title());
                         originality.setOriginality_details("");//详情在分享中会用到
-                        params.put("originality_id", originality.getOriginality_id());
-                        new HttpHelper<Originality>(FavoriteActivity.this, Originality.class).startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
-                        break;
+                        Intent intent = new Intent(FavoriteActivity.this, OriginalityDetailActivity.class);
+                        intent.putExtra("originality_id",originality.getOriginality_id());
+                        startActivity(intent);
+                        break;}
                     case 2:
-                        startOrderDetailPage(params,info,"0");
+                        startOrderDetailPage(info,"0");
                         break;
                     case 3:
-                        startOrderDetailPage(params,info,"1");
+                        startOrderDetailPage(info,"1");
                         break;
                     case 4: {
-                        startEnterpriseDetailPage(params,info,"4");
+                        startEnterpriseDetailPage(info,"4");
                         break;
                     }
                     case 5: {
-                        startEnterpriseDetailPage(params,info,"5");
+                        startEnterpriseDetailPage(info,"5");
                         break;
                     }
                     case 6: {
-                        startEnterpriseDetailPage(params,info,"6");
+                        startEnterpriseDetailPage(info,"6");
                         break;
                     }
                     case 7:
@@ -183,34 +187,34 @@ public class FavoriteActivity extends BaseActivity {
         });
     }
 
-    private void startEnterpriseDetailPage(Map<String,String> params,FavoriteInfo info,String classes) {
-        params.put("client_side", "app");
+    private void startEnterpriseDetailPage(FavoriteInfo info,String classes) {
         EnterpriseUser user = new EnterpriseUser();
         user.setAccount(info.getC_u_account());
         user.setAccount_id(info.getC_from_id());
         user.setFacilitator_name(info.getC_from_title());
         user.setModify_differentiate(classes);
-        params.put("acilitator_id", user.getAccount_id());
-        new HttpHelper<EnterpriseUser>(FavoriteActivity.this, EnterpriseUser.class)
-                .startDetailsPage(GET_ORDER_FACTORY_DETAILS, params, user);
+        Intent intent = new Intent(FavoriteActivity.this, FactoryDetailActivity.class);
+        intent.putExtra("acilitator_id",user.getAccount_id());
+        startActivity(intent);
     }
 
     /**
      * 订制和代工详情页跳转
-     * @param params
      * @param info
      * @param classes 订制：0，代工产品：1
      */
-    private void startOrderDetailPage(Map<String,String> params,FavoriteInfo info,String classes) {
-        params.put("client_side", "app");
+    private void startOrderDetailPage(FavoriteInfo info,String classes) {
+//        params.put("client_side", "app");
         Order order = new Order();
         order.setAccount(info.getC_u_account());
         order.setMade_id(info.getC_from_id());
         order.setMade_name(info.getC_from_title());
         order.setMade_describe("");//详情
         order.setMade_differentiate(classes);//代工产品
-        params.put("made_id", order.getMade_id());
-        new HttpHelper<Order>(FavoriteActivity.this, Order.class).startDetailsPage(GET_ORDER_PRODUCT_DETAILS, params, order);
+        startActivity(new Intent(this, OrderDetailActivity.class)
+                .putExtra("id", order.getMade_id()));
+//        params.put("made_id", order.getMade_id());
+//        new HttpHelper<Order>(FavoriteActivity.this, Order.class).startDetailsPage(GET_ORDER_PRODUCT_DETAILS, params, order);
     }
 
     private void deleteData(final int position) {
@@ -226,8 +230,15 @@ public class FavoriteActivity extends BaseActivity {
             @Override
             public void onResponse(String response, int id) {
                 Log.i(TAG, "删除收藏成功: " + response);
-                mFavorites.remove(position);
+                FavoriteInfo f = mFavorites.remove(position);
                 mAdapter.notifyDataSetChanged();
+                try {
+                    DbUtils.create(getApplicationContext(), StringUtils.getDbName())
+                            .delete(FavoriteInfo.class,
+                                    WhereBuilder.b("collection_id","=",f.getCollection_id()));
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
                 Toast.makeText(FavoriteActivity.this, "删除成功！", Toast.LENGTH_SHORT).show();
             }
         });

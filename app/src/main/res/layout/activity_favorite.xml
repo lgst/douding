@@ -14,24 +14,23 @@
         android:layout_height="56dp"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        app:navigationIcon="@mipmap/ic_chevron_left_white_24dp"
+        app:navigationIcon="?attr/homeAsUpIndicator"
         app:title="@string/mine_favorite"
-        app:titleTextColor="@color/white"
-    >
+        app:titleTextColor="@color/white">
     </android.support.v7.widget.Toolbar>
     <RelativeLayout
         android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        android:layout_height="match_parent">
 
-    <com.baoyz.swipemenulistview.SwipeMenuListView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-    </com.baoyz.swipemenulistview.SwipeMenuListView>
-    <include layout="@layout/item_not_data"
-             android:id="@+id/not_data"
-    />
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
+        <include android:id="@+id/not_data"
+                 layout="@layout/item_not_data"
+        />
     </RelativeLayout>
 </LinearLayout>

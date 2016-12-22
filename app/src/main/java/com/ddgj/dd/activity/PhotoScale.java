@@ -29,11 +29,16 @@ public class PhotoScale extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_viewer);
         view = (PinchImageView) findViewById(R.id.image);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         final String photoURL = getIntent().getStringExtra("photoURL");
         SimpleTarget target2 = new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-
                 view.setImageBitmap(bitmap);
             }
         };

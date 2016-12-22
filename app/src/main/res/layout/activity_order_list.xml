@@ -8,24 +8,23 @@
     android:orientation="vertical"
     android:background="@color/grey_lightE"
     tools:context="com.ddgj.dd.activity.OrderListActivity">
-    <RelativeLayout
-        style="@style/ActionBarLightTheme"
-        android:background="@color/white">
-        <ImageView
-            android:id="@+id/back"
-            style="@style/TitleBarImageTheme"
-            android:clickable="true"
-            android:onClick="backClick"
-            android:src="@mipmap/ic_blue_back"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_back_blue">
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:text="@string/order"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"/>
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
     <View style="@style/LineGrey1px"/>
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"

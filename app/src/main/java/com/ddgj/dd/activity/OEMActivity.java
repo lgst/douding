@@ -45,9 +45,6 @@ public class OEMActivity extends BaseActivity implements View.OnClickListener, N
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
             case R.id.factory:
                 startActivity(new Intent(this, OEMFactoryActivity.class));
                 break;

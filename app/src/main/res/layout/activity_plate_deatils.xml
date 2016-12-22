@@ -4,32 +4,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-    <RelativeLayout style="@style/ActionBarLightTheme">
-
-        <ImageView
-            android:id="@+id/backup"
-            style="@style/TitleBarImageTheme"
-            android:src="@mipmap/ic_blue_back"/>
-
-        <TextView
-            android:id="@+id/post_title"
-            style="@style/TitleBarTextTheme"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-
-    </RelativeLayout>
+    <include layout="@layout/toolbar"/>
 
     <ScrollView
         android:id="@+id/sv_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="38dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="56dp"
         android:gravity="center">
 
         <LinearLayout

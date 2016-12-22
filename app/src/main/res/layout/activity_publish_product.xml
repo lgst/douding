@@ -5,24 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <RelativeLayout style="@style/ActionBarLightTheme">
-
-        <ImageView
-            android:id="@+id/backup"
-            style="@style/TitleBarImageTheme"
-            android:src="@mipmap/ic_blue_back"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="产品发布"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-
-    </RelativeLayout>
+    <include layout="@layout/toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,7 +2,9 @@ package com.ddgj.dd.activity;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,12 +24,17 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        Toolbar mToolbar =  (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mToolbar.setTitle("关于我们");
+        mToolbar.setTitleTextColor(Color.WHITE);
         version = (TextView) findViewById(R.id.version);
         version.setText("当前版本："+getVersionName());
-    }
-
-    public void backClick(View v) {
-        finish();
     }
 
     public void checkUpdate(View v) {

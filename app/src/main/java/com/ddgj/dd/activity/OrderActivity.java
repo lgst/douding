@@ -2,6 +2,7 @@ package com.ddgj.dd.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,12 +38,13 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
     private String[] names;
     private List<Order> mOrders;
     private HttpHelper<Order> mOrderHttpHelper;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-        mOrderHttpHelper = new HttpHelper<Order>(this,Order.class);
+        mOrderHttpHelper = new HttpHelper<Order>(this, Order.class);
         initView();
         initCache();
         initDatas();
@@ -95,15 +97,18 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
                 }
             }
         });
-    }
-
-    public void backClick(View v) {
-        finish();
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initDatas() {
         //获取订制
-        Map<String,String> params = new HashMap<String,String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("made_state", "2");
         params.put("made_differentiate", "0");
         params.put("pageNumber", "1");
@@ -111,12 +116,12 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
         mOrderHttpHelper.getDatasPost(GET_ORDER, params, new DataCallback<Order>() {
             @Override
             public void Failed(Exception e) {
-                Log.e(TAG, "获取成功定制出错："+e.getMessage());
+                Log.e(TAG, "获取成功定制出错：" + e.getMessage());
             }
 
             @Override
             public void Success(List<Order> datas) {
-                mOrders=datas;
+                mOrders = datas;
                 mSuccess.setAdapter(new OrderAdapter(mOrders));
             }
         });
@@ -124,10 +129,7 @@ public class OrderActivity extends BaseActivity implements NetWorkInterface {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Order order = mOrders.get(position);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("made_id", order.getMade_id());
-                mOrderHttpHelper.startDetailsPage(GET_ORDER_DETAILS,params,order);
+                startActivity(new Intent(OrderActivity.this, OrderDetailActivity.class).putExtra("id", order.getMade_id()));
             }
         });
     }

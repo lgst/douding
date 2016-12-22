@@ -6,52 +6,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ddgj.dd.activity.AboutActivity">
-    <RelativeLayout
-        style="@style/ActionBarTheme">
-        <ImageView
-            style="@style/TitleBarImageTheme"
-            android:onClick="backClick"
-            android:src="@mipmap/ic_chevron_left_white_24dp"/>
-        <TextView
-            style="@style/TitleBarTextTheme"
-            android:text="@string/about_us"/>
-    </RelativeLayout>
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:padding="16dp">
-        <ImageView android:layout_width="100dp"
-                   android:layout_height="100dp"
-                   android:layout_gravity="center_horizontal"
-                   android:src="@mipmap/ic_web_launcher"/>
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="公司简介"
-                  android:textColor="@color/colorPrimary"
-                  android:textSize="14sp"
-                  android:textStyle="bold"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="8dp"
-            android:text="@string/about_us_content"
-            android:textColor="@color/black"
-            android:textSize="12sp"/>
+    <include layout="@layout/toolbar"/>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:padding="16dp">
+            <ImageView android:layout_width="100dp"
+                       android:layout_height="100dp"
+                       android:layout_gravity="center_horizontal"
+                       android:src="@mipmap/ic_web_launcher"/>
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="公司简介"
+                      android:textColor="@color/colorPrimary"
+                      android:textSize="16sp"
+                      android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="@string/about_us_content"
+                android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/version"
-            android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center"
-                  android:padding="16dp"
-                  android:text="版本：1.0.0"/>
-        <Button android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/version"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ease_btn_blue_selector"
-                android:text="检查更新"
-                android:onClick="checkUpdate"
-                android:textColor="@color/white"
-        />
-    </LinearLayout>
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="版本：1.0.0"/>
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ease_btn_blue_selector"
+                    android:onClick="checkUpdate"
+                    android:text="检查更新"
+                    android:textColor="@color/white"
+            />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

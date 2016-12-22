@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_join_reward"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.ddgj.dd.activity.JoinRewardActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_back_blue"
+        app:title="我要参加"
+        app:titleTextColor="@color/colorPrimary"/>
+    <View style="@style/LineGrey1px"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:padding="16dp"
+              android:text="您已成功参加该全款悬赏任务"
+              android:textColor="@color/black"
+              android:textSize="18dp"
+              android:textStyle="bold"/>
+    <View style="@style/LineGrey1px"/>
+    <View android:layout_width="match_parent" android:layout_height="16dp"
+          android:background="@color/grey_lightE"
+    />
+    <TextView android:id="@+id/title" android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="16dp"
+              android:textColor="@color/black"
+              android:textSize="18dp"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:paddingLeft="16dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                  android:layout_weight="2"
+                  android:text="编号"/>
+        <TextView android:id="@+id/number" android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="8"/>
+    </LinearLayout>
+    <TextView android:id="@+id/end_time" android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:drawableLeft="@mipmap/ic_time_end"
+              android:paddingLeft="16dp"
+              android:gravity="center_vertical"
+              android:textColor="@color/black"/>
+    <TextView android:id="@+id/timer" android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:gravity="center_vertical"
+              android:drawableLeft="@mipmap/ic_timer"
+              android:paddingLeft="16dp"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:padding="16dp"
+              android:text="提示："
+              android:textColor="@color/colorPrimary"/>
+    <TextView android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:text="您已成功参加任务，请务必在剩余时间结束前提交作品，否则将失去中标机会。"
+              android:textColor="@color/colorPrimary"/>
+    <Button
+        android:id="@+id/commit"
+        android:layout_width="match_parent" android:layout_height="48dp"
+        android:background="@drawable/selector_bottom_btn_bg"
+        android:text="提交我的任务作品"
+        android:textColor="@color/white"/>
+</LinearLayout>

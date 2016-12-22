@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.ddgj.dd.R;
-import com.ddgj.dd.fragment.MineOEMFragment;
+import com.ddgj.dd.fragment.MinePatentFragment;
 
 public class MinePatentActivity extends BaseActivity {
     private Toolbar mToolbar;
@@ -32,6 +32,6 @@ public class MinePatentActivity extends BaseActivity {
                 finish();
             }
         });
-        getSupportFragmentManager().beginTransaction().add(R.id.content, new MineOEMFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.content, new MinePatentFragment()).commit();
     }
 }

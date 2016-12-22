@@ -250,10 +250,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.MineProjectActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeLightStatuBar"/>
-        <activity
             android:name=".activity.PublishProductActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeLightStatuBar"/>
@@ -268,7 +264,7 @@
             android:screenOrientation="portrait"/>
 
         <service
-            android:name=".server.CheckUpdateService"
+            android:name=".service.InitService"
             android:enabled="true"
             android:exported="true">
         </service>
@@ -320,7 +316,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
         <activity
-            android:name=".activity.MineOrderActivity"
+            android:name=".activity.MineOrdersActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -328,7 +324,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.MineOrderDetailActivity"
+            android:name=".activity.MineOrdersDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.OrdersDetilActivity"
@@ -341,15 +337,76 @@
         <activity
             android:name=".activity.OrderFactoryActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.MineOEMActivity"
+        <activity
+            android:name=".activity.MineOEMActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.MineOriginalityActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.MinePatentActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.RewardActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.AddRewardActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.TenderDetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.RewardListActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.TenderListActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.AddTenderActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.RewardDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.JoinRewardActivity"
                   android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MineOriginalityActivity"
+        <activity android:name=".activity.JoinTenderActivity"
                   android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.MinePatentActivity"
+        <activity android:name=".activity.CommitRewardActivity"
                   android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".activity.MineTenderActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.MineRewardActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.FactoryDetailActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.OEMFactoryDetailActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.OEMProductDetailActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PatentDetailActivity"
+                  android:screenOrientation="portrait"/>
+        <receiver android:name=".receiver.NetReceiver"/>
+        <activity android:name=".activity.PurchaseActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.DetailsPurchaseActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PublishPurchaseActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CustomActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

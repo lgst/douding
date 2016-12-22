@@ -13,6 +13,7 @@ import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.PersonalUser;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.JsonUtils;
+import com.ddgj.dd.util.net.BusEvent;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.hyphenate.EMCallBack;
@@ -24,6 +25,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -43,7 +45,7 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
     private static final int REGISTER_SMS_CODE = 105;
     private EditText usernaemEt;
     private EditText pwdEt;
-    private String phone = "18165157887";
+    private String phone = "";
     public static String userName;
     private Handler handler = new Handler() {
         @Override
@@ -51,16 +53,18 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
             super.handleMessage(msg);
             switch (msg.what) {
                 case SUCCESS:
-                    if (getIntent().getStringExtra("flag").equals(BACK)) {
-                        MainActivity.update = true;
-                        UserHelper.getInstance().setLogined(true);
+//                    if (getIntent().getStringExtra("flag").equals(BACK)) {
+                    MainActivity.update = true;
+                    UserHelper.getInstance().setLogined(true);
 //                        UserHelper.getInstance().getUser().saveToSharedPreferences(LoginActivity.this);
-                        UserHelper.getInstance().loadUserInfo();
-                        showToastShort((String) msg.obj);
-                        dialog.dismiss();
-                        finish();
-                    } else {
-                    }
+                    UserHelper.getInstance().loadUserInfo();
+                    setResult(SUCCESS);
+                    showToastShort((String) msg.obj);
+                    dialog.dismiss();
+                    EventBus.getDefault().post(new BusEvent(BusEvent.LOGIN));//加载个人数据
+                    finish();
+//                    } else {
+//                    }
                     break;
                 case FAILDE:
                     showToastShort((String) msg.obj);
@@ -233,7 +237,8 @@ public class LoginActivity extends BaseActivity implements NetWorkInterface {
      */
     public void forgetPasswordClick(View v) {
 //        短信验证
-        startActivityForResult(new Intent(this, SMSCodeActivity.class), FORGET_SMS_CODE);
+        startActivityForResult(new Intent(this, SMSCodeActivity.class)
+                .putExtra("forget", true), FORGET_SMS_CODE);
 //        startActivity(new Intent(this,UpdatePasswordActivity.class));
     }
 

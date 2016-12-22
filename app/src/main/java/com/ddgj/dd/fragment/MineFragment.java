@@ -17,9 +17,11 @@ import com.ddgj.dd.activity.FavoriteActivity;
 import com.ddgj.dd.activity.LoginActivity;
 import com.ddgj.dd.activity.MineCustomActivity;
 import com.ddgj.dd.activity.MineOEMActivity;
-import com.ddgj.dd.activity.MineOrderActivity;
+import com.ddgj.dd.activity.MineOrdersActivity;
 import com.ddgj.dd.activity.MineOriginalityActivity;
 import com.ddgj.dd.activity.MinePatentActivity;
+import com.ddgj.dd.activity.MineRewardActivity;
+import com.ddgj.dd.activity.MineTenderActivity;
 import com.ddgj.dd.activity.SettingsActivity;
 import com.ddgj.dd.activity.UserCenterActivity;
 import com.ddgj.dd.bean.EnterpriseUser;
@@ -58,6 +60,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
     private LinearLayout mOrder;
     private TextView mOemCount;
     private LinearLayout mOem;
+    private TextView mMineReward;
+    private TextView mMineTender;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +128,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         findViewById(R.id.patent).setOnClickListener(this);
         mPatentCount = (TextView) findViewById(R.id.patent_count);
         initData();
+        mMineReward = (TextView) findViewById(R.id.mine_reward);
+        mMineReward.setOnClickListener(this);
+        mMineTender = (TextView) findViewById(R.id.mine_tender);
+        mMineTender.setOnClickListener(this);
     }
 
     private void initData() {
@@ -163,53 +171,100 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        if (!UserHelper.getInstance().isLogined()) {
-            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
-            return;
-        }
         switch (v.getId()) {
             case R.id.originality:
-                startActivity(new Intent(getActivity(), MineOriginalityActivity.class));
-                return;
+                clickOrigi();
+                break;
             case R.id.patent:
-                startActivity(new Intent(getActivity(), MinePatentActivity.class));
-                return;
+                clickPatent();
+                break;
             case R.id.order:
-                startActivity(new Intent(getActivity(), MineCustomActivity.class));
-                return;
+                clickOrder();
+                break;
             case R.id.oem:
-                startActivity(new Intent(getActivity(), MineOEMActivity.class));
-                return;
-            case R.id.click_login:
-                clickLogin();
-                return;
+                clickOem();
+                break;
             case R.id.mine_favorite:
                 clcikMineFavorite();
-                return;
+                break;
             case R.id.app_settings:
                 clickAppSettings();
-                return;
+                break;
             case R.id.share_to_friend:
                 clickShare();
-                return;
+                break;
             case R.id.about_us:
                 clickAboutUs();
-                return;
+                break;
             case R.id.mine_order:
-                clickOrder();
-                return;
+                clickMineOrder();
+                break;
+            case R.id.mine_reward:
+                clickReward();
+                break;
+            case R.id.mine_tender:
+                clickTender();
+                break;
+            case R.id.click_login:
+                clickLogin();
+                break;
+        }
+    }
+
+    private void clickOrigi() {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineOriginalityActivity.class));
+        else {
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+        }
+    }
+
+    private void clickPatent() {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MinePatentActivity.class));
+        else {
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+        }
+    }
+
+    private void clickOem() {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineOEMActivity.class));
+        else {
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+        }
+    }
+
+    private void clickReward() {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineRewardActivity.class));
+        else {
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+        }
+    }
+
+    private void clickTender() {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineTenderActivity.class));
+        else {
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
         }
     }
 
     private void clickOrder() {
         if (UserHelper.getInstance().isLogined())
-            startActivity(new Intent(getActivity(), MineOrderActivity.class));
+            startActivity(new Intent(getActivity(), MineCustomActivity.class));
         else {
-            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
         }
     }
-
+    private void clickMineOrder() {
+        if (UserHelper.getInstance().isLogined())
+            startActivity(new Intent(getActivity(), MineOrdersActivity.class));
+        else {
+            startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
+        }
+    }
     /**
      * 点击关于
      */
@@ -269,9 +324,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener, 
         if (UserHelper.getInstance().isLogined())
             startActivity(new Intent(getActivity(), FavoriteActivity.class));
         else {
-            Toast.makeText(getActivity(), "请先登录！", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), LoginActivity.class).putExtra("flag", LoginActivity.BACK));
-
         }
     }
 

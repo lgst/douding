@@ -25,7 +25,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private EditText userName;
     private EditText passWord;
     private EditText confirm;
-//    private Spinner questions;
+    //    private Spinner questions;
 //    private EditText answer;
     private Handler handler = new Handler() {
         @Override
@@ -37,6 +37,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             } else {
                 showToastShort((String) msg.obj);
             }
+            finish();
         }
     };
     private String phone;
@@ -77,7 +78,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                     .url(NetWorkInterface.FORGET_PASSWORD)
                     .post(builder.build())
                     .build();
-            Log.i(TAG, "forgetPasswordClick: account:"+username+"   phone"+phone);
+            Log.i(TAG, "forgetPasswordClick: account:" + username + "   phone" + phone);
             Call call = client.newCall(request);
             call.enqueue(new Callback() {
                 @Override

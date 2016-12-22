@@ -122,8 +122,8 @@
         <item>5001-10000</item>
         <item>10001-20000</item>
         <item>20001-50000</item>
-        <item>50000-100000</item>
-        <item>100000-1000000</item>
+        <item>50001-100000</item>
+        <item>100001-1000000</item>
     </string-array>
 
 
@@ -149,10 +149,11 @@
     <string name="enterprise_link_name">联系人</string>
     <string name="enterprise_contact">联系方式</string>
     <string name="about_us_content">
-        豆丁工匠于2014年底策划，前身为西安快租商贸有限公司国际港务区第一分公司，2016年6月正式注册为西安豆丁工匠网络科技有限公司。
-        豆丁工匠前期主要为租天下研发并生产智能手机充电站，包括：进行投币式充电站、无线式充电站、19寸LCD无线充电站等三代产品，目前主产第四代42寸LED无线局域网充电站,全息产品及其衍生产品等。
-        豆丁工匠APP现已上线，该项目主要包括创新创意、专利服务、悬赏竞标、技能共享、代工众筹、制造社区、私人订制、制造论坛、合作对接等9大服务模块。
-        因此，我们将豆丁工匠网络科技有限公司视为产品私人订制平台领域的试验审核基地、制造业的威客网，专利的孵化器。
+        豆丁工匠是一款“制造业+互联网”服务平台。前身为智能手机充电站组装工厂，目前已在西安市客运站、旅游景点、餐饮、酒店、娱乐场所铺设近百台并进行豆丁工匠的广告宣传推广。 我们以自己的工厂为试验模型，参考国内各省市制造企业提出的不同疑问，深入剖析制造业所遇到的困扰难点，最终开发出移动应用豆丁工匠。豆丁工匠总部位于古都西安，团队人数33人，平均年龄25岁，已在深圳开设分公司进行线下推广合作。产品经过精细打磨，最终于2016年11月正式上线。
+        豆丁工匠APP作为制造业+互联网服务平台，主要为用户提供创意发布、专利申请、委托代工、私人订制、众筹等一站式服务。每一位客户都可能对产品的改善有很好的创意，我们特别愿意与充满创意、热爱发明、追求完美与怀揣各式各样想法的您携手同行。
+        首先，您可以通过在App上注册，提供自己的创意方案，同时对创意进行保护，找到理想的工厂代工或者打造属于自己独一无二的产品，这一切交给专业的人才和机构，让工厂与您共同创造、让您用知识创意赚取利益、让产品服务大众，让想法变成产品，让创意变成现实，助力中国智造，无论您从事什么职业，拥有属于自己的专利或者产品将可能为您创造更多财富。
+        其次，我们拥有工厂，特别欢迎各类制造业创始人共同探讨制造业难点，在寒冬中抱团取暖。共同寻找制造业的突破口，打破瓶颈，实现我们共同的目标。
+        再者，我们欢迎热爱中国制造，拥有民族情怀的企业共同树立一个创新的平台，围绕制造业让我们共同尽一份力，加入豆丁工匠塑造更多民族名优品牌，目前APP已经上线并拥有珠三角，深圳，长三角，永康，温州产业带部分工厂进驻，包括陕西本地多家工厂已经进驻推广，诚邀各地企业加盟运营，寻找各省市加盟商，让我们一起努力，振兴中国制造！
     </string>
     <string name="app_share_text">让智慧照进现实、让创意成为产品。汇众智，共创造，让世界爱上中国制造</string>
     <string name="search">搜索</string>
@@ -263,5 +264,59 @@
     <string name="mine_order">我的订制</string>
     <string name="mine_oem">我的代工</string>
     <string name="comment">评论</string>
+    <string-array name="reward_mod">
+        <item>单人中标</item>
+        <item>多人中标</item>
+    </string-array>
+    <string-array name="purchaseTypes">
+        <item>机械设备</item>
+        <item>家装建材</item>
+        <item>电工电气</item>
+        <item>电子元件</item>
+        <item>安全防护</item>
+        <item>仪	器仪表</item>
+        <item>冶金矿产</item>
+        <item>交通运输</item>
+        <item>化工环保</item>
+        <item>五金工具</item>
+        <item>包装塑料</item>
+        <item>照明工业</item>
+        <item>纺织皮革</item>
+        <item>标	准件	</item>
+        <item>汽车用品</item>
+        <item>通信产品</item>
+        <item>其他</item>
+    </string-array>
+    <string-array name="purchase_time">
+        <item>7天内</item>
+        <item>15天内</item>
+        <item>1个月内</item>
+        <item>3个月内</item>
+    </string-array>
+    <string-array name="fac_filed">
+        <item>经营范围</item>
+        <item>机械设备</item>
+        <item>家装建材</item>
+        <item>电工电气</item>
+        <item>电子元件</item>
+        <item>安全防护</item>
+        <item>仪	器仪表</item>
+        <item>冶金矿产</item>
+        <item>交通运输</item>
+        <item>化工环保</item>
+        <item>五金工具</item>
+        <item>包装塑料</item>
+        <item>照明工业</item>
+        <item>纺织皮革</item>
+        <item>标	准件	</item>
+        <item>汽车用品</item>
+        <item>通信产品</item>
+        <item>其他</item>
+    </string-array>
 
+    <string-array name="fac_type">
+        <item>全部工厂</item>
+        <item>代工工厂</item>
+        <item>订制工厂</item>
+    </string-array>
 </resources>

@@ -10,8 +10,8 @@ public interface NetWorkInterface {
     /**
      * 主机地址
      */
-//     String HOST = "http://www.51douding.com";
-    String HOST = "http://192.168.2.180:8080/newdouding";
+    String HOST = "http://www.51douding.com";
+//    String HOST = "http://192.168.2.180:8080/newdouding";
 
     /**
      * 注册接口
@@ -191,7 +191,7 @@ public interface NetWorkInterface {
     /**
      * 获取工厂接口
      */
-    String GET_FACILITATORMADE = HOST + "/findFacilitatorMade.do";
+    String GET_FACILITATORMADE = HOST + "/facilitatorsSearch.do";
     /**
      * 获取产品接口
      */
@@ -275,4 +275,85 @@ public interface NetWorkInterface {
      * 拒绝验收
      */
     String REGECT_CHECK = HOST + "/refuseAcceptance.do";
+    /**
+     * 发布悬赏
+     */
+    String ADD_REWARD = HOST + "/addReward.do";
+    /**
+     * 参加悬赏
+     */
+    String ADD_REWARD_ORDER = HOST + "/addRewardTask.do";
+    /**
+     * 获取悬赏列表
+     */
+    String GET_REWARD = HOST + "/findRewardList.do";
+    /**
+     * 发布招标
+     */
+    String ADD_TENDER = HOST + "/addInviteTenders.do";
+    /**
+     * 获取招标
+     */
+    String GET_TENDER = HOST + "/findInviteTendersList.do";
+    /**
+     * 投标
+     */
+    String ADD_TENDER_ORDER = HOST + "/addTender.do";
+    /**
+     * 提交投标
+     */
+    String COMMIT_TENDER_ORDER = HOST + "/modifyTender.do";
+    /**
+     * 提交悬赏任务作品
+     */
+    String COMMIT_REWARD_ORDER = HOST + "/modifyRewardTask.do";
+    /**
+     * 获取我接的悬赏
+     */
+    String GET_MINE_REWARD_ORDER = HOST + "/findMyRewardTask.do";
+    /**
+     * 查询我的悬赏
+     */
+    String GET_MINE_REWARD = HOST + "/findMyReward.do";
+    /**
+     * 获取我的招标
+     */
+    String GET_MINE_TENDER = HOST + "/findMyInviteTenders.do";
+    /**
+     * 获取我的投标
+     */
+    String GET_MINE_TENDER_ORDER = HOST + "/findMyTender.do";
+    /**
+     * 查询创意详情
+     */
+    String GET_ORIGINALITY_DETAIL = HOST + "/findByOriginalityId.do";
+    /**
+     * 查询专利详情
+     */
+    String GET_PATENT_DETAIL = HOST + "/findByPatentId.do";
+    /**
+     * 查询工厂详情
+     */
+    String GET_FACTORY_DETAIL = HOST + "/findbyId_fcilitator.do";
+    /**
+     * 查询代工产品详情
+     */
+    String GET_DAIGONF_PRODUCT_DETAIL = HOST + "/findCustom_made.do";
+    /**
+     * 取消收藏接口
+     */
+    String QUXIAO_FAVORITE = HOST + "/cancelCollection.do";
+    /**
+     * 获取采购列表
+     * /procurementByType.do
+     */
+    String GET_PROCUREMENT = HOST + "/procurementByType.do";
+    /**
+     * 发布采购
+     */
+    String ADD_PROCUREMENT = HOST + "/insertProcurement.do";
+    /**
+     * 承接/updateContinue.do
+     */
+    String CONTINUE = HOST + "/updateContinue.do";
 }

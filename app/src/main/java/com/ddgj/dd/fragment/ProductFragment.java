@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ddgj.dd.R;
-import com.ddgj.dd.activity.BaseActivity;
 import com.ddgj.dd.activity.LoginActivity;
+import com.ddgj.dd.activity.OriginalityDetailActivity;
 import com.ddgj.dd.activity.PublishProductActivity;
 import com.ddgj.dd.adapter.FactoryProductsAdapter;
 import com.ddgj.dd.bean.EnterpriseUser;
 import com.ddgj.dd.bean.Originality;
+import com.ddgj.dd.util.T;
 import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
+import com.ddgj.dd.util.net.NetUtils;
 import com.ddgj.dd.util.user.UserHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -29,8 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_PRODUCTMADE;
-import static com.ddgj.dd.util.net.NetWorkInterface.GET__PRODUCT_DETAILS;
+import static com.ddgj.dd.util.net.NetWorkInterface.GET_ALL_ORIGINALITY;
 
 /**
  * Created by Administrator on 2016/11/8.
@@ -39,9 +41,10 @@ import static com.ddgj.dd.util.net.NetWorkInterface.GET__PRODUCT_DETAILS;
 public class ProductFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
     private PullToRefreshListView mListView;
     private FloatingActionButton mFab;
+    private String mKeyWords="";
     List<Originality> mProducts = new ArrayList<Originality>();
     private FactoryProductsAdapter mAdapter = new FactoryProductsAdapter(mProducts);
-    private BaseActivity act;
+    private FragmentActivity act;
     /**
      * 页码
      */
@@ -65,7 +68,7 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        act = (BaseActivity) getActivity();
+        act = (FragmentActivity) getActivity();
         mHttpHelper = new HttpHelper<Originality>(act, Originality.class);
         return inflater.inflate(R.layout.fragment_product, null);
     }
@@ -77,19 +80,29 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
         initData(LOAD);
     }
 
+    public ProductFragment setmKeyWords(String keyWords) {
+        this.mKeyWords = keyWords;
+        return this;
+    }
+
+    public void search() {
+        mListView.setRefreshing(true);
+    }
+
     private void initData(final int flag) {
-        if (!act.checkNetWork()) {
-            act.showToastNotNetWork();
+        if (!NetUtils.isNetworkConnected(getContext())) {
             return;
         }
         Map<String, String> params = new HashMap<String, String>();
+        params.put("originality_name", mKeyWords);
         params.put("originality_differentiate", "1");
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        mHttpHelper.getDatasPost(GET_PRODUCTMADE, params, new DataCallback<Originality>() {
+        mHttpHelper.getDatasPost(GET_ALL_ORIGINALITY, params, new DataCallback<Originality>() {
             @Override
             public void Failed(Exception e) {
                 Log.e("lgst", "加载中国智造产品失败：" + e.getMessage());
+                mListView.onRefreshComplete();
             }
 
             @Override
@@ -115,7 +128,7 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
                 if (UserHelper.getInstance().isLogined())
                     startActivity(new Intent(act, PublishProductActivity.class));
                 else {
-                    act.showToastShort("请先登录！");
+                    T.showShort(getContext(), "请先登录！");
                     startActivity(new Intent(act, LoginActivity.class).putExtra("flag", LoginActivity.BACK));
                 }
             }
@@ -147,18 +160,21 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                    startActivity(new Intent(getActivity(),PublishProductActivity.class));
+                startActivity(new Intent(getActivity(), PublishProductActivity.class));
                 break;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Map<String, String> params = new HashMap<String, String>();
+//        Map<String, String> params = new HashMap<String, String>();
         Originality ori = mProducts.get(position - 1);
         ori.setOriginality_differentiate("1");
-        params.put("client_side", "app");
-        params.put("originality_id", ori.getOriginality_id());
-        mHttpHelper.startDetailsPage(GET__PRODUCT_DETAILS, params, ori);
+        Intent intent = new Intent(getActivity(), OriginalityDetailActivity.class);
+        intent.putExtra("originality_id", ori.getOriginality_id());
+        startActivity(intent);
+//        params.put("client_side", "app");
+//        params.put("originality_id", ori.getOriginality_id());
+//        mHttpHelper.startDetailsPage(GET__PRODUCT_DETAILS, params, ori);
     }
 }

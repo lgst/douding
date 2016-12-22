@@ -77,12 +77,12 @@ public class SplashScreenActivity extends BaseActivity {
                 OkHttpUtils.post().url(CHECK_UPDATE).params(params).build().execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        Log.e("lgst", e.getMessage());
+//                        Log.e("lgst", e.getMessage());
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("lgst", response);
+//                        Log.i("lgst", response);
                         try {
                             JSONObject jo = new JSONObject(response);
                             int status = jo.getInt("status");

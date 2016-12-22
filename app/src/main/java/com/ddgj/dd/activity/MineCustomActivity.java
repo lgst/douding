@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -17,22 +16,19 @@ import android.widget.TextView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Order;
-import com.ddgj.dd.util.net.DataCallback;
-import com.ddgj.dd.util.net.HttpHelper;
-import com.ddgj.dd.util.user.UserHelper;
+import com.ddgj.dd.util.StringUtils;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.ddgj.dd.util.net.NetWorkInterface.GET_MINE_ORDER;
 
 public class MineCustomActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private Toolbar mToolbar;
     private List<Order> mOrders = new ArrayList<Order>();
-    private int pageNumber = 1;
+    private int pageNumber = 0;
     private ListView mListView;
     private View mView;
     private LinearLayout mLoading;
@@ -41,11 +37,14 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
     //    0为等待接单 1为已接单 2为成功 3为失败 4服务方申请合作 5服务方申请验收
     private static final String[] STATUS = {"等待接单", "工作中", "交易成功", "交易失败", "待确认合作", "待验收"};
     private int[] colors;
+    private DbUtils mDbu;
+    private boolean noMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_custom);
+        mDbu = DbUtils.create(getApplicationContext(), StringUtils.getDbName());
         initView();
         colors = new int[]{R.color.waiting,
                 R.color.working,
@@ -57,32 +56,48 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     private void initData() {
-        if (!checkNetWork()) {
-            showToastNotNetWork();
+        if (noMore)
             return;
+        try {
+            List<Order> orders = mDbu.findAll(Selector.from(Order.class).limit(10).offset(pageNumber));
+            if (orders != null) {
+                mOrders.addAll(orders);
+                mAdapter.notifyDataSetChanged();
+            }
+            if (orders == null || orders.size() < 10) {
+                mListView.removeFooterView(mView);
+                noMore = true;
+            }
+            mLoading.setVisibility(View.GONE);
+        } catch (DbException e) {
+            e.printStackTrace();
         }
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("pageNumber", String.valueOf(pageNumber));
-        params.put("pageSingle", "10");
-        params.put("made_differentiate", "0");
-        params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
-        new HttpHelper<Order>(this, Order.class)
-                .getDatasPost(GET_MINE_ORDER, params, new DataCallback<Order>() {
-                    @Override
-                    public void Failed(Exception e) {
-                        Log.e("lgst", "我的订制获取出错：" + e.getMessage());
-                    }
-
-                    @Override
-                    public void Success(List<Order> datas) {
-                        if (datas.size() < 10)
-                            mListView.removeFooterView(mView);
-                        mOrders.addAll(datas);
-                        mAdapter.notifyDataSetChanged();
-                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-                            mLoading.setVisibility(View.GONE);
-                    }
-                });
+//        if (!checkNetWork()) {
+//            showToastNotNetWork();
+//            return;
+//        }
+//        Map<String, String> params = new HashMap<String, String>();
+//        params.put("pageNumber", String.valueOf(pageNumber));
+//        params.put("pageSingle", "10");
+//        params.put("made_differentiate", "0");
+//        params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
+//        new HttpHelper<Order>(this, Order.class)
+//                .getDatasPost(GET_MINE_ORDER, params, new DataCallback<Order>() {
+//                    @Override
+//                    public void Failed(Exception e) {
+//                        Log.e("lgst", "我的订制获取出错：" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void Success(List<Order> datas) {
+//                        if (datas.size() < 10)
+//                            mListView.removeFooterView(mView);
+//                        mOrders.addAll(datas);
+//                        mAdapter.notifyDataSetChanged();
+//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+//                            mLoading.setVisibility(View.GONE);
+//                    }
+//                });
     }
 
     @Override
@@ -128,7 +143,7 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Order order = mOrders.get(position);
-        startActivity(new Intent(this, MineOrderDetailActivity.class)
+        startActivity(new Intent(this, MineOrdersDetailActivity.class)
                 .putExtra("id", order.getMade_id()));
     }
 

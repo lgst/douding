@@ -3,6 +3,7 @@ package com.ddgj.dd.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -36,7 +37,6 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
     private OriginalityPLVAdapter mAdapter;
     private RadioGroup mRg;
     //    private LinearLayout mLoading;
-    private TextView content;
     /**
      * 页码
      */
@@ -77,6 +77,9 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
     private FloatingActionButton floatingActionButton;
     private HttpHelper<Originality> mOriHttpHelper;
     private View notDataView;
+    private TextView mSearch;
+    private Toolbar mToolbar;
+    private String mKeyWords="";
 
 
     @Override
@@ -102,7 +105,7 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         Map<String, String> params = new HashMap<String, String>();
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        params.put("originality_name", content.getText().toString().trim());
+        params.put("originality_name", mKeyWords);
         if (classes == MINE) {
             params.put("o_account_id", UserHelper.getInstance().getUser().getAccount_id());
         } else {
@@ -150,7 +153,14 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
 
     @Override
     public void initView() {
-//        mLoading = (LinearLayout) findViewById(R.id.loading);
+        mSearch = (TextView) findViewById(R.id.search);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRg = (RadioGroup) findViewById(R.id.rg);
         mplv = (PullToRefreshListView) findViewById(R.id.plv);
         mplv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -171,16 +181,13 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Originality originality = mOriginalitys.get(position - 1);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("originality_id", originality.getOriginality_id());
-                originality.setOriginality_differentiate("0");
-                mOriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
+                Intent intent = new Intent(OriginalityActivity.this, OriginalityDetailActivity.class);
+                intent.putExtra("originality_id", originality.getOriginality_id());
+                startActivity(intent);
             }
         });
         mplv.setAdapter(mAdapter);
         mRg.setOnCheckedChangeListener(this);
-        content = (TextView) findViewById(R.id.search_edit_text);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +204,6 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         lsdc.setScrollDistanceListener(new ListScrollDistanceCalculator.ScrollDistanceListener() {
             @Override
             public void onScrollDistanceChanged(int delta, int total) {
-                Log.i(TAG, "delta:" + delta + "  total:" + total);
                 if (total > 0) {
                     if (is) {
                         floatingActionButton.clearAnimation();
@@ -260,7 +266,8 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == SUCCESS) {
             String text = data.getStringExtra("content");
-            content.setText(text);
+            mSearch.setText(text);
+            mKeyWords = text;
             initDatas(LOAD, classes);
         }
     }
@@ -308,4 +315,5 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
         mplv.setRefreshing(true);
 //        initDatas(LOAD, classes);
     }
+
 }

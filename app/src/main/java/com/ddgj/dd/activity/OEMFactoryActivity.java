@@ -1,5 +1,6 @@
 package com.ddgj.dd.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -123,10 +124,14 @@ public class OEMFactoryActivity extends BaseActivity implements NetWorkInterface
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final EnterpriseUser user = mFactorys.get(position - 1);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("acilitator_id", user.getAccount_id());
-                mHttpHelper.startDetailsPage(GET_ORDER_FACTORY_DETAILS, params, user);
+                Intent intent = new Intent(OEMFactoryActivity.this, OEMFactoryDetailActivity.class);
+                intent.putExtra("acilitator_id",user.getAcilitator_id());
+//                Log.e("acilitator_id", "acilitator_id)：" +user.getAcilitator_id());
+                startActivity(intent);
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("client_side", "app");
+//                params.put("acilitator_id", user.getAccount_id());
+//                mHttpHelper.startDetailsPage(GET_ORDER_FACTORY_DETAILS, params, user);
             }
         });
         mplv.setAdapter(mAdapter);

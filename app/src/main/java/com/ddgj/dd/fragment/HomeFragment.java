@@ -1,6 +1,8 @@
 package com.ddgj.dd.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,9 @@ import android.widget.AdapterView;
 
 import com.ddgj.dd.R;
 import com.ddgj.dd.activity.BaseActivity;
-import com.ddgj.dd.adapter.ADAdapter;
+import com.ddgj.dd.activity.OriginalityDetailActivity;
+import com.ddgj.dd.activity.PatentDetailActivity;
+import com.ddgj.dd.activity.WebActivity;
 import com.ddgj.dd.adapter.ClassesGridViewAdapter;
 import com.ddgj.dd.adapter.OriginalityPLVAdapter;
 import com.ddgj.dd.adapter.PatentPLVAdapter;
@@ -21,10 +25,9 @@ import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
+import com.ddgj.dd.view.Banner;
 import com.ddgj.dd.view.CustomGridView;
 import com.ddgj.dd.view.CustomListView;
-import com.hejunlin.superindicatorlibray.CircleIndicator;
-import com.hejunlin.superindicatorlibray.LoopViewPager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +41,7 @@ import static com.hyphenate.chat.EMGCMListenerService.TAG;
  */
 public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private BaseActivity act;
-    private LoopViewPager viewpager;
-    private CircleIndicator indicator;
+    private ViewPager viewpager;
     private CustomGridView classesGV;
     private CustomListView patentListView;
     private CustomListView originalityListView;
@@ -48,6 +50,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private HttpHelper<ADBean> adHttphelper;
     private HttpHelper<Originality> oriHttpHelper;
     private HttpHelper<Patent> patentHttpHelper;
+    private Banner mBanner;
 
     public HomeFragment() {
     }
@@ -56,6 +59,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         act = (BaseActivity) getActivity();
+        mBanner = new Banner(getContext());
     }
 
     @Override
@@ -79,11 +83,18 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
         adHttphelper = new HttpHelper<ADBean>(getActivity(), ADBean.class, true);
         String adData = FileUtil.readJsonFromCache(ADBean.class.getName());
         if (adData != null) {
-            List<ADBean> adBeens = adHttphelper.analysisAndLoadOriginality(adData);
+            final List<ADBean> adBeens = adHttphelper.analysisAndLoadOriginality(adData);
             if (!adBeens.isEmpty()) {
-                viewpager.setAdapter(new ADAdapter(act, adBeens));
-                viewpager.setLooperPic(true);//是否设置自动轮播
-                indicator.setViewPager(viewpager);
+                mBanner.init(viewpager, adBeens)
+                        .startBanner()
+                        .setOnItemClickListener(new Banner.OnItemClickListener() {
+                            @Override
+                            public void OnItemClickListener(int position) {
+                                startActivity(new Intent(getActivity(), WebActivity.class).putExtra("classes", "0")
+                                        .putExtra("title", adBeens.get(position).getContent())
+                                        .putExtra("url", "http://" + adBeens.get(position).getLink_address()));
+                            }
+                        });
             }
         }
         /*
@@ -130,11 +141,14 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Originality originality = mOriginalitys.get(position);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("originality_id", originality.getOriginality_id());
-                originality.setOriginality_differentiate("0");
-                oriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
+                Intent intent = new Intent(getActivity(), OriginalityDetailActivity.class);
+                intent.putExtra("originality_id", originality.getOriginality_id());
+                startActivity(intent);
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("client_side", "app");
+//                params.put("originality_id", originality.getOriginality_id());
+//                originality.setOriginality_differentiate("0");
+//                oriHttpHelper.startDetailsPage(GET_ORIGINALITY_DETAILS, params, originality);
             }
         });
     }
@@ -163,18 +177,21 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Patent patent = mPatents.get(position);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("client_side", "app");
-                params.put("patent_id", patent.getPatent_id());
-                patentHttpHelper.startDetailsPage(GET_PATENT_DETAILS, params, patent);
+                Intent intent = new Intent(getActivity(), PatentDetailActivity.class);
+                intent.putExtra("patent_id", patent.getPatent_id());
+                Log.e("patent", "patent：" + patent.getPatent_id());
+                startActivity(intent);
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("client_side", "app");
+//                params.put("patent_id", patent.getPatent_id());
+//                patentHttpHelper.startDetailsPage(GET_PATENT_DETAILS, params, patent);
             }
         });
     }
 
     @Override
     protected void initView() {
-        viewpager = (LoopViewPager) findViewById(R.id.viewpager);
-        indicator = (CircleIndicator) findViewById(R.id.indicator);
+        viewpager = (ViewPager) findViewById(R.id.viewpager);
         classesGV = (CustomGridView) findViewById(R.id.calsses_list);
         patentListView = (CustomListView) findViewById(R.id.patent_list);
         originalityListView = (CustomListView) findViewById(R.id.originality_list);
@@ -197,9 +214,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
             public void Success(List<ADBean> datas) {
                 if (datas.isEmpty())
                     return;
-                viewpager.setAdapter(new ADAdapter(act, datas));
-                viewpager.setLooperPic(true);//是否设置自动轮播
-                indicator.setViewPager(viewpager);
+                mBanner.init(viewpager, datas).startBanner();
             }
         });
     }
