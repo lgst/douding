@@ -119,7 +119,7 @@ public class AddRewardActivity extends BaseActivity implements NetWorkInterface,
                 isAgreed = mRewardAgree.isChecked();
                 break;
             case R.id.add_img:
-                if (PermissionUtils.requestAllPermissions(this, 200))
+                if (PermissionUtils.requestAllPermissions(this, 201))
                     addImage();
                 break;
             case R.id.commit_btn:
@@ -133,13 +133,14 @@ public class AddRewardActivity extends BaseActivity implements NetWorkInterface,
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 200) {
-            commit();
+        if (requestCode == 201) {
+            addImage();
         }
     }
 
     private void commit() {
         PostFormBuilder post = OkHttpUtils.post();
+        HashMap<String, String> params = new HashMap<>();
         if (!mImagePath.isEmpty()) {
             int i = 0;
             for (String path : mImagePath) {
@@ -147,9 +148,10 @@ public class AddRewardActivity extends BaseActivity implements NetWorkInterface,
                 String s = "reward_picture";
                 post.addFile(s + i++, file.getName(), file);
             }
+        }else {
+            params.put("reward_picture","");
         }
         final SweetAlertDialog dialog = showLoadingDialog("正在发送您的悬赏", "");
-        HashMap<String, String> params = new HashMap<>();
         params.put("reward_title", mTitle.getText().toString().trim());
         params.put("reward_price", mPrice.getText().toString().trim());
         params.put("reward_start_time", "");

@@ -90,7 +90,7 @@ public class ProductFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void initData(final int flag) {
-        if (!NetUtils.isNetworkConnected(getContext())) {
+        if (!NetUtils.isConnected(getContext())) {
             return;
         }
         Map<String, String> params = new HashMap<String, String>();

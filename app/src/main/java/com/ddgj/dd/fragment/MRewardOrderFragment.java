@@ -128,15 +128,17 @@ public class MRewardOrderFragment extends BaseFragment implements NetWorkInterfa
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             ViewHolder vh = (ViewHolder) holder;
             vh.mTitle.setText(mRewardOs.get(position).getReward_title());
-            String[] pic = mRewardOs.get(position).getReward_picture().split(",");
-            vh.mImage.setVisibility(View.GONE);
-            for (String url : pic) {
-                if (!url.equals("null")) {
-                    Glide.with(getContext()).load(HOST + "/" + url).error(R.drawable.ic_image_default).into(vh.mImage);
-                    vh.mImage.setVisibility(View.VISIBLE);
-                    break;
-                }
+            if (mRewardOs.get(position).getReward_picture() != null) {
+                String[] pic = mRewardOs.get(position).getReward_picture().split(",");
+                vh.mImage.setVisibility(View.GONE);
+                for (String url : pic) {
+                    if (!url.equals("null")) {
+                        Glide.with(getContext()).load(HOST + "/" + url).error(R.drawable.ic_image_default).into(vh.mImage);
+                        vh.mImage.setVisibility(View.VISIBLE);
+                        break;
+                    }
 
+                }
             }
             vh.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -21,7 +21,6 @@ import com.ddgj.dd.activity.CitySelecterActivity;
 import com.ddgj.dd.activity.FactoryDetailActivity;
 import com.ddgj.dd.adapter.FactoryAdapter;
 import com.ddgj.dd.bean.EnterpriseUser;
-import com.ddgj.dd.util.L;
 import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
 import com.ddgj.dd.util.net.NetUtils;
@@ -98,7 +97,7 @@ public class FactoryFragment extends BaseFragment implements AdapterView.OnItemC
     }
 
     private void initData(final int flag) {
-        if (!NetUtils.isNetworkConnected(getContext())) {
+        if (!NetUtils.isConnected(getContext())) {
             return;
         }
         String address = mBtnCity.getText().toString().replace("全国", "");
@@ -113,7 +112,7 @@ public class FactoryFragment extends BaseFragment implements AdapterView.OnItemC
         params.put("facilitator_address", address);
         params.put("pageNumber", String.valueOf(mPageNumber));
         params.put("pageSingle", String.valueOf(mPageSingle));
-        L.i("type:"+type+"   filed:"+params.get("facilitator_filed"));
+//        L.i("type:"+type+"   filed:"+params.get("facilitator_filed"));
         mHttpHelper.getDatasPost(GET_FACILITATORMADE, params, new DataCallback<EnterpriseUser>() {
             @Override
             public void Failed(Exception e) {

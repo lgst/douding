@@ -259,6 +259,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         .putString("province", province)
                         .putString("street", street)
                         .putString("streetNumber", streetNumbet).commit();
+            mLocationClient.stop();
         }
     };
 

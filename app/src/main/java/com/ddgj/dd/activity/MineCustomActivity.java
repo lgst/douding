@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -17,12 +18,17 @@ import android.widget.TextView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.bean.Order;
 import com.ddgj.dd.util.StringUtils;
+import com.ddgj.dd.util.net.DataCallback;
+import com.ddgj.dd.util.net.HttpHelper;
+import com.ddgj.dd.util.user.UserHelper;
 import com.lidroid.xutils.DbUtils;
-import com.lidroid.xutils.db.sqlite.Selector;
-import com.lidroid.xutils.exception.DbException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.ddgj.dd.util.net.NetWorkInterface.GET_MINE_ORDER;
 
 public class MineCustomActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -58,46 +64,46 @@ public class MineCustomActivity extends BaseActivity implements AdapterView.OnIt
     private void initData() {
         if (noMore)
             return;
-        try {
-            List<Order> orders = mDbu.findAll(Selector.from(Order.class).limit(10).offset(pageNumber));
-            if (orders != null) {
-                mOrders.addAll(orders);
-                mAdapter.notifyDataSetChanged();
-            }
-            if (orders == null || orders.size() < 10) {
-                mListView.removeFooterView(mView);
-                noMore = true;
-            }
-            mLoading.setVisibility(View.GONE);
-        } catch (DbException e) {
-            e.printStackTrace();
-        }
-//        if (!checkNetWork()) {
-//            showToastNotNetWork();
-//            return;
+//        try {
+//            List<Order> orders = mDbu.findAll(Selector.from(Order.class).limit(10).offset(pageNumber));
+//            if (orders != null) {
+//                mOrders.addAll(orders);
+//                mAdapter.notifyDataSetChanged();
+//            }
+//            if (orders == null || orders.size() < 10) {
+//                mListView.removeFooterView(mView);
+//                noMore = true;
+//            }
+//            mLoading.setVisibility(View.GONE);
+//        } catch (DbException e) {
+//            e.printStackTrace();
 //        }
-//        Map<String, String> params = new HashMap<String, String>();
-//        params.put("pageNumber", String.valueOf(pageNumber));
-//        params.put("pageSingle", "10");
-//        params.put("made_differentiate", "0");
-//        params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
-//        new HttpHelper<Order>(this, Order.class)
-//                .getDatasPost(GET_MINE_ORDER, params, new DataCallback<Order>() {
-//                    @Override
-//                    public void Failed(Exception e) {
-//                        Log.e("lgst", "我的订制获取出错：" + e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void Success(List<Order> datas) {
-//                        if (datas.size() < 10)
-//                            mListView.removeFooterView(mView);
-//                        mOrders.addAll(datas);
-//                        mAdapter.notifyDataSetChanged();
-//                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
-//                            mLoading.setVisibility(View.GONE);
-//                    }
-//                });
+        if (!checkNetWork()) {
+            showToastNotNetWork();
+            return;
+        }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("pageNumber", String.valueOf(pageNumber));
+        params.put("pageSingle", "10");
+        params.put("made_differentiate", "0");
+        params.put("m_a_id", UserHelper.getInstance().getUser().getAccount_id());
+        new HttpHelper<Order>(this, Order.class)
+                .getDatasPost(GET_MINE_ORDER, params, new DataCallback<Order>() {
+                    @Override
+                    public void Failed(Exception e) {
+                        Log.e("lgst", "我的订制获取出错：" + e.getMessage());
+                    }
+
+                    @Override
+                    public void Success(List<Order> datas) {
+                        if (datas.size() < 10)
+                            mListView.removeFooterView(mView);
+                        mOrders.addAll(datas);
+                        mAdapter.notifyDataSetChanged();
+                        if (mLoading.getVisibility() == View.VISIBLE)//关闭加载数据页面
+                            mLoading.setVisibility(View.GONE);
+                    }
+                });
     }
 
     @Override

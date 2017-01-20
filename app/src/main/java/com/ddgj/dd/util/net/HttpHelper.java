@@ -15,6 +15,7 @@ import com.ddgj.dd.bean.Originality;
 import com.ddgj.dd.bean.Patent;
 import com.ddgj.dd.bean.ResponseInfo;
 import com.ddgj.dd.util.FileUtil;
+import com.ddgj.dd.util.L;
 import com.ddgj.dd.util.user.UserHelper;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -228,6 +229,7 @@ public class HttpHelper<T> implements NetWorkInterface {
         if (response == null) {
             return new ArrayList<T>();
         }
+        L.i(response);
         List<T> datas = new ArrayList<T>();
         try {
             JSONObject jo = new JSONObject(response);

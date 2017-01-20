@@ -17,8 +17,10 @@ import android.widget.TextView;
 import com.ddgj.dd.R;
 import com.ddgj.dd.adapter.OriginalityPLVAdapter;
 import com.ddgj.dd.bean.Originality;
+import com.ddgj.dd.util.L;
 import com.ddgj.dd.util.net.DataCallback;
 import com.ddgj.dd.util.net.HttpHelper;
+import com.ddgj.dd.util.net.NetUtils;
 import com.ddgj.dd.util.net.NetWorkInterface;
 import com.ddgj.dd.util.user.UserHelper;
 import com.ddgj.dd.view.ListScrollDistanceCalculator;
@@ -98,7 +100,8 @@ public class OriginalityActivity extends BaseActivity implements RadioGroup.OnCh
      * classes:分类  ALL：全部   NEW：最新   HOT：最热   MINE：我的
      */
     private void initDatas(final int flag, final int classes) {
-        if (!checkNetWork()) {
+        L.i("加载数据");
+        if (!NetUtils.isConnected(this)) {
             showToastNotNetWork();
             return;
         }

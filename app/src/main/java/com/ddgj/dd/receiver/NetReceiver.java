@@ -19,7 +19,7 @@ public class NetReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
-            boolean isConnected = NetUtils.isNetworkConnected(context);
+            boolean isConnected = NetUtils.isConnected(context);
             if (isConnected) {
 //                Toast.makeText(context, "已经连接网络", Toast.LENGTH_LONG).show();
                 EventBus.getDefault().post(new BusEvent(BusEvent.NET_STATUS).setConnect(true));

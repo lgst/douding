@@ -38,6 +38,8 @@ import java.util.Map;
 
 import okhttp3.Call;
 
+import static com.ddgj.dd.R.id.imgs;
+
 public class RewardDetailActivity extends BaseActivity implements NetWorkInterface, View.OnClickListener, AdapterView.OnItemClickListener {
 
     private Toolbar mToolbar;
@@ -67,11 +69,13 @@ public class RewardDetailActivity extends BaseActivity implements NetWorkInterfa
 
     protected void initView() {
         mReward = (RewardInfo) getIntent().getSerializableExtra("data");
-        String[] imgs = mReward.getReward_picture().split(",");
-        for (String url : imgs) {
-            if (url.equals("null"))
-                continue;
-            mImages.add(HOST + "/" + url);
+        if (mReward.getReward_picture() != null) {
+            String[] imgs = mReward.getReward_picture().split(",");
+            for (String url : imgs) {
+                if (url.equals("null"))
+                    continue;
+                mImages.add(HOST + "/" + url);
+            }
         }
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_back_blue);
@@ -97,7 +101,7 @@ public class RewardDetailActivity extends BaseActivity implements NetWorkInterfa
         mChat.setOnClickListener(this);
         mJoin.setOnClickListener(this);
         mBottom = (LinearLayout) findViewById(R.id.bottom);
-        mImgs = (CustomGridView) findViewById(R.id.imgs);
+        mImgs = (CustomGridView) findViewById(imgs);
         mImgs.setOnItemClickListener(this);
         mImgs.setAdapter(new BaseAdapter() {
             @Override
@@ -143,7 +147,7 @@ public class RewardDetailActivity extends BaseActivity implements NetWorkInterfa
         DecimalFormat df = new DecimalFormat("#.##");
         String price = df.format((Float.parseFloat(mReward.getReward_price()) * 0.985f));
         mMoney.setText(mReward.getReward_price() + " ｘ 98.5%\n=\n" + price);
-        if (mReward.getDel_state()==null||mReward.getDel_state().equals("0"))
+        if (mReward.getDel_state() == null || mReward.getDel_state().equals("0"))
             mStatus.setText("招标中");
     }
 

@@ -81,7 +81,7 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
     private void initCacha() {
         /*加载缓存广告*/
         adHttphelper = new HttpHelper<ADBean>(getActivity(), ADBean.class, true);
-        String adData = FileUtil.readJsonFromCache(ADBean.class.getName());
+        final String adData = FileUtil.readJsonFromCache(ADBean.class.getName());
         if (adData != null) {
             final List<ADBean> adBeens = adHttphelper.analysisAndLoadOriginality(adData);
             if (!adBeens.isEmpty()) {
@@ -92,7 +92,8 @@ public class HomeFragment extends BaseFragment implements NetWorkInterface {
                             public void OnItemClickListener(int position) {
                                 startActivity(new Intent(getActivity(), WebActivity.class).putExtra("classes", "0")
                                         .putExtra("title", adBeens.get(position).getContent())
-                                        .putExtra("url", "http://" + adBeens.get(position).getLink_address()));
+                                        .putExtra("url", "http://" + adBeens.get(position).getLink_address())
+                                        .putExtra("content", adBeens.get(position).getNote()));
                             }
                         });
             }
